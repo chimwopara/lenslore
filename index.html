@@ -97,8 +97,36 @@
         
         .clothesline-row {
             position: relative;
-            margin-bottom: 250px; /* INCREASED SPACING */
+            margin-bottom: 250px;
             height: 140px;
+        }
+        
+        /* MOBILE SPECIFIC ROW STYLING */
+        @media (max-width: 768px) {
+            .clothesline-row {
+                margin-bottom: 180px;
+                overflow-x: auto;
+                overflow-y: visible;
+                padding-bottom: 20px;
+            }
+            
+            .clothesline-row::-webkit-scrollbar {
+                height: 8px;
+            }
+            
+            .clothesline-row::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 4px;
+            }
+            
+            .clothesline-row::-webkit-scrollbar-thumb {
+                background: rgba(245, 158, 11, 0.5);
+                border-radius: 4px;
+            }
+            
+            .clothesline-row::-webkit-scrollbar-thumb:hover {
+                background: rgba(245, 158, 11, 0.7);
+            }
         }
         
         .clothesline {
@@ -129,6 +157,15 @@
             border-radius: 2px;
             animation: ropeWave 8s ease-in-out infinite;
             position: relative;
+            transition: transform 0.2s ease;
+            z-index: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .clothesline {
+                /* Mobile clothesline needs to be wider for horizontal scroll */
+                min-width: 150%;
+            }
         }
         
         .clothesline::before {
@@ -177,6 +214,7 @@
             border-radius: 50%;
             box-shadow: 0 0 5px rgba(0,0,0,0.6);
             border: 2px solid #A0522D;
+            z-index: 2;
         }
         
         .clothesline-row::before {
@@ -207,29 +245,46 @@
         .hanging-photo {
             position: relative;
             display: inline-block;
-            margin: 0 30px 0px; /* INCREASED HORIZONTAL SPACING */
+            margin: 0 30px 0px;
             cursor: grab;
             transform-origin: center top;
             animation: gentleSwayWithBreeze 6s ease-in-out infinite;
-            transition: none; /* Remove transition for dragging */
-        }
-        
-        .hanging-photo:hover {
-            animation-play-state: paused;
-            transform: scale(1.08) translateY(-8px);
-            z-index: 15;
-            transition: transform 0.3s ease;
-        }
-        
-        .hanging-photo.dragging {
-            cursor: grabbing;
-            z-index: 20;
-            animation: none;
             transition: none;
+            flex-shrink: 0; /* Prevent photos from shrinking on mobile */
         }
         
-        .hanging-photo.snapping-back {
-            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        /* MOBILE: Disable dragging and hover effects */
+        @media (max-width: 768px) {
+            .hanging-photo {
+                cursor: pointer;
+                margin: 0 15px 0px;
+            }
+            
+            .hanging-photo:hover {
+                animation-play-state: running;
+                transform: scale(1.02);
+            }
+        }
+        
+        /* DESKTOP: Enable dragging and enhanced hover */
+        @media (min-width: 769px) {
+            .hanging-photo:hover {
+                animation-play-state: paused;
+                transform: scale(1.08) translateY(-8px);
+                z-index: 15;
+                transition: transform 0.3s ease;
+            }
+            
+            .hanging-photo.dragging {
+                cursor: grabbing;
+                z-index: 20;
+                animation: none;
+                transition: none;
+            }
+            
+            .hanging-photo.snapping-back {
+                transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
         }
         
         /* GENTLE SWAY ANIMATIONS */
@@ -591,22 +646,29 @@
             justify-content: center;
         }
         
-        /* GALLERY GRID - EDGE TO EDGE */
+        /* GALLERY GRID - RESPONSIVE LAYOUT */
         .gallery-grid {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
             align-items: flex-start;
             gap: 0;
-            width: 100vw;
-            margin-left: calc(-50vw + 50%);
+            width: 100%;
             padding: 0 20px;
         }
         
-        /* RESPONSIVE DESIGN - MOBILE FIRST */
+        /* MOBILE: Horizontal scroll layout */
         @media (max-width: 768px) {
+            .gallery-grid {
+                justify-content: flex-start;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding: 0 10px;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+            }
+            
             .hanging-photo {
-                margin: 0 10px 0px;
+                scroll-snap-align: start;
             }
             
             .photo-small {
@@ -633,57 +695,9 @@
                 width: 200px;
                 height: 140px;
             }
-            
-            .hanging-photo:hover {
-                animation-play-state: running;
-                transform: scale(1.02);
-            }
-            
-            .clothesline-row {
-                margin-bottom: 180px;
-            }
-            
-            .gallery-grid {
-                padding: 0 10px;
-            }
-            
-            /* Mobile Navigation */
-            .glass-header {
-                padding: 0.75rem 0;
-            }
-            
-            /* Mobile Typography */
-            .hero-title {
-                font-size: 2.5rem;
-                line-height: 1.1;
-            }
-            
-            /* Mobile Pricing Buttons */
-            .pricing-btn {
-                padding: 1rem;
-            }
-            
-            .pricing-btn h3 {
-                font-size: 1rem;
-            }
-            
-            .pricing-btn p:nth-child(4) {
-                font-size: 1.5rem;
-            }
-            
-            /* Mobile Form */
-            #contactForm .grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            
-            #contactForm input,
-            #contactForm select,
-            #contactForm textarea {
-                font-size: 16px; /* Prevents zoom on iOS */
-            }
         }
         
+        /* RESPONSIVE DESIGN - MOBILE FIRST */
         @media (max-width: 480px) {
             .photo-small {
                 width: 120px;
@@ -720,6 +734,15 @@
             
             .pricing-btn {
                 padding: 0.75rem;
+            }
+        }
+        
+        /* DESKTOP RESPONSIVE */
+        @media (min-width: 769px) {
+            .gallery-grid {
+                flex-wrap: wrap;
+                width: 100vw;
+                margin-left: calc(-50vw + 50%);
             }
         }
     </style>
@@ -800,7 +823,7 @@
              <div class="bg-black/50 absolute inset-0"></div>
              <div class="relative z-10 text-center px-6">
                 <h2 class="text-4xl md:text-6xl font-display font-bold text-white mb-6 scroll-animate">Portfolio</h2>
-                <p class="text-neutral-200 text-lg md:text-xl max-w-2xl mx-auto mb-8 scroll-animate" style="transition-delay: 100ms;">Fresh from the darkroom - stories captured and hanging to dry. Drag them around!</p>
+                <p class="text-neutral-200 text-lg md:text-xl max-w-2xl mx-auto mb-8 scroll-animate" style="transition-delay: 100ms;">Fresh from the darkroom - stories captured and hanging to dry. <span class="hidden md:inline">Drag them around!</span><span class="md:hidden">Swipe to explore!</span></p>
                 
                 <div class="flex justify-center space-x-2 md:space-x-4 scroll-animate" style="transition-delay: 200ms;">
                     <button class="gallery-btn active py-3 px-6 md:px-8 rounded-xl font-semibold text-sm" data-filter="all">All</button>
@@ -813,7 +836,7 @@
 
         <!-- Portfolio Section -->
         <section id="portfolio" class="py-20 md:py-32">
-            <!-- Darkroom Clotheslines Gallery - EDGE TO EDGE -->
+            <!-- Darkroom Clotheslines Gallery -->
             <div class="darkroom-lines">
                 <div id="gallery-container">
                     <!-- Multiple clothesline rows will be dynamically inserted here -->
@@ -876,11 +899,6 @@
                 </div>
              </div>
         </section>
-
-        
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Footer -->
@@ -912,13 +930,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // DRAG SYSTEM VARIABLES
+            // DETECT MOBILE DEVICE
+            const isMobile = window.innerWidth <= 768;
+            
+            // DRAG SYSTEM VARIABLES (DESKTOP ONLY)
             let isDragging = false;
             let currentDragElement = null;
             let startX = 0;
             let startY = 0;
-            let elementStartX = 0;
-            let elementStartY = 0;
+            let currentRope = null;
             
             // --- Mobile Menu Toggle ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -937,14 +957,15 @@
             const modalImage = document.getElementById('modalImage');
             const closeModal = document.getElementById('closeModal');
 
-            const images = [
-                ...Array.from({ length: 16 }, (_, i) => ({ src: `p${i + 1}.png`, category: 'portraits', alt: `Portrait ${i + 1}` })),
-                ...Array.from({ length: 9 }, (_, i) => ({ src: `c${i + 1}.png`, category: 'community', alt: `Community & Calling ${i + 1}` })),
-                ...Array.from({ length: 12 }, (_, i) => ({ src: `f${i + 1}.png`, category: 'fashion', alt: `Fashion & Brand Work ${i + 1}` })),
+            // ENSURE NO DUPLICATE IMAGES - CREATE UNIQUE ARRAYS
+            const allImages = [
+                ...Array.from({ length: 16 }, (_, i) => ({ src: `p${i + 1}.png`, category: 'portraits', alt: `Portrait ${i + 1}`, id: `p${i + 1}` })),
+                ...Array.from({ length: 9 }, (_, i) => ({ src: `c${i + 1}.png`, category: 'community', alt: `Community & Calling ${i + 1}`, id: `c${i + 1}` })),
+                ...Array.from({ length: 12 }, (_, i) => ({ src: `f${i + 1}.png`, category: 'fashion', alt: `Fashion & Brand Work ${i + 1}`, id: `f${i + 1}` })),
             ];
             
-            // Shuffle images for variety
-            images.sort(() => 0.5 - Math.random());
+            // Shuffle images for variety but maintain uniqueness
+            const shuffledImages = [...allImages].sort(() => 0.5 - Math.random());
 
             // Photo sizes for darkroom variety
             const photoSizes = ['photo-small', 'photo-medium', 'photo-large', 'photo-square', 'photo-landscape'];
@@ -953,8 +974,10 @@
                 return photoSizes[Math.floor(Math.random() * photoSizes.length)];
             }
 
-            // RUBBER BAND DRAG SYSTEM
+            // ENHANCED DRAG SYSTEM WITH ROPE PHYSICS (DESKTOP ONLY)
             function initializeDragSystem(hangingPhoto) {
+                if (isMobile) return; // Skip drag system on mobile
+                
                 let originalTransform = '';
                 
                 function handleDragStart(e) {
@@ -962,6 +985,7 @@
                     
                     isDragging = true;
                     currentDragElement = hangingPhoto;
+                    currentRope = hangingPhoto.closest('.clothesline-row').querySelector('.clothesline');
                     
                     const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
                     const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
@@ -997,6 +1021,14 @@
                     
                     hangingPhoto.style.transform = `translate(${rubberX}px, ${rubberY}px) rotate(${rotation}deg)`;
                     
+                    // ROPE PHYSICS: Make the rope bend/sag when photo is pulled
+                    if (currentRope) {
+                        const ropeBend = Math.min(Math.abs(rubberY * 0.3), 15); // Limit rope bend
+                        const ropeRotation = rubberX * 0.02; // Slight rope rotation
+                        currentRope.style.transform = `translateY(${ropeBend}px) rotate(${ropeRotation}deg)`;
+                        currentRope.style.transformOrigin = 'center center';
+                    }
+                    
                     e.preventDefault();
                 }
                 
@@ -1012,6 +1044,13 @@
                     // Snap back to original position with bounce
                     hangingPhoto.style.transform = originalTransform;
                     
+                    // Snap rope back to normal position
+                    if (currentRope) {
+                        currentRope.style.transform = '';
+                        currentRope.style.transformOrigin = '';
+                        currentRope = null;
+                    }
+                    
                     setTimeout(() => {
                         hangingPhoto.classList.remove('snapping-back');
                         hangingPhoto.style.zIndex = '';
@@ -1020,15 +1059,13 @@
                     e.preventDefault();
                 }
                 
-                // Mouse events
-                hangingPhoto.addEventListener('mousedown', handleDragStart);
-                document.addEventListener('mousemove', handleDragMove);
-                document.addEventListener('mouseup', handleDragEnd);
-                
-                // Touch events
-                hangingPhoto.addEventListener('touchstart', handleDragStart, { passive: false });
-                document.addEventListener('touchmove', handleDragMove, { passive: false });
-                document.addEventListener('touchend', handleDragEnd, { passive: false });
+                // Only add drag events for desktop
+                if (!isMobile) {
+                    // Mouse events
+                    hangingPhoto.addEventListener('mousedown', handleDragStart);
+                    document.addEventListener('mousemove', handleDragMove);
+                    document.addEventListener('mouseup', handleDragEnd);
+                }
             }
 
             // Function to create darkroom-style hanging photo with FIXED DIMENSIONS
@@ -1038,6 +1075,7 @@
                 
                 hangingPhoto.className = `hanging-photo ${photoSize} scroll-animate`;
                 hangingPhoto.style.transitionDelay = `${(index % 12) * 100}ms`;
+                hangingPhoto.setAttribute('data-image-id', image.id); // Track unique ID
 
                 // Create clothespin
                 const clothespin = document.createElement('div');
@@ -1073,7 +1111,7 @@
                 hangingPhoto.appendChild(watermark);
                 hangingPhoto.appendChild(cameraWatermark);
                 
-                // Initialize drag system for this photo
+                // Initialize drag system for this photo (desktop only)
                 initializeDragSystem(hangingPhoto);
                 
                 // Click handler for modal (only if not dragging)
@@ -1091,13 +1129,25 @@
                 return hangingPhoto;
             }
 
-            // Function to organize photos into rows for multiple clotheslines - MAX 4 PER ROW
+            // Function to organize photos into rows for multiple clotheslines
             function renderGallery(filter = 'all') {
                 galleryContainer.innerHTML = '';
-                const filteredImages = (filter === 'all') ? images : images.filter(img => img.category === filter);
                 
-                // Group photos into rows - MAX 4 photos per row for bigger, bolder look
-                const photosPerRow = window.innerWidth < 768 ? [2, 3, 2, 3, 2] : [4, 3, 4, 4, 3, 4, 4, 3];
+                // Filter images and ensure no duplicates
+                let filteredImages = (filter === 'all') ? shuffledImages : shuffledImages.filter(img => img.category === filter);
+                
+                // Remove duplicates by ID (extra safety)
+                const seenIds = new Set();
+                filteredImages = filteredImages.filter(img => {
+                    if (seenIds.has(img.id)) {
+                        return false;
+                    }
+                    seenIds.add(img.id);
+                    return true;
+                });
+                
+                // Group photos into rows - Mobile: 2 per row, Desktop: 3-4 per row
+                const photosPerRow = isMobile ? [2, 2, 2, 2, 2] : [4, 3, 4, 4, 3, 4, 4, 3];
                 let imageIndex = 0;
                 let rowIndex = 0;
                 
@@ -1258,62 +1308,14 @@
                 });
             });
             
-            // --- CONTACT FORM HANDLER ---
-            const contactForm = document.getElementById('contactForm');
-            const successMessage = document.getElementById('successMessage');
-            
-            if (contactForm && successMessage) {
-                contactForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    // Get form data
-                    const fullName = document.getElementById('fullName').value;
-                    const phoneNumber = document.getElementById('phoneNumber').value;
-                    const city = document.getElementById('city').value;
-                    const hearAbout = document.getElementById('hearAbout').value;
-                    const message = document.getElementById('message').value || 'No additional message provided.';
-                    
-                    // Validate required fields
-                    if (!fullName || !phoneNumber || !city || !hearAbout) {
-                        alert('Please fill in all required fields.');
-                        return;
-                    }
-                    
-                    // Create email content
-                    const emailSubject = encodeURIComponent('New Photography Inquiry from ' + fullName);
-                    const emailBodyText = 'Hi there!' + 
-                        '%0D%0A%0D%0A' + 'I am interested in your photography services. Here are my details:' +
-                        '%0D%0A%0D%0A' + 'CONTACT INFORMATION:' +
-                        '%0D%0A' + 'Name: ' + fullName +
-                        '%0D%0A' + 'Phone: ' + phoneNumber +
-                        '%0D%0A' + 'City: ' + city +
-                        '%0D%0A' + 'How I heard about you: ' + hearAbout +
-                        '%0D%0A%0D%0A' + 'MESSAGE:' +
-                        '%0D%0A' + message +
-                        '%0D%0A%0D%0A' + 'Looking forward to hearing from you!' +
-                        '%0D%0A%0D%0A' + 'Best regards,' +
-                        '%0D%0A' + fullName;
-                    
-                    // Create mailto link
-                    const mailtoLink = 'mailto:hello@lenslore.ca?subject=' + emailSubject + '&body=' + emailBodyText;
-                    
-                    // Open email client
-                    window.location.href = mailtoLink;
-                    
-                    // Show success message
-                    contactForm.style.display = 'none';
-                    successMessage.classList.remove('hidden');
-                    successMessage.classList.add('form-success');
-                    
-                    // Reset form after delay
-                    setTimeout(function() {
-                        contactForm.reset();
-                        contactForm.style.display = 'block';
-                        successMessage.classList.add('hidden');
-                        successMessage.classList.remove('form-success');
-                    }, 8000);
-                });
-            }
+            // --- RESIZE HANDLER ---
+            window.addEventListener('resize', () => {
+                // Re-render gallery on significant size changes
+                const newIsMobile = window.innerWidth <= 768;
+                if (newIsMobile !== isMobile) {
+                    location.reload(); // Simple solution for major layout changes
+                }
+            });
         });
     </script>
 
