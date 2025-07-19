@@ -148,7 +148,7 @@
             
             .clothesline-row .gallery-grid {
                 overflow-x: auto;
-                overflow-y: visible;
+                overflow-y: hidden; /* PREVENT VERTICAL SCROLL */
                 padding: 0 20px;
                 width: 100%;
                 max-width: 100%;
@@ -156,6 +156,9 @@
                 display: flex;
                 flex-direction: row; /* Ensure horizontal layout */
                 flex-wrap: nowrap;
+                /* CRITICAL: Prevent vertical scroll on gallery container */
+                touch-action: pan-x pinch-zoom;
+                -ms-touch-action: pan-x pinch-zoom;
             }
             
             .clothesline-row::-webkit-scrollbar {
@@ -165,7 +168,7 @@
         
         .clothesline {
             position: absolute;
-            top: 20px;
+            top: 20px; /* FIXED POSITION - photos hang 32px below this */
             left: 0;
             right: 0;
             height: 4px;
@@ -194,6 +197,14 @@
             transition: transform 0.2s ease;
             z-index: 1;
             width: 100%; /* Ensure proper width */
+        }
+        
+        /* MOBILE: Ensure rope positioning is maintained */
+        @media (max-width: 768px) {
+            .clothesline {
+                top: 20px !important; /* Force consistent rope position */
+                height: 4px !important;
+            }
         }
         
         .clothesline::before {
@@ -269,7 +280,7 @@
             }
         }
         
-        /* PHOTO HANGING ON LINE WITH SWAY ANIMATION */
+        /* PHOTO HANGING ON LINE WITH SWAY ANIMATION - ENSURE ROPE CONNECTION */
         .hanging-photo {
             position: relative;
             display: inline-block;
@@ -279,21 +290,32 @@
             animation: gentleSwayWithBreeze 6s ease-in-out infinite;
             transition: none;
             flex-shrink: 0; /* Prevent photos from shrinking on mobile */
-            top: 8px; /* Offset to account for clothespin connection to rope */
+            top: 32px; /* FIXED OFFSET - ensures photos are always connected to rope */
         }
         
-        /* MOBILE: Disable dragging and optimize for touch */
+        /* MOBILE: Disable dragging and optimize for touch - PREVENT VERTICAL SCROLL */
         @media (max-width: 768px) {
             .hanging-photo {
                 cursor: pointer;
                 margin: 0; /* Removed since we use gap in parent */
                 min-width: 220px; /* Ensure minimum width */
+                /* ENSURE ROPE CONNECTION ON MOBILE */
+                top: 32px !important; /* Match desktop offset - FORCE CONNECTION */
+                /* PREVENT VERTICAL SCROLL */
+                touch-action: pan-x pinch-zoom;
+                -ms-touch-action: pan-x pinch-zoom;
             }
             
             .hanging-photo:active {
                 animation-play-state: paused;
                 transform: scale(0.98);
                 transition: transform 0.2s ease;
+            }
+            
+            /* ENSURE CLOTHESPIN CONNECTION ON MOBILE */
+            .clothespin {
+                top: -32px !important; /* Force consistent positioning */
+                height: 48px !important; /* Ensure full connection */
             }
         }
         
@@ -353,14 +375,14 @@
             }
         }
         
-        /* CLOTHESPIN/PEG STYLES WITH TOGGLE ANIMATION - CONNECTS PHOTO TO ROPE */
+        /* CLOTHESPIN/PEG STYLES - GUARANTEED ROPE-PHOTO CONNECTION */
         .clothespin {
             position: absolute;
-            top: -28px; /* Position to overlap with rope */
+            top: -32px; /* Position to overlap with rope - MATCHES PHOTO TOP OFFSET */
             left: 50%;
             transform: translateX(-50%);
             width: 24px;
-            height: 45px; /* Taller to connect to rope */
+            height: 48px; /* Increased height to ensure connection */
             z-index: 15; /* Above rope and photo */
             animation: pinToggle 4s ease-in-out infinite;
         }
@@ -380,26 +402,26 @@
         .clothespin::before {
             content: '';
             position: absolute;
-            top: 8px; /* Start from rope level */
+            top: 4px; /* Start from rope level */
             left: 50%;
             transform: translateX(-50%);
-            width: 5px;
-            height: 32px; /* Extend through rope to photo */
+            width: 6px;
+            height: 40px; /* Extend through rope to photo - INCREASED LENGTH */
             background: linear-gradient(to bottom, #D2691E, #A0522D);
-            border-radius: 2px;
+            border-radius: 3px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.4);
         }
         
         .clothespin::after {
             content: '';
             position: absolute;
-            top: 24px; /* Position to grip rope and photo top */
+            top: 20px; /* Position to grip rope and photo top */
             left: 50%;
             transform: translateX(-50%);
-            width: 20px;
-            height: 16px; /* Bigger grip */
+            width: 22px;
+            height: 18px; /* Bigger grip for better connection */
             background: linear-gradient(45deg, #D2691E, #A0522D, #8B4513);
-            border-radius: 10px 10px 5px 5px;
+            border-radius: 11px 11px 6px 6px;
             box-shadow: 
                 0 3px 6px rgba(0,0,0,0.4),
                 inset 0 0 0 1px rgba(139, 69, 19, 0.6);
@@ -697,13 +719,13 @@
             box-sizing: border-box;
         }
         
-        /* MOBILE: One photo per row with horizontal scrolling */
+        /* MOBILE: One photo per row with horizontal scrolling - PREVENT VERTICAL SCROLL */
         @media (max-width: 768px) {
             .gallery-grid {
                 justify-content: flex-start;
                 flex-wrap: nowrap;
                 overflow-x: auto;
-                overflow-y: visible;
+                overflow-y: hidden; /* Prevent vertical scroll */
                 padding: 0 20px;
                 scroll-snap-type: x mandatory;
                 -webkit-overflow-scrolling: touch;
@@ -716,6 +738,9 @@
                 display: flex;
                 flex-direction: row;
                 align-items: flex-start;
+                /* CRITICAL: Prevent vertical scroll on touch */
+                touch-action: pan-x pinch-zoom;
+                -ms-touch-action: pan-x pinch-zoom;
             }
             
             .gallery-grid::-webkit-scrollbar {
@@ -742,6 +767,12 @@
                 /* Make all photos same size on mobile for consistency */
                 width: 220px !important;
                 height: 280px !important;
+                /* CRITICAL: Prevent vertical scroll when touching photos */
+                touch-action: pan-x pinch-zoom;
+                -ms-touch-action: pan-x pinch-zoom;
+                /* ENSURE PROPER CONNECTION TO ROPE */
+                position: relative;
+                top: 40px; /* Fixed offset from rope */
             }
             
             /* Override all photo size classes on mobile to be consistent */
@@ -1196,7 +1227,7 @@
                 // Initialize drag system for this photo (desktop only)
                 initializeDragSystem(hangingPhoto);
                 
-                // Click handler for modal (only if not dragging)
+                // Click handler for modal (only if not dragging) + PREVENT VERTICAL SCROLL
                 hangingPhoto.addEventListener('click', (e) => {
                     if (hangingPhoto.classList.contains('dragging')) return;
                     
@@ -1207,6 +1238,21 @@
                         imageModal.classList.remove('opacity-0', 'pointer-events-none');
                     }, 300);
                 });
+                
+                // MOBILE: Prevent vertical scrolling when touching photos
+                if (isMobile) {
+                    hangingPhoto.addEventListener('touchstart', (e) => {
+                        e.stopPropagation();
+                    }, { passive: true });
+                    
+                    hangingPhoto.addEventListener('touchmove', (e) => {
+                        e.stopPropagation();
+                    }, { passive: true });
+                    
+                    hangingPhoto.addEventListener('touchend', (e) => {
+                        e.stopPropagation();
+                    }, { passive: true });
+                }
                 
                 return hangingPhoto;
             }
@@ -1283,6 +1329,34 @@
                         const hangingPhoto = createHangingPhoto(image, imageIndex + photoIndex);
                         rowGallery.appendChild(hangingPhoto);
                     });
+                    
+                    // MOBILE: Prevent vertical scroll on gallery containers
+                    if (isMobile) {
+                        rowGallery.addEventListener('touchstart', (e) => {
+                            // Allow horizontal scroll but prevent vertical
+                            const touch = e.touches[0];
+                            rowGallery._startY = touch.clientY;
+                            rowGallery._startX = touch.clientX;
+                        }, { passive: true });
+                        
+                        rowGallery.addEventListener('touchmove', (e) => {
+                            if (!rowGallery._startY || !rowGallery._startX) return;
+                            
+                            const touch = e.touches[0];
+                            const deltaY = Math.abs(touch.clientY - rowGallery._startY);
+                            const deltaX = Math.abs(touch.clientX - rowGallery._startX);
+                            
+                            // If more vertical movement than horizontal, prevent it
+                            if (deltaY > deltaX) {
+                                e.preventDefault();
+                            }
+                        }, { passive: false });
+                        
+                        rowGallery.addEventListener('touchend', (e) => {
+                            rowGallery._startY = null;
+                            rowGallery._startX = null;
+                        }, { passive: true });
+                    }
                     
                     clotheslineRow.appendChild(clothesline);
                     clotheslineRow.appendChild(rowGallery);
