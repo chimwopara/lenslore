@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,68 +9,728 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* Custom styles for typography and layout */
+        /* PERFORMANCE FIRST: No heavy animations */
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a;
+            background: #0a0a0a;
             color: #e5e5e5;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
         }
+
         .font-display {
             font-family: 'Playfair Display', serif;
         }
+        
+        /* AMBIENT BACKGROUND - STATIC VERSION */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(251, 146, 60, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, rgba(14, 165, 233, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 60% 30%, rgba(168, 85, 247, 0.03) 0%, transparent 40%);
+        }
+        
+        /* OPTIMIZED NAVIGATION */
         .nav-link {
-            transition: color 0.3s ease;
+            transition: color 0.2s ease;
+            position: relative;
         }
+        
         .nav-link:hover {
-            color: #f59e0b; /* Amber-500 */
+            color: #f59e0b;
         }
+        
+        .glass-header {
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* HERO SECTION */
+        .hero-title {
+            background: linear-gradient(135deg, #ffffff, #f59e0b, #fb923c);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* GALLERY BUTTONS */
         .gallery-btn {
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
         }
+        
         .gallery-btn.active {
-            background-color: #f59e0b;
+            background: linear-gradient(135deg, #f59e0b, #fb923c);
             color: #0a0a0a;
+            transform: translateY(-2px);
         }
-        .gallery-item {
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease;
+        
+        .gallery-btn:hover:not(.active) {
+            background: rgba(245, 158, 11, 0.2);
+            transform: translateY(-1px);
         }
-        .gallery-item:hover {
-            transform: scale(1.03);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        
+        /* DARKROOM CLOTHESLINE SYSTEM WITH BETTER SPACING */
+        .darkroom-lines {
+            position: relative;
+            padding: 80px 0;
+            min-height: 1200px;
+        }
+        
+        .clothesline-row {
+            position: relative;
+            margin-bottom: 250px; /* INCREASED SPACING */
+            height: 140px;
+        }
+        
+        .clothesline {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #8B4513 0px,
+                    #A0522D 2px,
+                    #654321 4px,
+                    #8B4513 6px
+                ),
+                linear-gradient(to bottom,
+                    #A0522D 0%,
+                    #8B4513 25%,
+                    #654321 50%,
+                    #8B4513 75%,
+                    #A0522D 100%
+                );
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(139, 69, 19, 0.8),
+                inset 0 -1px 0 rgba(101, 67, 33, 0.8);
+            border-radius: 2px;
+            animation: ropeWave 8s ease-in-out infinite;
+            position: relative;
+        }
+        
+        .clothesline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent 0px,
+                rgba(139, 69, 19, 0.3) 1px,
+                transparent 2px,
+                rgba(160, 82, 45, 0.2) 3px
+            );
+            border-radius: 2px;
+        }
+        
+        .clothesline::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: repeating-linear-gradient(
+                90deg,
+                #654321 0px,
+                #8B4513 3px,
+                #A0522D 6px,
+                #8B4513 9px
+            );
+            transform: translateY(-50%);
+        }
+        
+        /* ROPE ANCHOR POINTS */
+        .clothesline-row::before,
+        .clothesline-row::after {
+            content: '';
+            position: absolute;
+            top: 14px;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #8B4513, #654321);
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.6);
+            border: 2px solid #A0522D;
+        }
+        
+        .clothesline-row::before {
+            left: 1%;
+        }
+        
+        .clothesline-row::after {
+            right: 1%;
+        }
+        
+        /* ROPE WAVE ANIMATION */
+        @keyframes ropeWave {
+            0%, 100% { 
+                transform: translateY(0px); 
+            }
+            25% { 
+                transform: translateY(-1px); 
+            }
+            50% { 
+                transform: translateY(0px); 
+            }
+            75% { 
+                transform: translateY(1px); 
+            }
+        }
+        
+        /* PHOTO HANGING ON LINE WITH SWAY ANIMATION */
+        .hanging-photo {
+            position: relative;
+            display: inline-block;
+            margin: 0 30px 0px; /* INCREASED HORIZONTAL SPACING */
+            cursor: grab;
+            transform-origin: center top;
+            animation: gentleSwayWithBreeze 6s ease-in-out infinite;
+            transition: none; /* Remove transition for dragging */
+        }
+        
+        .hanging-photo:hover {
+            animation-play-state: paused;
+            transform: scale(1.08) translateY(-8px);
+            z-index: 15;
+            transition: transform 0.3s ease;
+        }
+        
+        .hanging-photo.dragging {
+            cursor: grabbing;
+            z-index: 20;
+            animation: none;
+            transition: none;
+        }
+        
+        .hanging-photo.snapping-back {
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        /* GENTLE SWAY ANIMATIONS */
+        @keyframes gentleSwayWithBreeze {
+            0%, 100% { 
+                transform: rotate(-1deg) translateY(0px); 
+            }
+            25% { 
+                transform: rotate(0.5deg) translateY(-2px); 
+            }
+            50% { 
+                transform: rotate(1deg) translateY(0px); 
+            }
+            75% { 
+                transform: rotate(-0.5deg) translateY(-1px); 
+            }
+        }
+        
+        .hanging-photo:nth-child(even) {
+            animation: gentleSwayReverse 7s ease-in-out infinite;
+        }
+        
+        @keyframes gentleSwayReverse {
+            0%, 100% { 
+                transform: rotate(1deg) translateY(-1px); 
+            }
+            25% { 
+                transform: rotate(-0.5deg) translateY(0px); 
+            }
+            50% { 
+                transform: rotate(-1deg) translateY(-2px); 
+            }
+            75% { 
+                transform: rotate(0.5deg) translateY(0px); 
+            }
+        }
+        
+        /* CLOTHESPIN/PEG STYLES WITH TOGGLE ANIMATION */
+        .clothespin {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 35px;
             z-index: 10;
+            animation: pinToggle 4s ease-in-out infinite;
         }
+        
+        @keyframes pinToggle {
+            0%, 90%, 100% { 
+                transform: translateX(-50%) rotate(0deg); 
+            }
+            5%, 15% { 
+                transform: translateX(-50%) rotate(-2deg); 
+            }
+            10% { 
+                transform: translateX(-50%) rotate(2deg); 
+            }
+        }
+        
+        .clothespin::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 22px;
+            background: linear-gradient(to bottom, #D2691E, #A0522D);
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        
+        .clothespin::after {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 14px;
+            background: linear-gradient(45deg, #D2691E, #A0522D, #8B4513);
+            border-radius: 10px 10px 5px 5px;
+            box-shadow: 
+                0 3px 6px rgba(0,0,0,0.4),
+                inset 0 0 0 1px rgba(139, 69, 19, 0.6);
+        }
+        
+        /* DIRECT PHOTO STYLING - NO WHITE BORDERS */
+        .hanging-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            border-radius: 4px;
+            box-shadow: 
+                0 4px 12px rgba(0,0,0,0.3),
+                0 12px 32px rgba(0,0,0,0.2);
+            user-select: none;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+        }
+        
+        /* GLASS DISPLAY CASE FOR ME.PNG */
+        .glass-display-case {
+            position: relative;
+            background: linear-gradient(145deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0.05) 50%, 
+                rgba(0,0,0,0.1) 100%);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
+            animation: floatGently 8s ease-in-out infinite;
+        }
+        
+        @keyframes floatGently {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            50% { 
+                transform: translateY(-8px) rotate(0.5deg); 
+            }
+        }
+        
+        .glass-display-case::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            height: 2px;
+            background: linear-gradient(to right, 
+                transparent, 
+                rgba(255,255,255,0.4), 
+                transparent);
+            border-radius: 1px;
+        }
+        
+        .glass-display-case::after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom, 
+                rgba(255,255,255,0.3), 
+                transparent);
+            border-radius: 1px;
+        }
+        
+        .glass-case-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+        
+        /* HANGING CHAIN FOR GLASS CASE */
+        .hanging-chain {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 25px;
+            background: repeating-linear-gradient(
+                to bottom,
+                #888 0px,
+                #888 3px,
+                #666 3px,
+                #666 6px
+            );
+            border-radius: 2px;
+        }
+        
+        .hanging-chain::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: #666;
+            border-radius: 50%;
+            box-shadow: 0 0 3px rgba(0,0,0,0.5);
+        }
+        
+        /* DIFFERENT PHOTO SIZES FOR VARIETY - BIGGER FOR MAX 4 PER ROW */
+        .photo-small {
+            width: 240px;
+            height: 300px;
+        }
+        
+        .photo-medium {
+            width: 280px;
+            height: 350px;
+        }
+        
+        .photo-large {
+            width: 320px;
+            height: 400px;
+        }
+        
+        .photo-square {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .photo-landscape {
+            width: 380px;
+            height: 280px;
+        }
+        
+        /* WATERMARK STYLES */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            z-index: 3;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 16px;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .camera-watermark {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            z-index: 3;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 8px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .watermark.visible,
+        .camera-watermark.visible {
+            opacity: 1;
+        }
+        
+        /* PRICING CARDS */
         .pricing-card {
-            border: 1px solid #27272a; /* Zinc-800 */
-            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
         }
+        
         .pricing-card:hover {
             border-color: #f59e0b;
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
         }
-        /* Style for the image modal */
-        #imageModal {
-            transition: opacity 0.3s ease;
+        
+        /* BUTTONS */
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #fb923c);
+            transition: all 0.2s ease;
         }
-        /* Parallax section style */
-        .parallax-section {
-            min-height: 70vh;
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
         }
-        /* Scroll-triggered animations */
+        
+        /* SCROLL ANIMATIONS - SIMPLIFIED */
         .scroll-animate {
             opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
         }
+        
         .scroll-animate.is-visible {
             opacity: 1;
             transform: translateY(0);
+        }
+        
+        /* CONTACT FORM STYLING */
+        #contactForm input,
+        #contactForm select,
+        #contactForm textarea {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        #contactForm input:focus,
+        #contactForm select:focus,
+        #contactForm textarea:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        #contactForm input::placeholder,
+        #contactForm textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        #contactForm select option {
+            background: #1a1a1a;
+            color: #e5e5e5;
+        }
+        
+        .form-success {
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* MODAL */
+        #imageModal {
+            transition: all 0.3s ease;
+        }
+        
+        /* SIMPLE PARALLAX SECTIONS - NO FIXED BACKGROUNDS */
+        .parallax-section {
+            min-height: 70vh;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* GALLERY GRID - EDGE TO EDGE */
+        .gallery-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 0;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            padding: 0 20px;
+        }
+        
+        /* RESPONSIVE DESIGN - MOBILE FIRST */
+        @media (max-width: 768px) {
+            .hanging-photo {
+                margin: 0 10px 0px;
+            }
+            
+            .photo-small {
+                width: 140px;
+                height: 180px;
+            }
+            
+            .photo-medium {
+                width: 160px;
+                height: 200px;
+            }
+            
+            .photo-large {
+                width: 180px;
+                height: 230px;
+            }
+            
+            .photo-square {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .photo-landscape {
+                width: 200px;
+                height: 140px;
+            }
+            
+            .hanging-photo:hover {
+                animation-play-state: running;
+                transform: scale(1.02);
+            }
+            
+            .clothesline-row {
+                margin-bottom: 180px;
+            }
+            
+            .gallery-grid {
+                padding: 0 10px;
+            }
+            
+            /* Mobile Navigation */
+            .glass-header {
+                padding: 0.75rem 0;
+            }
+            
+            /* Mobile Typography */
+            .hero-title {
+                font-size: 2.5rem;
+                line-height: 1.1;
+            }
+            
+            /* Mobile Pricing Buttons */
+            .pricing-btn {
+                padding: 1rem;
+            }
+            
+            .pricing-btn h3 {
+                font-size: 1rem;
+            }
+            
+            .pricing-btn p:nth-child(4) {
+                font-size: 1.5rem;
+            }
+            
+            /* Mobile Form */
+            #contactForm .grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            #contactForm input,
+            #contactForm select,
+            #contactForm textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .photo-small {
+                width: 120px;
+                height: 150px;
+            }
+            
+            .photo-medium {
+                width: 140px;
+                height: 175px;
+            }
+            
+            .photo-large {
+                width: 160px;
+                height: 200px;
+            }
+            
+            .photo-square {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .photo-landscape {
+                width: 180px;
+                height: 120px;
+            }
+            
+            .clothesline-row {
+                margin-bottom: 150px;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .pricing-btn {
+                padding: 0.75rem;
+            }
         }
     </style>
 </head>
 <body class="antialiased">
 
+    <!-- Ambient Background -->
+    <div class="ambient-bg"></div>
+
     <!-- Header & Navigation -->
-    <header class="bg-black/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50">
+    <header class="glass-header fixed top-0 left-0 right-0 z-50">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="text-2xl font-display font-bold tracking-wider">Lensl<span class="text-amber-500">0</span>re.ca</a>
             <nav class="hidden md:flex items-center space-x-8">
@@ -96,154 +756,170 @@
 
     <!-- Hero Section -->
     <main>
-        <section id="hero" class="h-screen flex items-center justify-center text-center bg-cover bg-center bg-fixed" style="background-image: url('p1.png');">
-            <div class="bg-black/60 absolute inset-0"></div>
+        <section id="hero" class="h-screen flex items-center justify-center text-center bg-cover bg-center" style="background-image: url('p15.png');">
+            <div class="bg-black/40 absolute inset-0"></div>
             <div class="relative z-10 px-4">
-                <h1 class="text-5xl md:text-8xl font-display font-black text-white leading-tight scroll-animate">Tell Your Story</h1>
-                <p class="text-lg md:text-xl text-neutral-300 mt-4 max-w-2xl mx-auto scroll-animate" style="transition-delay: 100ms;">Through intentional, cinematic, and authentic photography.</p>
-                <a href="#portfolio" class="mt-8 inline-block bg-amber-500 text-black font-bold uppercase tracking-widest py-3 px-8 rounded-lg text-sm hover:bg-amber-400 transition-colors scroll-animate" style="transition-delay: 200ms;">
-                    View My Work
-                </a>
+                <h1 class="text-5xl md:text-8xl font-display font-black hero-title leading-tight scroll-animate">Tell Your Story</h1>
+                <p class="text-lg md:text-xl text-neutral-200 mt-4 max-w-2xl mx-auto scroll-animate" style="transition-delay: 100ms;">Through intentional, cinematic, and authentic photography.</p>
+                
             </div>
         </section>
 
         <!-- About Section -->
-        <section id="about" class="py-20 md:py-32 bg-black">
+        <section id="about" class="py-20 md:py-32 relative">
             <div class="container mx-auto px-6">
-                <div class="max-w-4xl mx-auto text-center scroll-animate">
-                    <h2 class="text-3xl md:text-5xl font-display font-bold">Lensl<span class="text-amber-500">0</span>re: Tell Your Story</h2>
-                    <p class="text-neutral-400 mt-6 text-lg">
-                        LensL0re is a platform dedicated to storytelling through the lens. We believe every person, moment, and scene holds a story waiting to be told.
-                    </p>
-                </div>
-                <div class="grid md:grid-cols-2 gap-12 mt-16 items-center">
-                    <div class="scroll-animate">
-                        <img src="me.png" alt="Photographer Kiitan Kujembola" class="rounded-lg shadow-2xl" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/1a1a1a/444?text=me.png+not+found';">
-                    </div>
-                    <div class="space-y-6 scroll-animate" style="transition-delay: 150ms;">
+                <div class="grid md:grid-cols-5 gap-16 items-center">
+                    <div class="md:col-span-2 space-y-6 scroll-animate">
+                        <p class="text-neutral-300 text-lg leading-relaxed">
+                            LensL0re is a platform dedicated to storytelling through the lens. We believe every person, moment, and scene holds a story waiting to be told.
+                        </p>
                         <h3 class="text-2xl font-bold font-display">The Experience</h3>
-                        <p class="text-neutral-400">
+                        <p class="text-neutral-300">
                             Our tagline, "Tell Your Story," is an invitation. We don't just take pictures; we listen, observe, and collaborate to bring your unique narrative to life.
                         </p>
-                        <p class="text-neutral-400">
+                        <p class="text-neutral-300">
                            LensL0re offers photography that feels intentional, cinematic, and rooted in connection. Every session is custom-tailored to reflect who you are or what your brand represents.
                         </p>
                         <h4 class="font-bold text-lg pt-4">Why It Matters</h4>
-                        <p class="text-neutral-400">
-                            In a world overflowing with content, we cut through the noise by focusing on meaning. We create space for images that stick with you, not because they’re polished, but because they’re <span class="text-amber-500 font-semibold">real</span>.
+                        <p class="text-neutral-300">
+                            In a world overflowing with content, we cut through the noise by focusing on meaning. We create space for images that stick with you, not because they're polished, but because they're <span class="text-amber-500 font-semibold">real</span>.
                         </p>
+                    </div>
+                    <div class="md:col-span-3 scroll-animate" style="transition-delay: 150ms;">
+                        <div class="glass-display-case" style="max-width: 600px; margin: 0 auto;">
+                            <div class="hanging-chain"></div>
+                            <img src="me.png" alt="Photographer Kiitan Kujembola" class="glass-case-photo" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/1a1a1a/444?text=me.png+not+found';">
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Full Screen Parallax Image 1 -->
-        <section class="parallax-section bg-cover bg-center bg-fixed flex items-center justify-center" style="background-image: url('p5.png');">
+        <!-- Portfolio Section Header on Background Image -->
+        <section class="parallax-section" style="background-image: url('p11.png');">
              <div class="bg-black/50 absolute inset-0"></div>
+             <div class="relative z-10 text-center px-6">
+                <h2 class="text-4xl md:text-6xl font-display font-bold text-white mb-6 scroll-animate">Portfolio</h2>
+                <p class="text-neutral-200 text-lg md:text-xl max-w-2xl mx-auto mb-8 scroll-animate" style="transition-delay: 100ms;">Fresh from the darkroom - stories captured and hanging to dry. Drag them around!</p>
+                
+                <div class="flex justify-center space-x-2 md:space-x-4 scroll-animate" style="transition-delay: 200ms;">
+                    <button class="gallery-btn active py-3 px-6 md:px-8 rounded-xl font-semibold text-sm" data-filter="all">All</button>
+                    <button class="gallery-btn py-3 px-6 md:px-8 rounded-xl font-semibold text-sm" data-filter="portraits">Portraits</button>
+                    <button class="gallery-btn py-3 px-6 md:px-8 rounded-xl font-semibold text-sm" data-filter="community">Community</button>
+                    <button class="gallery-btn py-3 px-6 md:px-8 rounded-xl font-semibold text-sm" data-filter="fashion">Fashion</button>
+                </div>
+             </div>
         </section>
 
         <!-- Portfolio Section -->
         <section id="portfolio" class="py-20 md:py-32">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12 scroll-animate">
-                    <h2 class="text-3xl md:text-5xl font-display font-bold">Portfolio</h2>
-                    <p class="text-neutral-400 mt-4 max-w-2xl mx-auto">A collection of stories, moments, and creative expressions.</p>
-                </div>
-                
-                <div class="flex justify-center space-x-2 md:space-x-4 mb-12 scroll-animate">
-                    <button class="gallery-btn active py-2 px-4 md:px-6 rounded-lg font-semibold text-sm" data-filter="all">All</button>
-                    <button class="gallery-btn py-2 px-4 md:px-6 rounded-lg font-semibold text-sm" data-filter="portraits">Portraits</button>
-                    <button class="gallery-btn py-2 px-4 md:px-6 rounded-lg font-semibold text-sm" data-filter="community">Community</button>
-                    <button class="gallery-btn py-2 px-4 md:px-6 rounded-lg font-semibold text-sm" data-filter="fashion">Fashion</button>
-                </div>
-
-                <!-- Gallery Grid -->
-                <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 auto-rows-fr gap-4">
-                    <!-- Images will be dynamically inserted here by JS -->
+            <!-- Darkroom Clotheslines Gallery - EDGE TO EDGE -->
+            <div class="darkroom-lines">
+                <div id="gallery-container">
+                    <!-- Multiple clothesline rows will be dynamically inserted here -->
                 </div>
             </div>
         </section>
         
-        <!-- Full Screen Parallax Image 2 -->
-        <section class="parallax-section bg-cover bg-center bg-fixed flex items-center justify-center" style="background-image: url('f3.png');">
+        <!-- Pricing Section Header on Background Image -->
+        <section class="parallax-section" style="background-image: url('p14.png');">
              <div class="bg-black/50 absolute inset-0"></div>
+             <div class="relative z-10 text-center px-4 md:px-6">
+                <h2 class="text-3xl md:text-6xl font-display font-bold text-white mb-4 md:mb-6 scroll-animate">Packages & Pricing</h2>
+                <p class="text-neutral-200 text-base md:text-xl max-w-2xl mx-auto mb-8 md:mb-12 scroll-animate" style="transition-delay: 100ms;">Choose a package that best tells your story, or let's create a custom one.</p>
+                
+                <!-- Pricing Buttons Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto scroll-animate" style="transition-delay: 200ms;">
+                    <!-- Starter Package -->
+                    <button class="pricing-btn bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-xl p-4 md:p-6 text-white hover:bg-opacity-20 transition-all duration-300 transform hover:scale-105" data-package="starter">
+                        <h3 class="text-lg md:text-xl font-bold font-display text-amber-400 mb-2">Starter Package</h3>
+                        <p class="text-sm text-neutral-300 mb-3">"Mini Shoot"</p>
+                        <p class="text-2xl md:text-3xl font-bold mb-4">$50–$75</p>
+                        <ul class="text-sm space-y-2 text-left">
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>30-min session</li>
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>10 edited images</li>
+                        </ul>
+                    </button>
+                    
+                    <!-- Standard Package -->
+                    <button class="pricing-btn bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-xl p-4 md:p-6 text-white hover:bg-opacity-20 transition-all duration-300 transform hover:scale-105" data-package="standard">
+                        <h3 class="text-lg md:text-xl font-bold font-display text-amber-400 mb-2">Standard Package</h3>
+                        <p class="text-sm text-neutral-300 mb-3">"Full Session"</p>
+                        <p class="text-2xl md:text-3xl font-bold mb-4">$100–$150</p>
+                        <ul class="text-sm space-y-2 text-left">
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>1-hour session</li>
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>20–25 edited images</li>
+                        </ul>
+                    </button>
+                    
+                    <!-- Premium Package -->
+                    <button class="pricing-btn bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-xl p-4 md:p-6 text-white hover:bg-opacity-20 transition-all duration-300 transform hover:scale-105" data-package="premium">
+                        <h3 class="text-lg md:text-xl font-bold font-display text-amber-400 mb-2">Premium Package</h3>
+                        <p class="text-sm text-neutral-300 mb-3">"Creative"</p>
+                        <p class="text-2xl md:text-3xl font-bold mb-4">$175–$250</p>
+                        <ul class="text-sm space-y-2 text-left">
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>1.5–2 hour session</li>
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>35–50 edited images</li>
+                        </ul>
+                    </button>
+                    
+                    <!-- Studio Session -->
+                    <button class="pricing-btn bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-xl p-4 md:p-6 text-white hover:bg-opacity-20 transition-all duration-300 transform hover:scale-105" data-package="studio">
+                        <h3 class="text-lg md:text-xl font-bold font-display text-amber-400 mb-2">Studio Session</h3>
+                        <p class="text-sm text-neutral-300 mb-3">"Professional"</p>
+                        <p class="text-2xl md:text-3xl font-bold mb-4">TBD</p>
+                        <ul class="text-sm space-y-2 text-left">
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>1–1.5 hour session</li>
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>Professional studio</li>
+                        </ul>
+                    </button>
+                </div>
+             </div>
         </section>
 
-        <!-- Pricing Section -->
-        <section id="pricing" class="py-20 md:py-32 bg-black">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12 scroll-animate">
-                    <h2 class="text-3xl md:text-5xl font-display font-bold">Packages & Pricing</h2>
-                    <p class="text-neutral-400 mt-4 max-w-2xl mx-auto">Choose a package that best tells your story, or let's create a custom one.</p>
-                </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <!-- Pricing Cards -->
-                    <div class="pricing-card bg-neutral-900 p-8 rounded-lg flex flex-col scroll-animate">
-                        <h3 class="text-xl font-bold font-display text-amber-500">Starter Package</h3>
-                        <p class="text-sm text-neutral-400 mb-4">“Mini Shoot”</p>
-                        <p class="text-3xl font-bold mb-4">$50–$75</p>
-                        <ul class="space-y-3 text-neutral-300 flex-grow">
-                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>30-min session</li>
-                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>10 edited images</li>
-                        </ul>
-                    </div>
-                    <div class="pricing-card bg-neutral-900 p-8 rounded-lg flex flex-col scroll-animate" style="transition-delay: 100ms;">
-                        <h3 class="text-xl font-bold font-display text-amber-500">Standard Package</h3>
-                        <p class="text-sm text-neutral-400 mb-4">“Full Session”</p>
-                        <p class="text-3xl font-bold mb-4">$100–$150</p>
-                        <ul class="space-y-3 text-neutral-300 flex-grow">
-                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>1-hour session</li>
-                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>20–25 edited images</li>
-                        </ul>
-                    </div>
-                    <div class="pricing-card bg-neutral-900 p-8 rounded-lg flex flex-col scroll-animate" style="transition-delay: 200ms;">
-                        <h3 class="text-xl font-bold font-display text-amber-500">Premium Package</h3>
-                        <p class="text-sm text-neutral-400 mb-4">“Creative”</p>
-                        <p class="text-3xl font-bold mb-4">$175–$250</p>
-                        <ul class="space-y-3 text-neutral-300 flex-grow">
-                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>1.5–2 hour session</li>
-                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>35–50 edited images</li>
-                        </ul>
-                    </div>
-                    <div class="pricing-card bg-neutral-900 p-8 rounded-lg flex flex-col scroll-animate" style="transition-delay: 300ms;">
-                        <h3 class="text-xl font-bold font-display text-amber-500">Studio Session</h3>
-                        <p class="text-sm text-neutral-400 mb-4">“Professional”</p>
-                        <p class="text-3xl font-bold mb-4">TBD</p>
-                        <ul class="space-y-3 text-neutral-300 flex-grow">
-                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>1–1.5 hour session</li>
-                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>Professional studio</li>
-                        </ul>
-                    </div>
+        
                 </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer id="contact" class="bg-black border-t border-neutral-800 py-12">
+    <footer id="contact" class="glass-header border-t border-neutral-700 py-12">
         <div class="container mx-auto px-6 text-center">
             <h2 class="text-2xl md:text-3xl font-display font-bold scroll-animate">Let's Create Together</h2>
-            <p class="text-neutral-400 mt-4 mb-8 max-w-xl mx-auto scroll-animate">Ready to tell your story? Get in touch to book a session.</p>
-            <a href="mailto:hello@lenslore.ca" class="mt-8 mb-8 inline-block bg-amber-500 text-black font-bold uppercase tracking-widest py-3 px-8 rounded-lg text-sm hover:bg-amber-400 transition-colors scroll-animate">
-                hello@lenslore.ca
-            </a>
+            <p class="text-neutral-300 mt-4 mb-8 max-w-xl mx-auto scroll-animate">Ready to tell your story? Get in touch to book a session.</p>
+            
             <div class="flex justify-center space-x-6 mt-8 scroll-animate">
                 <a href="https://www.instagram.com/lens_l0re/" target="_blank" rel="noopener noreferrer" class="text-neutral-400 hover:text-amber-500 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919 4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.90-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg>
                 </a>
             </div>
             <p class="text-neutral-500 text-sm mt-10">&copy; <span id="year"></span> Lenslore.ca by Kiitan Kujembola. All Rights Reserved.</p>
+            <p class="text-neutral-600 text-xs mt-2">
+                Site created by 
+                <a href="https://www.instagram.com/mrwopara/?hl=en" target="_blank" rel="noopener noreferrer" class="text-amber-500 hover:text-amber-400 transition-colors font-semibold">
+                    Chim
+                </a>
+            </p>
         </div>
     </footer>
     
     <!-- Image Modal -->
     <div id="imageModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none">
         <img id="modalImage" src="" alt="Full size view" class="max-w-full max-h-full rounded-lg shadow-2xl">
-        <button id="closeModal" class="absolute top-6 right-6 text-white text-4xl">&times;</button>
+        <button id="closeModal" class="absolute top-6 right-6 text-white text-4xl hover:text-amber-500 transition-colors">&times;</button>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // DRAG SYSTEM VARIABLES
+            let isDragging = false;
+            let currentDragElement = null;
+            let startX = 0;
+            let startY = 0;
+            let elementStartX = 0;
+            let elementStartY = 0;
+            
             // --- Mobile Menu Toggle ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -255,7 +931,7 @@
             document.getElementById('year').textContent = new Date().getFullYear();
 
             // --- Portfolio Gallery Logic ---
-            const galleryGrid = document.getElementById('gallery-grid');
+            const galleryContainer = document.getElementById('gallery-container');
             const filterButtons = document.querySelectorAll('.gallery-btn');
             const imageModal = document.getElementById('imageModal');
             const modalImage = document.getElementById('modalImage');
@@ -267,55 +943,202 @@
                 ...Array.from({ length: 12 }, (_, i) => ({ src: `f${i + 1}.png`, category: 'fashion', alt: `Fashion & Brand Work ${i + 1}` })),
             ];
             
+            // Shuffle images for variety
             images.sort(() => 0.5 - Math.random());
 
-            function renderGallery(filter = 'all') {
-                galleryGrid.innerHTML = '';
-                const filteredImages = (filter === 'all') ? images : images.filter(img => img.category === filter);
+            // Photo sizes for darkroom variety
+            const photoSizes = ['photo-small', 'photo-medium', 'photo-large', 'photo-square', 'photo-landscape'];
 
-                filteredImages.forEach((image, index) => {
-                    const item = document.createElement('div');
-                    
-                    let classList = 'gallery-item cursor-pointer relative overflow-hidden rounded-lg group scroll-animate';
-                    
-                    // Dynamic sizing for masonry layout
-                    if (filteredImages.length > 4) {
-                        if (index % 7 === 1) { classList += ' md:col-span-2 md:row-span-2'; } 
-                        else if (index % 9 === 3) { classList += ' md:row-span-2'; }
-                        else if (index % 11 === 5) { classList += ' md:col-span-2'; }
-                    }
-                    
-                    item.className = classList;
-                    item.style.transitionDelay = `${(index % 8) * 50}ms`;
+            function getRandomPhotoSize() {
+                return photoSizes[Math.floor(Math.random() * photoSizes.length)];
+            }
 
-                    const imgElement = document.createElement('img');
-                    imgElement.src = image.src;
-                    imgElement.alt = image.alt;
-                    imgElement.className = 'w-full h-full object-cover rounded-lg transition-transform duration-500 group-hover:scale-110';
-                    imgElement.onerror = function() { this.onerror=null; this.src=`https://placehold.co/600x800/111/fff?text=${image.src.replace('.png','').toUpperCase()}+Not+Found`; };
+            // RUBBER BAND DRAG SYSTEM
+            function initializeDragSystem(hangingPhoto) {
+                let originalTransform = '';
+                
+                function handleDragStart(e) {
+                    if (e.target.closest('.watermark') || e.target.closest('.camera-watermark')) return;
                     
-                    const overlay = document.createElement('div');
-                    overlay.className = 'absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4';
+                    isDragging = true;
+                    currentDragElement = hangingPhoto;
                     
-                    const categoryText = document.createElement('span');
-                    categoryText.className = 'text-white font-bold text-sm uppercase tracking-widest';
-                    categoryText.textContent = image.category;
+                    const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
                     
-                    overlay.appendChild(categoryText);
-                    item.appendChild(imgElement);
-                    item.appendChild(overlay);
-                    galleryGrid.appendChild(item);
+                    startX = clientX;
+                    startY = clientY;
                     
-                    item.addEventListener('click', () => {
+                    // Store original transform for snap-back
+                    originalTransform = hangingPhoto.style.transform || '';
+                    
+                    hangingPhoto.classList.add('dragging');
+                    hangingPhoto.style.zIndex = '25';
+                    
+                    e.preventDefault();
+                }
+                
+                function handleDragMove(e) {
+                    if (!isDragging || currentDragElement !== hangingPhoto) return;
+                    
+                    const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+                    
+                    const deltaX = clientX - startX;
+                    const deltaY = clientY - startY;
+                    
+                    // Apply rubber band effect - resistance increases with distance
+                    const resistance = 0.7;
+                    const rubberX = deltaX * resistance;
+                    const rubberY = deltaY * resistance;
+                    
+                    // Add slight rotation based on horizontal movement
+                    const rotation = rubberX * 0.05;
+                    
+                    hangingPhoto.style.transform = `translate(${rubberX}px, ${rubberY}px) rotate(${rotation}deg)`;
+                    
+                    e.preventDefault();
+                }
+                
+                function handleDragEnd(e) {
+                    if (!isDragging || currentDragElement !== hangingPhoto) return;
+                    
+                    isDragging = false;
+                    currentDragElement = null;
+                    
+                    hangingPhoto.classList.remove('dragging');
+                    hangingPhoto.classList.add('snapping-back');
+                    
+                    // Snap back to original position with bounce
+                    hangingPhoto.style.transform = originalTransform;
+                    
+                    setTimeout(() => {
+                        hangingPhoto.classList.remove('snapping-back');
+                        hangingPhoto.style.zIndex = '';
+                    }, 800);
+                    
+                    e.preventDefault();
+                }
+                
+                // Mouse events
+                hangingPhoto.addEventListener('mousedown', handleDragStart);
+                document.addEventListener('mousemove', handleDragMove);
+                document.addEventListener('mouseup', handleDragEnd);
+                
+                // Touch events
+                hangingPhoto.addEventListener('touchstart', handleDragStart, { passive: false });
+                document.addEventListener('touchmove', handleDragMove, { passive: false });
+                document.addEventListener('touchend', handleDragEnd, { passive: false });
+            }
+
+            // Function to create darkroom-style hanging photo with FIXED DIMENSIONS
+            function createHangingPhoto(image, index) {
+                const hangingPhoto = document.createElement('div');
+                const photoSize = getRandomPhotoSize();
+                
+                hangingPhoto.className = `hanging-photo ${photoSize} scroll-animate`;
+                hangingPhoto.style.transitionDelay = `${(index % 12) * 100}ms`;
+
+                // Create clothespin
+                const clothespin = document.createElement('div');
+                clothespin.className = 'clothespin';
+
+                // Create image directly - NO WHITE BORDER with FIXED SIZING
+                const imgElement = document.createElement('img');
+                imgElement.src = image.src;
+                imgElement.alt = image.alt;
+                imgElement.loading = 'lazy';
+                
+                // FORCE PROPER DIMENSIONS - no need to wait for load
+                imgElement.style.width = '100%';
+                imgElement.style.height = '100%';
+                imgElement.style.objectFit = 'cover'; // Use cover to prevent distortion
+                imgElement.style.objectPosition = 'center';
+                
+                imgElement.onerror = function() { 
+                    this.onerror=null; 
+                    this.src=`https://placehold.co/400x500/111/fff?text=${image.src.replace('.png','').toUpperCase()}+Not+Found`; 
+                };
+                
+                const watermark = document.createElement('div');
+                watermark.className = 'watermark';
+                watermark.textContent = '@lens_l0re';
+                
+                const cameraWatermark = document.createElement('div');
+                cameraWatermark.className = 'camera-watermark';
+                cameraWatermark.textContent = 'Nikon D5100';
+                
+                hangingPhoto.appendChild(clothespin);
+                hangingPhoto.appendChild(imgElement);
+                hangingPhoto.appendChild(watermark);
+                hangingPhoto.appendChild(cameraWatermark);
+                
+                // Initialize drag system for this photo
+                initializeDragSystem(hangingPhoto);
+                
+                // Click handler for modal (only if not dragging)
+                hangingPhoto.addEventListener('click', (e) => {
+                    if (hangingPhoto.classList.contains('dragging')) return;
+                    
+                    watermark.classList.add('visible');
+                    cameraWatermark.classList.add('visible');
+                    setTimeout(() => {
                         modalImage.src = image.src;
                         imageModal.classList.remove('opacity-0', 'pointer-events-none');
-                    });
+                    }, 300);
                 });
                 
-                // Re-trigger animations for new items
+                return hangingPhoto;
+            }
+
+            // Function to organize photos into rows for multiple clotheslines - MAX 4 PER ROW
+            function renderGallery(filter = 'all') {
+                galleryContainer.innerHTML = '';
+                const filteredImages = (filter === 'all') ? images : images.filter(img => img.category === filter);
+                
+                // Group photos into rows - MAX 4 photos per row for bigger, bolder look
+                const photosPerRow = window.innerWidth < 768 ? [2, 3, 2, 3, 2] : [4, 3, 4, 4, 3, 4, 4, 3];
+                let imageIndex = 0;
+                let rowIndex = 0;
+                
+                while (imageIndex < filteredImages.length) {
+                    const currentRowCount = photosPerRow[rowIndex % photosPerRow.length];
+                    const rowImages = filteredImages.slice(imageIndex, imageIndex + currentRowCount);
+                    
+                    if (rowImages.length === 0) break;
+                    
+                    // Create clothesline row
+                    const clotheslineRow = document.createElement('div');
+                    clotheslineRow.className = 'clothesline-row';
+                    
+                    // Create rope
+                    const clothesline = document.createElement('div');
+                    clothesline.className = 'clothesline';
+                    clothesline.style.animationDelay = `${rowIndex * 0.5}s`;
+                    
+                    // Create row gallery
+                    const rowGallery = document.createElement('div');
+                    rowGallery.className = 'gallery-grid';
+                    
+                    // Add photos to this row
+                    rowImages.forEach((image, photoIndex) => {
+                        const hangingPhoto = createHangingPhoto(image, imageIndex + photoIndex);
+                        rowGallery.appendChild(hangingPhoto);
+                    });
+                    
+                    clotheslineRow.appendChild(clothesline);
+                    clotheslineRow.appendChild(rowGallery);
+                    galleryContainer.appendChild(clotheslineRow);
+                    
+                    imageIndex += currentRowCount;
+                    rowIndex++;
+                }
+                
+                // Re-trigger scroll animations
                 observeAnimatedElements();
             }
 
+            // Filter button functionality
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     filterButtons.forEach(btn => btn.classList.remove('active'));
@@ -325,19 +1148,27 @@
                 });
             });
             
-            closeModal.addEventListener('click', () => imageModal.classList.add('opacity-0', 'pointer-events-none'));
+            // Modal close handlers
+            closeModal.addEventListener('click', closeModalHandler);
             imageModal.addEventListener('click', (e) => {
-                if (e.target === imageModal) imageModal.classList.add('opacity-0', 'pointer-events-none');
+                if (e.target === imageModal) {
+                    closeModalHandler();
+                }
             });
+            
+            function closeModalHandler() {
+                imageModal.classList.add('opacity-0', 'pointer-events-none');
+                document.querySelectorAll('.watermark, .camera-watermark').forEach(wm => wm.classList.remove('visible'));
+            }
 
-            // --- Scroll Animation Observer ---
+            // --- OPTIMIZED Scroll Animation Observer ---
             let observer;
             function observeAnimatedElements() {
                 if (observer) {
                     observer.disconnect();
                 }
                 
-                const animatedElements = document.querySelectorAll('.scroll-animate');
+                const animatedElements = document.querySelectorAll('.scroll-animate:not(.is-visible)');
                 
                 observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
@@ -346,13 +1177,143 @@
                             observer.unobserve(entry.target);
                         }
                     });
-                }, { threshold: 0.1 });
+                }, { 
+                    threshold: 0.1,
+                    rootMargin: '50px'
+                });
 
                 animatedElements.forEach(el => observer.observe(el));
             }
             
-            // Initial gallery render and animation setup
+            // Initial setup
             renderGallery('all');
+            
+            // --- PRICING BUTTON HANDLERS ---
+            const pricingButtons = document.querySelectorAll('.pricing-btn');
+            
+            pricingButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const packageType = this.getAttribute('data-package');
+                    let packageInfo = {};
+                    
+                    switch(packageType) {
+                        case 'starter':
+                            packageInfo = {
+                                name: 'Starter Package',
+                                subtitle: 'Mini Shoot',
+                                price: '$50-$75',
+                                details: '30-min session, 10 edited images'
+                            };
+                            break;
+                        case 'standard':
+                            packageInfo = {
+                                name: 'Standard Package',
+                                subtitle: 'Full Session',
+                                price: '$100-$150',
+                                details: '1-hour session, 20-25 edited images'
+                            };
+                            break;
+                        case 'premium':
+                            packageInfo = {
+                                name: 'Premium Package',
+                                subtitle: 'Creative',
+                                price: '$175-$250',
+                                details: '1.5-2 hour session, 35-50 edited images'
+                            };
+                            break;
+                        case 'studio':
+                            packageInfo = {
+                                name: 'Studio Session',
+                                subtitle: 'Professional',
+                                price: 'TBD',
+                                details: '1-1.5 hour session, Professional studio'
+                            };
+                            break;
+                    }
+                    
+                    // Create email content with empty fields for user to fill
+                    const emailSubject = encodeURIComponent('Photography Inquiry - ' + packageInfo.name);
+                    const emailBodyText = 'Hi there!' + 
+                        '%0D%0A%0D%0A' + 'I am interested in booking the ' + packageInfo.name + ' (' + packageInfo.subtitle + ') - ' + packageInfo.price + '.' +
+                        '%0D%0A%0D%0A' + 'Package includes: ' + packageInfo.details +
+                        '%0D%0A%0D%0A' + 'PLEASE FILL OUT THE FOLLOWING:' +
+                        '%0D%0A%0D%0A' + 'Your Name: [PLEASE ADD YOUR NAME]' +
+                        '%0D%0A' + 'Phone Number: [PLEASE ADD YOUR PHONE]' +
+                        '%0D%0A' + 'Email: [PLEASE ADD YOUR EMAIL]' +
+                        '%0D%0A' + 'City: [PLEASE ADD YOUR CITY]' +
+                        '%0D%0A' + 'Preferred Date(s): [PLEASE ADD PREFERRED DATES]' +
+                        '%0D%0A' + 'Event/Session Type: [PLEASE DESCRIBE]' +
+                        '%0D%0A' + 'Location Preference: [INDOOR/OUTDOOR/STUDIO/OTHER]' +
+                        '%0D%0A' + 'How did you hear about us: [PLEASE TELL US]' +
+                        '%0D%0A%0D%0A' + 'Additional Details/Vision:' +
+                        '%0D%0A' + '[PLEASE DESCRIBE YOUR VISION, ANY SPECIFIC SHOTS YOU WANT, STYLE PREFERENCES, ETC.]' +
+                        '%0D%0A%0D%0A' + 'Looking forward to creating something amazing together!' +
+                        '%0D%0A%0D%0A' + 'Best regards,';
+                    
+                    // Create mailto link
+                    const mailtoLink = 'mailto:hello@lenslore.ca?subject=' + emailSubject + '&body=' + emailBodyText;
+                    
+                    // Open email client
+                    window.location.href = mailtoLink;
+                });
+            });
+            
+            // --- CONTACT FORM HANDLER ---
+            const contactForm = document.getElementById('contactForm');
+            const successMessage = document.getElementById('successMessage');
+            
+            if (contactForm && successMessage) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get form data
+                    const fullName = document.getElementById('fullName').value;
+                    const phoneNumber = document.getElementById('phoneNumber').value;
+                    const city = document.getElementById('city').value;
+                    const hearAbout = document.getElementById('hearAbout').value;
+                    const message = document.getElementById('message').value || 'No additional message provided.';
+                    
+                    // Validate required fields
+                    if (!fullName || !phoneNumber || !city || !hearAbout) {
+                        alert('Please fill in all required fields.');
+                        return;
+                    }
+                    
+                    // Create email content
+                    const emailSubject = encodeURIComponent('New Photography Inquiry from ' + fullName);
+                    const emailBodyText = 'Hi there!' + 
+                        '%0D%0A%0D%0A' + 'I am interested in your photography services. Here are my details:' +
+                        '%0D%0A%0D%0A' + 'CONTACT INFORMATION:' +
+                        '%0D%0A' + 'Name: ' + fullName +
+                        '%0D%0A' + 'Phone: ' + phoneNumber +
+                        '%0D%0A' + 'City: ' + city +
+                        '%0D%0A' + 'How I heard about you: ' + hearAbout +
+                        '%0D%0A%0D%0A' + 'MESSAGE:' +
+                        '%0D%0A' + message +
+                        '%0D%0A%0D%0A' + 'Looking forward to hearing from you!' +
+                        '%0D%0A%0D%0A' + 'Best regards,' +
+                        '%0D%0A' + fullName;
+                    
+                    // Create mailto link
+                    const mailtoLink = 'mailto:hello@lenslore.ca?subject=' + emailSubject + '&body=' + emailBodyText;
+                    
+                    // Open email client
+                    window.location.href = mailtoLink;
+                    
+                    // Show success message
+                    contactForm.style.display = 'none';
+                    successMessage.classList.remove('hidden');
+                    successMessage.classList.add('form-success');
+                    
+                    // Reset form after delay
+                    setTimeout(function() {
+                        contactForm.reset();
+                        contactForm.style.display = 'block';
+                        successMessage.classList.add('hidden');
+                        successMessage.classList.remove('form-success');
+                    }, 8000);
+                });
+            }
         });
     </script>
 
