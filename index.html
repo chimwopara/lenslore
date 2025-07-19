@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lenslore.ca | Kiitan Kujembola Photography</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for typography and layout */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+        }
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #f59e0b; /* Amber-500 */
+        }
+        .gallery-btn {
+            transition: all 0.3s ease;
+        }
+        .gallery-btn.active {
+            background-color: #f59e0b;
+            color: #0a0a0a;
+        }
+        .gallery-item {
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease;
+        }
+        .gallery-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        .pricing-card {
+            border: 1px solid #27272a; /* Zinc-800 */
+            transition: all 0.3s ease;
+        }
+        .pricing-card:hover {
+            border-color: #f59e0b;
+            transform: translateY(-5px);
+        }
+        /* Style for the image modal */
+        #imageModal {
+            transition: opacity 0.3s ease;
+        }
+        /* Parallax section style */
+        .parallax-section {
+            min-height: 70vh;
+        }
+        /* Scroll-triggered animations */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .scroll-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-black/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-display font-bold tracking-wider">Lensl<span class="text-amber-500">0</span>re.ca</a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="nav-link text-sm uppercase tracking-widest">About</a>
+                <a href="#portfolio" class="nav-link text-sm uppercase tracking-widest">Portfolio</a>
+                <a href="#pricing" class="nav-link text-sm uppercase tracking-widest">Pricing</a>
+                <a href="#contact" class="nav-link text-sm uppercase tracking-widest">Contact</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#about" class="block py-2 nav-link text-sm uppercase tracking-widest">About</a>
+            <a href="#portfolio" class="block py-2 nav-link text-sm uppercase tracking-widest">Portfolio</a>
+            <a href="#pricing" class="block py-2 nav-link text-sm uppercase tracking-widest">Pricing</a>
+            <a href="#contact" class="block py-2 nav-link text-sm uppercase tracking-widest">Contact</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+        <section id="hero" class="h-screen flex items-center justify-center text-center bg-cover bg-center bg-fixed" style="background-image: url('p1.png');">
+            <div class="bg-black/60 absolute inset-0"></div>
+            <div class="relative z-10 px-4">
+                <h1 class="text-5xl md:text-8xl font-display font-black text-white leading-tight scroll-animate">Tell Your Story</h1>
+                <p class="text-lg md:text-xl text-neutral-300 mt-4 max-w-2xl mx-auto scroll-animate" style="transition-delay: 100ms;">Through intentional, cinematic, and authentic photography.</p>
+                <a href="#portfolio" class="mt-8 inline-block bg-amber-500 text-black font-bold uppercase tracking-widest py-3 px-8 rounded-lg text-sm hover:bg-amber-400 transition-colors scroll-animate" style="transition-delay: 200ms;">
+                    View My Work
+                </a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 md:py-32 bg-black">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center scroll-animate">
+                    <h2 class="text-3xl md:text-5xl font-display font-bold">Lensl<span class="text-amber-500">0</span>re: Tell Your Story</h2>
+                    <p class="text-neutral-400 mt-6 text-lg">
+                        LensL0re is a platform dedicated to storytelling through the lens. We believe every person, moment, and scene holds a story waiting to be told.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12 mt-16 items-center">
+                    <div class="scroll-animate">
+                        <img src="me.png" alt="Photographer Kiitan Kujembola" class="rounded-lg shadow-2xl" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/1a1a1a/444?text=me.png+not+found';">
+                    </div>
+                    <div class="space-y-6 scroll-animate" style="transition-delay: 150ms;">
+                        <h3 class="text-2xl font-bold font-display">The Experience</h3>
+                        <p class="text-neutral-400">
+                            Our tagline, "Tell Your Story," is an invitation. We don't just take pictures; we listen, observe, and collaborate to bring your unique narrative to life.
+                        </p>
+                        <p class="text-neutral-400">
+                           LensL0re offers photography that feels intentional, cinematic, and rooted in connection. Every session is custom-tailored to reflect who you are or what your brand represents.
+                        </p>
+                        <h4 class="font-bold text-lg pt-4">Why It Matters</h4>
+                        <p class="text-neutral-400">
+                            In a world overflowing with content, we cut through the noise by focusing on meaning. We create space for images that stick with you, not because they’re polished, but because they’re <span class="text-amber-500 font-semibold">real</span>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Full Screen Parallax Image 1 -->
+        <section class="parallax-section bg-cover bg-center bg-fixed flex items-center justify-center" style="background-image: url('p5.png');">
+             <div class="bg-black/50 absolute inset-0"></div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12 scroll-animate">
+                    <h2 class="text-3xl md:text-5xl font-display font-bold">Portfolio</h2>
+                    <p class="text-neutral-400 mt-4 max-w-2xl mx-auto">A collection of stories, moments, and creative expressions.</p>
+                </div>
+                
+                <div class="flex justify-center space-x-2 md:space-x-4 mb-12 scroll-animate">
+                    <button class="gallery-btn active py-2 px-4 md:px-6 rounded-lg font-semibold text-sm" data-filter="all">All</button>
+                    <button class="gallery-btn py-2 px-4 md:px-6 rounded-lg font-semibold text-sm" data-filter="portraits">Portraits</button>
+                    <button class="gallery-btn py-2 px-4 md:px-6 rounded-lg font-semibold text-sm" data-filter="community">Community</button>
+                    <button class="gallery-btn py-2 px-4 md:px-6 rounded-lg font-semibold text-sm" data-filter="fashion">Fashion</button>
+                </div>
+
+                <!-- Gallery Grid -->
+                <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 auto-rows-fr gap-4">
+                    <!-- Images will be dynamically inserted here by JS -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Full Screen Parallax Image 2 -->
+        <section class="parallax-section bg-cover bg-center bg-fixed flex items-center justify-center" style="background-image: url('f3.png');">
+             <div class="bg-black/50 absolute inset-0"></div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-20 md:py-32 bg-black">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12 scroll-animate">
+                    <h2 class="text-3xl md:text-5xl font-display font-bold">Packages & Pricing</h2>
+                    <p class="text-neutral-400 mt-4 max-w-2xl mx-auto">Choose a package that best tells your story, or let's create a custom one.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Pricing Cards -->
+                    <div class="pricing-card bg-neutral-900 p-8 rounded-lg flex flex-col scroll-animate">
+                        <h3 class="text-xl font-bold font-display text-amber-500">Starter Package</h3>
+                        <p class="text-sm text-neutral-400 mb-4">“Mini Shoot”</p>
+                        <p class="text-3xl font-bold mb-4">$50–$75</p>
+                        <ul class="space-y-3 text-neutral-300 flex-grow">
+                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>30-min session</li>
+                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>10 edited images</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-card bg-neutral-900 p-8 rounded-lg flex flex-col scroll-animate" style="transition-delay: 100ms;">
+                        <h3 class="text-xl font-bold font-display text-amber-500">Standard Package</h3>
+                        <p class="text-sm text-neutral-400 mb-4">“Full Session”</p>
+                        <p class="text-3xl font-bold mb-4">$100–$150</p>
+                        <ul class="space-y-3 text-neutral-300 flex-grow">
+                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>1-hour session</li>
+                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>20–25 edited images</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-card bg-neutral-900 p-8 rounded-lg flex flex-col scroll-animate" style="transition-delay: 200ms;">
+                        <h3 class="text-xl font-bold font-display text-amber-500">Premium Package</h3>
+                        <p class="text-sm text-neutral-400 mb-4">“Creative”</p>
+                        <p class="text-3xl font-bold mb-4">$175–$250</p>
+                        <ul class="space-y-3 text-neutral-300 flex-grow">
+                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>1.5–2 hour session</li>
+                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>35–50 edited images</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-card bg-neutral-900 p-8 rounded-lg flex flex-col scroll-animate" style="transition-delay: 300ms;">
+                        <h3 class="text-xl font-bold font-display text-amber-500">Studio Session</h3>
+                        <p class="text-sm text-neutral-400 mb-4">“Professional”</p>
+                        <p class="text-3xl font-bold mb-4">TBD</p>
+                        <ul class="space-y-3 text-neutral-300 flex-grow">
+                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>1–1.5 hour session</li>
+                            <li class="flex items-center"><span class="text-amber-500 mr-3">✔</span>Professional studio</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-black border-t border-neutral-800 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-2xl md:text-3xl font-display font-bold scroll-animate">Let's Create Together</h2>
+            <p class="text-neutral-400 mt-4 mb-8 max-w-xl mx-auto scroll-animate">Ready to tell your story? Get in touch to book a session.</p>
+            <a href="mailto:hello@lenslore.ca" class="mt-8 mb-8 inline-block bg-amber-500 text-black font-bold uppercase tracking-widest py-3 px-8 rounded-lg text-sm hover:bg-amber-400 transition-colors scroll-animate">
+                hello@lenslore.ca
+            </a>
+            <div class="flex justify-center space-x-6 mt-8 scroll-animate">
+                <a href="https://www.instagram.com/lens_l0re/" target="_blank" rel="noopener noreferrer" class="text-neutral-400 hover:text-amber-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919 4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg>
+                </a>
+            </div>
+            <p class="text-neutral-500 text-sm mt-10">&copy; <span id="year"></span> Lenslore.ca by Kiitan Kujembola. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none">
+        <img id="modalImage" src="" alt="Full size view" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        <button id="closeModal" class="absolute top-6 right-6 text-white text-4xl">&times;</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // --- Dynamic Year for Footer ---
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // --- Portfolio Gallery Logic ---
+            const galleryGrid = document.getElementById('gallery-grid');
+            const filterButtons = document.querySelectorAll('.gallery-btn');
+            const imageModal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const closeModal = document.getElementById('closeModal');
+
+            const images = [
+                ...Array.from({ length: 16 }, (_, i) => ({ src: `p${i + 1}.png`, category: 'portraits', alt: `Portrait ${i + 1}` })),
+                ...Array.from({ length: 9 }, (_, i) => ({ src: `c${i + 1}.png`, category: 'community', alt: `Community & Calling ${i + 1}` })),
+                ...Array.from({ length: 12 }, (_, i) => ({ src: `f${i + 1}.png`, category: 'fashion', alt: `Fashion & Brand Work ${i + 1}` })),
+            ];
+            
+            images.sort(() => 0.5 - Math.random());
+
+            function renderGallery(filter = 'all') {
+                galleryGrid.innerHTML = '';
+                const filteredImages = (filter === 'all') ? images : images.filter(img => img.category === filter);
+
+                filteredImages.forEach((image, index) => {
+                    const item = document.createElement('div');
+                    
+                    let classList = 'gallery-item cursor-pointer relative overflow-hidden rounded-lg group scroll-animate';
+                    
+                    // Dynamic sizing for masonry layout
+                    if (filteredImages.length > 4) {
+                        if (index % 7 === 1) { classList += ' md:col-span-2 md:row-span-2'; } 
+                        else if (index % 9 === 3) { classList += ' md:row-span-2'; }
+                        else if (index % 11 === 5) { classList += ' md:col-span-2'; }
+                    }
+                    
+                    item.className = classList;
+                    item.style.transitionDelay = `${(index % 8) * 50}ms`;
+
+                    const imgElement = document.createElement('img');
+                    imgElement.src = image.src;
+                    imgElement.alt = image.alt;
+                    imgElement.className = 'w-full h-full object-cover rounded-lg transition-transform duration-500 group-hover:scale-110';
+                    imgElement.onerror = function() { this.onerror=null; this.src=`https://placehold.co/600x800/111/fff?text=${image.src.replace('.png','').toUpperCase()}+Not+Found`; };
+                    
+                    const overlay = document.createElement('div');
+                    overlay.className = 'absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4';
+                    
+                    const categoryText = document.createElement('span');
+                    categoryText.className = 'text-white font-bold text-sm uppercase tracking-widest';
+                    categoryText.textContent = image.category;
+                    
+                    overlay.appendChild(categoryText);
+                    item.appendChild(imgElement);
+                    item.appendChild(overlay);
+                    galleryGrid.appendChild(item);
+                    
+                    item.addEventListener('click', () => {
+                        modalImage.src = image.src;
+                        imageModal.classList.remove('opacity-0', 'pointer-events-none');
+                    });
+                });
+                
+                // Re-trigger animations for new items
+                observeAnimatedElements();
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const filter = button.getAttribute('data-filter');
+                    renderGallery(filter);
+                });
+            });
+            
+            closeModal.addEventListener('click', () => imageModal.classList.add('opacity-0', 'pointer-events-none'));
+            imageModal.addEventListener('click', (e) => {
+                if (e.target === imageModal) imageModal.classList.add('opacity-0', 'pointer-events-none');
+            });
+
+            // --- Scroll Animation Observer ---
+            let observer;
+            function observeAnimatedElements() {
+                if (observer) {
+                    observer.disconnect();
+                }
+                
+                const animatedElements = document.querySelectorAll('.scroll-animate');
+                
+                observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                animatedElements.forEach(el => observer.observe(el));
+            }
+            
+            // Initial gallery render and animation setup
+            renderGallery('all');
+        });
+    </script>
+
+</body>
+</html>
