@@ -22,6 +22,8 @@
             margin: 0;
             padding: 0;
             line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll on body */
+            width: 100%;
         }
 
         .font-display {
@@ -93,39 +95,50 @@
             position: relative;
             padding: 80px 0;
             min-height: 1200px;
+            width: 100%;
+            overflow-x: hidden; /* Prevent horizontal overflow */
         }
         
         .clothesline-row {
             position: relative;
             margin-bottom: 250px;
-            height: 140px;
+            height: auto; /* Allow dynamic height */
+            min-height: 180px; /* Minimum height for content */
+            width: 100%;
+            overflow: visible; /* Ensure content is visible */
         }
         
         /* MOBILE SPECIFIC ROW STYLING */
         @media (max-width: 768px) {
+            .darkroom-lines {
+                padding: 40px 0;
+                width: 100%;
+                overflow: hidden; /* Prevent horizontal scroll on main container */
+            }
+            
             .clothesline-row {
-                margin-bottom: 180px;
+                margin-bottom: 250px; /* Increased spacing between rows */
+                width: 100%;
+                max-width: 100vw;
+                overflow: visible; /* Allow content to be visible */
+                height: auto; /* Let height adjust to content */
+                min-height: 200px; /* Minimum height for photos */
+            }
+            
+            .clothesline-row .gallery-grid {
                 overflow-x: auto;
                 overflow-y: visible;
-                padding-bottom: 20px;
+                padding: 0 15px;
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: row; /* Ensure horizontal layout */
+                flex-wrap: nowrap;
             }
             
             .clothesline-row::-webkit-scrollbar {
-                height: 8px;
-            }
-            
-            .clothesline-row::-webkit-scrollbar-track {
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 4px;
-            }
-            
-            .clothesline-row::-webkit-scrollbar-thumb {
-                background: rgba(245, 158, 11, 0.5);
-                border-radius: 4px;
-            }
-            
-            .clothesline-row::-webkit-scrollbar-thumb:hover {
-                background: rgba(245, 158, 11, 0.7);
+                display: none; /* Hide scrollbar but keep functionality */
             }
         }
         
@@ -159,13 +172,7 @@
             position: relative;
             transition: transform 0.2s ease;
             z-index: 1;
-        }
-        
-        @media (max-width: 768px) {
-            .clothesline {
-                /* Mobile clothesline needs to be wider for horizontal scroll */
-                min-width: 150%;
-            }
+            width: 100%; /* Ensure proper width */
         }
         
         .clothesline::before {
@@ -251,13 +258,15 @@
             animation: gentleSwayWithBreeze 6s ease-in-out infinite;
             transition: none;
             flex-shrink: 0; /* Prevent photos from shrinking on mobile */
+            top: 8px; /* Offset to account for clothespin connection to rope */
         }
         
-        /* MOBILE: Disable dragging and hover effects */
+        /* MOBILE: Disable dragging and hover effects, ensure no overlaps */
         @media (max-width: 768px) {
             .hanging-photo {
                 cursor: pointer;
-                margin: 0 15px 0px;
+                margin: 0; /* Removed since we use gap in parent */
+                min-width: 140px; /* Ensure minimum width */
             }
             
             .hanging-photo:hover {
@@ -322,15 +331,15 @@
             }
         }
         
-        /* CLOTHESPIN/PEG STYLES WITH TOGGLE ANIMATION */
+        /* CLOTHESPIN/PEG STYLES WITH TOGGLE ANIMATION - CONNECTS PHOTO TO ROPE */
         .clothespin {
             position: absolute;
-            top: -18px;
+            top: -28px; /* Position to overlap with rope */
             left: 50%;
             transform: translateX(-50%);
             width: 24px;
-            height: 35px;
-            z-index: 10;
+            height: 45px; /* Taller to connect to rope */
+            z-index: 15; /* Above rope and photo */
             animation: pinToggle 4s ease-in-out infinite;
         }
         
@@ -349,11 +358,11 @@
         .clothespin::before {
             content: '';
             position: absolute;
-            top: 0;
+            top: 8px; /* Start from rope level */
             left: 50%;
             transform: translateX(-50%);
             width: 5px;
-            height: 22px;
+            height: 32px; /* Extend through rope to photo */
             background: linear-gradient(to bottom, #D2691E, #A0522D);
             border-radius: 2px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.4);
@@ -362,11 +371,11 @@
         .clothespin::after {
             content: '';
             position: absolute;
-            top: 16px;
+            top: 24px; /* Position to grip rope and photo top */
             left: 50%;
             transform: translateX(-50%);
             width: 20px;
-            height: 14px;
+            height: 16px; /* Bigger grip */
             background: linear-gradient(45deg, #D2691E, #A0522D, #8B4513);
             border-radius: 10px 10px 5px 5px;
             box-shadow: 
@@ -644,6 +653,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 100%;
+            overflow: hidden; /* Prevent horizontal overflow */
+        }
+        
+        @media (max-width: 768px) {
+            .parallax-section {
+                min-height: 60vh; /* Reduce height on mobile */
+                padding: 20px 10px;
+            }
         }
         
         /* GALLERY GRID - RESPONSIVE LAYOUT */
@@ -654,22 +672,53 @@
             gap: 0;
             width: 100%;
             padding: 0 20px;
+            box-sizing: border-box;
         }
         
-        /* MOBILE: Horizontal scroll layout */
+        /* MOBILE: Horizontal scroll layout with proper spacing */
         @media (max-width: 768px) {
             .gallery-grid {
                 justify-content: flex-start;
                 flex-wrap: nowrap;
                 overflow-x: auto;
-                padding: 0 10px;
+                overflow-y: visible;
+                padding: 0 15px;
                 scroll-snap-type: x mandatory;
                 -webkit-overflow-scrolling: touch;
+                gap: 15px; /* Reduced gap to fit better */
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                height: auto; /* Remove height constraints */
+                min-height: 200px; /* Allow for photo height */
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            
+            .gallery-grid::-webkit-scrollbar {
+                height: 6px;
+                margin-top: 10px;
+            }
+            
+            .gallery-grid::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 3px;
+            }
+            
+            .gallery-grid::-webkit-scrollbar-thumb {
+                background: rgba(245, 158, 11, 0.5);
+                border-radius: 3px;
             }
             
             .hanging-photo {
                 scroll-snap-align: start;
+                margin: 0; /* Remove margin since we use gap */
+                flex-shrink: 0;
+                display: inline-block; /* Ensure inline display */
+                vertical-align: top; /* Align to top */
             }
+        }
             
             .photo-small {
                 width: 140px;
@@ -695,37 +744,41 @@
                 width: 200px;
                 height: 140px;
             }
-        }
+        
         
         /* RESPONSIVE DESIGN - MOBILE FIRST */
         @media (max-width: 480px) {
+            body {
+                overflow-x: hidden;
+            }
+            
             .photo-small {
-                width: 120px;
-                height: 150px;
+                width: 90px;
+                height: 115px;
             }
             
             .photo-medium {
-                width: 140px;
-                height: 175px;
+                width: 100px;
+                height: 125px;
             }
             
             .photo-large {
-                width: 160px;
-                height: 200px;
-            }
-            
-            .photo-square {
-                width: 140px;
+                width: 110px;
                 height: 140px;
             }
             
+            .photo-square {
+                width: 100px;
+                height: 100px;
+            }
+            
             .photo-landscape {
-                width: 180px;
-                height: 120px;
+                width: 120px;
+                height: 85px;
             }
             
             .clothesline-row {
-                margin-bottom: 150px;
+                margin-bottom: 200px; /* Reduced spacing for small screens */
             }
             
             .hero-title {
@@ -734,6 +787,11 @@
             
             .pricing-btn {
                 padding: 0.75rem;
+            }
+            
+            .gallery-grid {
+                gap: 8px; /* Smaller gap for very small screens */
+                padding: 0 10px;
             }
         }
         
@@ -747,7 +805,7 @@
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased" style="overflow-x: hidden; width: 100%; max-width: 100vw;">
 
     <!-- Ambient Background -->
     <div class="ambient-bg"></div>
@@ -835,7 +893,7 @@
         </section>
 
         <!-- Portfolio Section -->
-        <section id="portfolio" class="py-20 md:py-32">
+        <section id="portfolio" class="py-20 md:py-32" style="overflow-x: hidden; width: 100%;">
             <!-- Darkroom Clotheslines Gallery -->
             <div class="darkroom-lines">
                 <div id="gallery-container">
@@ -957,11 +1015,11 @@
             const modalImage = document.getElementById('modalImage');
             const closeModal = document.getElementById('closeModal');
 
-            // ENSURE NO DUPLICATE IMAGES - CREATE UNIQUE ARRAYS
+            // ENSURE NO DUPLICATE IMAGES - CREATE UNIQUE ARRAYS (EXCLUDING f1)
             const allImages = [
                 ...Array.from({ length: 16 }, (_, i) => ({ src: `p${i + 1}.png`, category: 'portraits', alt: `Portrait ${i + 1}`, id: `p${i + 1}` })),
                 ...Array.from({ length: 9 }, (_, i) => ({ src: `c${i + 1}.png`, category: 'community', alt: `Community & Calling ${i + 1}`, id: `c${i + 1}` })),
-                ...Array.from({ length: 12 }, (_, i) => ({ src: `f${i + 1}.png`, category: 'fashion', alt: `Fashion & Brand Work ${i + 1}`, id: `f${i + 1}` })),
+                ...Array.from({ length: 11 }, (_, i) => ({ src: `f${i + 2}.png`, category: 'fashion', alt: `Fashion & Brand Work ${i + 2}`, id: `f${i + 2}` })), // Skip f1
             ];
             
             // Shuffle images for variety but maintain uniqueness
@@ -1021,12 +1079,24 @@
                     
                     hangingPhoto.style.transform = `translate(${rubberX}px, ${rubberY}px) rotate(${rotation}deg)`;
                     
-                    // ROPE PHYSICS: Make the rope bend/sag when photo is pulled
+                    // ENHANCED ROPE PHYSICS: Stretch the rope at connection point
                     if (currentRope) {
-                        const ropeBend = Math.min(Math.abs(rubberY * 0.3), 15); // Limit rope bend
-                        const ropeRotation = rubberX * 0.02; // Slight rope rotation
-                        currentRope.style.transform = `translateY(${ropeBend}px) rotate(${ropeRotation}deg)`;
-                        currentRope.style.transformOrigin = 'center center';
+                        const photoRect = hangingPhoto.getBoundingClientRect();
+                        const ropeRect = currentRope.getBoundingClientRect();
+                        
+                        // Calculate the connection point relative to the rope
+                        const connectionPoint = (photoRect.left + photoRect.width / 2 - ropeRect.left) / ropeRect.width;
+                        
+                        // Create rope stretching effect using CSS transforms
+                        const stretchY = Math.min(Math.abs(rubberY * 0.8), 25); // More pronounced stretch
+                        const stretchX = rubberX * 0.3;
+                        
+                        // Apply localized stretch at the connection point
+                        currentRope.style.transformOrigin = `${connectionPoint * 100}% center`;
+                        currentRope.style.transform = `translate(${stretchX}px, ${stretchY}px) scaleY(${1 + Math.abs(rubberY) * 0.01}) rotate(${rubberX * 0.03}deg)`;
+                        
+                        // Add visual rope tension effect
+                        currentRope.style.filter = `brightness(${1 + Math.abs(rubberY) * 0.005})`;
                     }
                     
                     e.preventDefault();
@@ -1044,10 +1114,17 @@
                     // Snap back to original position with bounce
                     hangingPhoto.style.transform = originalTransform;
                     
-                    // Snap rope back to normal position
+                    // Reset rope to normal position with smooth transition
                     if (currentRope) {
+                        currentRope.style.transition = 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
                         currentRope.style.transform = '';
                         currentRope.style.transformOrigin = '';
+                        currentRope.style.filter = '';
+                        
+                        setTimeout(() => {
+                            currentRope.style.transition = '';
+                        }, 800);
+                        
                         currentRope = null;
                     }
                     
@@ -1129,6 +1206,32 @@
                 return hangingPhoto;
             }
 
+            // Function to check and prevent photo overlaps
+            function preventOverlaps(container) {
+                const photos = container.querySelectorAll('.hanging-photo');
+                const photosArray = Array.from(photos);
+                
+                for (let i = 0; i < photosArray.length; i++) {
+                    const currentPhoto = photosArray[i];
+                    const currentRect = currentPhoto.getBoundingClientRect();
+                    
+                    for (let j = i + 1; j < photosArray.length; j++) {
+                        const nextPhoto = photosArray[j];
+                        const nextRect = nextPhoto.getBoundingClientRect();
+                        
+                        // Check if photos overlap horizontally
+                        const horizontalOverlap = !(currentRect.right <= nextRect.left || nextRect.right <= currentRect.left);
+                        const verticalOverlap = !(currentRect.bottom <= nextRect.top || nextRect.bottom <= currentRect.top);
+                        
+                        if (horizontalOverlap && verticalOverlap) {
+                            // Hide the later photo to prevent overlap
+                            nextPhoto.style.display = 'none';
+                            console.log(`Hidden photo ${nextPhoto.getAttribute('data-image-id')} to prevent overlap`);
+                        }
+                    }
+                }
+            }
+
             // Function to organize photos into rows for multiple clotheslines
             function renderGallery(filter = 'all') {
                 galleryContainer.innerHTML = '';
@@ -1146,8 +1249,8 @@
                     return true;
                 });
                 
-                // Group photos into rows - Mobile: 2 per row, Desktop: 3-4 per row
-                const photosPerRow = isMobile ? [2, 2, 2, 2, 2] : [4, 3, 4, 4, 3, 4, 4, 3];
+                // Group photos into rows - Mobile: 2-3 photos max to ensure all are visible, Desktop: 3-4 per row
+                const photosPerRow = isMobile ? [2, 3, 2, 3, 2, 3, 2] : [4, 3, 4, 4, 3, 4, 4, 3];
                 let imageIndex = 0;
                 let rowIndex = 0;
                 
@@ -1179,6 +1282,11 @@
                     clotheslineRow.appendChild(clothesline);
                     clotheslineRow.appendChild(rowGallery);
                     galleryContainer.appendChild(clotheslineRow);
+                    
+                    // Prevent overlaps in this row
+                    setTimeout(() => {
+                        preventOverlaps(rowGallery);
+                    }, 100); // Small delay to ensure layout is complete
                     
                     imageIndex += currentRowCount;
                     rowIndex++;
@@ -1316,6 +1424,20 @@
                     location.reload(); // Simple solution for major layout changes
                 }
             });
+            
+            // --- MOBILE SCROLL FIX ---
+            if (isMobile) {
+                // Prevent horizontal scroll on mobile
+                document.body.style.overflowX = 'hidden';
+                document.documentElement.style.overflowX = 'hidden';
+                
+                // Ensure all sections fit within viewport
+                const sections = document.querySelectorAll('section, main, .container');
+                sections.forEach(section => {
+                    section.style.maxWidth = '100vw';
+                    section.style.overflowX = 'hidden';
+                });
+            }
         });
     </script>
 
