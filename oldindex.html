@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lenslore.ca | Kiitan Kujembola Photography</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        /* PERFORMANCE FIRST: No heavy animations */
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e5e5e5;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll on body */
+            width: 100%;
+        }
+
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* AMBIENT BACKGROUND - STATIC VERSION */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(251, 146, 60, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, rgba(14, 165, 233, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 60% 30%, rgba(168, 85, 247, 0.03) 0%, transparent 40%);
+        }
+        
+        /* OPTIMIZED NAVIGATION */
+        .nav-link {
+            transition: color 0.2s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: #f59e0b;
+        }
+        
+        .glass-header {
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* HERO SECTION */
+        .hero-title {
+            background: linear-gradient(135deg, #ffffff, #f59e0b, #fb923c);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* GALLERY BUTTONS */
+        .gallery-btn {
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .gallery-btn.active {
+            background: linear-gradient(135deg, #f59e0b, #fb923c);
+            color: #0a0a0a;
+            transform: translateY(-2px);
+        }
+        
+        .gallery-btn:hover:not(.active) {
+            background: rgba(245, 158, 11, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        /* MOBILE: 2x2 Grid for Filter Buttons */
+        @media (max-width: 768px) {
+            .filter-buttons-container {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+                gap: 12px;
+                justify-items: center;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            
+            .filter-buttons-container .gallery-btn {
+                width: 100%;
+                min-width: 120px;
+                text-align: center;
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+        }
+        
+        /* DARKROOM CLOTHESLINE SYSTEM WITH BETTER SPACING */
+        .darkroom-lines {
+            position: relative;
+            padding: 80px 0;
+            min-height: 1200px;
+            width: 100%;
+            overflow-x: hidden; /* Prevent horizontal overflow */
+        }
+        
+        .clothesline-row {
+            position: relative;
+            margin-bottom: 250px;
+            height: auto; /* Allow dynamic height */
+            min-height: 180px; /* Minimum height for content */
+            width: 100%;
+            overflow: visible; /* Ensure content is visible */
+        }
+        
+        /* MOBILE SPECIFIC ROW STYLING */
+        @media (max-width: 768px) {
+            .darkroom-lines {
+                padding: 40px 0;
+                width: 100%;
+                overflow: hidden; /* Prevent horizontal scroll on main container */
+            }
+            
+            .clothesline-row {
+                margin-bottom: 280px; /* Increased spacing for better separation */
+                width: 100%;
+                max-width: 100vw;
+                overflow: visible; /* Allow content to be visible */
+                height: auto; /* Let height adjust to content */
+                min-height: 280px; /* Minimum height for photos */
+            }
+            
+            .clothesline-row .gallery-grid {
+                overflow-x: auto;
+                overflow-y: hidden; /* PREVENT VERTICAL SCROLL */
+                padding: 0 20px;
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: row; /* Ensure horizontal layout */
+                flex-wrap: nowrap;
+                /* CRITICAL: Prevent vertical scroll on gallery container */
+                touch-action: pan-x pinch-zoom;
+                -ms-touch-action: pan-x pinch-zoom;
+            }
+            
+            .clothesline-row::-webkit-scrollbar {
+                display: none; /* Hide scrollbar but keep functionality */
+            }
+        }
+        
+        .clothesline {
+            position: absolute;
+            top: 20px; /* FIXED POSITION - photos hang 32px below this */
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #8B4513 0px,
+                    #A0522D 2px,
+                    #654321 4px,
+                    #8B4513 6px
+                ),
+                linear-gradient(to bottom,
+                    #A0522D 0%,
+                    #8B4513 25%,
+                    #654321 50%,
+                    #8B4513 75%,
+                    #A0522D 100%
+                );
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(139, 69, 19, 0.8),
+                inset 0 -1px 0 rgba(101, 67, 33, 0.8);
+            border-radius: 2px;
+            animation: ropeWave 8s ease-in-out infinite;
+            position: relative;
+            transition: transform 0.2s ease;
+            z-index: 1;
+            width: 100%; /* Ensure proper width */
+        }
+        
+        /* MOBILE: Ensure rope positioning is maintained */
+        @media (max-width: 768px) {
+            .clothesline {
+                top: 20px !important; /* Force consistent rope position */
+                height: 4px !important;
+            }
+        }
+        
+        .clothesline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent 0px,
+                rgba(139, 69, 19, 0.3) 1px,
+                transparent 2px,
+                rgba(160, 82, 45, 0.2) 3px
+            );
+            border-radius: 2px;
+        }
+        
+        .clothesline::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: repeating-linear-gradient(
+                90deg,
+                #654321 0px,
+                #8B4513 3px,
+                #A0522D 6px,
+                #8B4513 9px
+            );
+            transform: translateY(-50%);
+        }
+        
+        /* ROPE ANCHOR POINTS */
+        .clothesline-row::before,
+        .clothesline-row::after {
+            content: '';
+            position: absolute;
+            top: 14px;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #8B4513, #654321);
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.6);
+            border: 2px solid #A0522D;
+            z-index: 2;
+        }
+        
+        .clothesline-row::before {
+            left: 1%;
+        }
+        
+        .clothesline-row::after {
+            right: 1%;
+        }
+        
+        /* ROPE WAVE ANIMATION */
+        @keyframes ropeWave {
+            0%, 100% { 
+                transform: translateY(0px); 
+            }
+            25% { 
+                transform: translateY(-1px); 
+            }
+            50% { 
+                transform: translateY(0px); 
+            }
+            75% { 
+                transform: translateY(1px); 
+            }
+        }
+        
+        /* PHOTO HANGING ON LINE WITH SWAY ANIMATION - ENSURE ROPE CONNECTION */
+        .hanging-photo {
+            position: relative;
+            display: inline-block;
+            margin: 0 30px 0px;
+            cursor: grab;
+            transform-origin: center top;
+            animation: gentleSwayWithBreeze 6s ease-in-out infinite;
+            transition: none;
+            flex-shrink: 0; /* Prevent photos from shrinking on mobile */
+            top: 32px; /* FIXED OFFSET - ensures photos are always connected to rope */
+        }
+        
+        /* MOBILE: Disable dragging and optimize for touch - PREVENT VERTICAL SCROLL */
+        @media (max-width: 768px) {
+            .hanging-photo {
+                cursor: pointer;
+                margin: 0; /* Removed since we use gap in parent */
+                min-width: 220px; /* Ensure minimum width */
+                /* ENSURE ROPE CONNECTION ON MOBILE */
+                top: 32px !important; /* Match desktop offset - FORCE CONNECTION */
+                /* PREVENT VERTICAL SCROLL */
+                touch-action: pan-x pinch-zoom;
+                -ms-touch-action: pan-x pinch-zoom;
+            }
+            
+            .hanging-photo:active {
+                animation-play-state: paused;
+                transform: scale(0.98);
+                transition: transform 0.2s ease;
+            }
+            
+            /* ENSURE CLOTHESPIN CONNECTION ON MOBILE */
+            .clothespin {
+                top: -32px !important; /* Force consistent positioning */
+                height: 48px !important; /* Ensure full connection */
+            }
+        }
+        
+        /* DESKTOP: Enable dragging and enhanced hover */
+        @media (min-width: 769px) {
+            .hanging-photo:hover {
+                animation-play-state: paused;
+                transform: scale(1.08) translateY(-8px);
+                z-index: 15;
+                transition: transform 0.3s ease;
+            }
+            
+            .hanging-photo.dragging {
+                cursor: grabbing;
+                z-index: 20;
+                animation: none;
+                transition: none;
+            }
+            
+            .hanging-photo.snapping-back {
+                transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+        }
+        
+        /* GENTLE SWAY ANIMATIONS */
+        @keyframes gentleSwayWithBreeze {
+            0%, 100% { 
+                transform: rotate(-1deg) translateY(0px); 
+            }
+            25% { 
+                transform: rotate(0.5deg) translateY(-2px); 
+            }
+            50% { 
+                transform: rotate(1deg) translateY(0px); 
+            }
+            75% { 
+                transform: rotate(-0.5deg) translateY(-1px); 
+            }
+        }
+        
+        .hanging-photo:nth-child(even) {
+            animation: gentleSwayReverse 7s ease-in-out infinite;
+        }
+        
+        @keyframes gentleSwayReverse {
+            0%, 100% { 
+                transform: rotate(1deg) translateY(-1px); 
+            }
+            25% { 
+                transform: rotate(-0.5deg) translateY(0px); 
+            }
+            50% { 
+                transform: rotate(-1deg) translateY(-2px); 
+            }
+            75% { 
+                transform: rotate(0.5deg) translateY(0px); 
+            }
+        }
+        
+        /* CLOTHESPIN/PEG STYLES - GUARANTEED ROPE-PHOTO CONNECTION */
+        .clothespin {
+            position: absolute;
+            top: -32px; /* Position to overlap with rope - MATCHES PHOTO TOP OFFSET */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 48px; /* Increased height to ensure connection */
+            z-index: 15; /* Above rope and photo */
+            animation: pinToggle 4s ease-in-out infinite;
+        }
+        
+        @keyframes pinToggle {
+            0%, 90%, 100% { 
+                transform: translateX(-50%) rotate(0deg); 
+            }
+            5%, 15% { 
+                transform: translateX(-50%) rotate(-2deg); 
+            }
+            10% { 
+                transform: translateX(-50%) rotate(2deg); 
+            }
+        }
+        
+        .clothespin::before {
+            content: '';
+            position: absolute;
+            top: 4px; /* Start from rope level */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 40px; /* Extend through rope to photo - INCREASED LENGTH */
+            background: linear-gradient(to bottom, #D2691E, #A0522D);
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        
+        .clothespin::after {
+            content: '';
+            position: absolute;
+            top: 20px; /* Position to grip rope and photo top */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 22px;
+            height: 18px; /* Bigger grip for better connection */
+            background: linear-gradient(45deg, #D2691E, #A0522D, #8B4513);
+            border-radius: 11px 11px 6px 6px;
+            box-shadow: 
+                0 3px 6px rgba(0,0,0,0.4),
+                inset 0 0 0 1px rgba(139, 69, 19, 0.6);
+        }
+        
+        /* DIRECT PHOTO STYLING - NO WHITE BORDERS */
+        .hanging-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            border-radius: 4px;
+            box-shadow: 
+                0 4px 12px rgba(0,0,0,0.3),
+                0 12px 32px rgba(0,0,0,0.2);
+            user-select: none;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+        }
+        
+        /* GLASS DISPLAY CASE FOR ME.PNG */
+        .glass-display-case {
+            position: relative;
+            background: linear-gradient(145deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0.05) 50%, 
+                rgba(0,0,0,0.1) 100%);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
+            animation: floatGently 8s ease-in-out infinite;
+        }
+        
+        @keyframes floatGently {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            50% { 
+                transform: translateY(-8px) rotate(0.5deg); 
+            }
+        }
+        
+        .glass-display-case::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            height: 2px;
+            background: linear-gradient(to right, 
+                transparent, 
+                rgba(255,255,255,0.4), 
+                transparent);
+            border-radius: 1px;
+        }
+        
+        .glass-display-case::after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom, 
+                rgba(255,255,255,0.3), 
+                transparent);
+            border-radius: 1px;
+        }
+        
+        .glass-case-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+        
+        /* HANGING CHAIN FOR GLASS CASE */
+        .hanging-chain {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 25px;
+            background: repeating-linear-gradient(
+                to bottom,
+                #888 0px,
+                #888 3px,
+                #666 3px,
+                #666 6px
+            );
+            border-radius: 2px;
+        }
+        
+        .hanging-chain::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: #666;
+            border-radius: 50%;
+            box-shadow: 0 0 3px rgba(0,0,0,0.5);
+        }
+        
+        /* DIFFERENT PHOTO SIZES FOR VARIETY - BIGGER FOR MAX 4 PER ROW */
+        .photo-small {
+            width: 240px;
+            height: 300px;
+        }
+        
+        .photo-medium {
+            width: 280px;
+            height: 350px;
+        }
+        
+        .photo-large {
+            width: 320px;
+            height: 400px;
+        }
+        
+        .photo-square {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .photo-landscape {
+            width: 380px;
+            height: 280px;
+        }
+        
+        /* WATERMARK STYLES */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            z-index: 3;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 16px;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .camera-watermark {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            z-index: 3;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 8px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .watermark.visible,
+        .camera-watermark.visible {
+            opacity: 1;
+        }
+        
+        /* PRICING CARDS */
+        .pricing-card {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+        }
+        
+        .pricing-card:hover {
+            border-color: #f59e0b;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
+        }
+        
+        /* BUTTONS */
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #fb923c);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        }
+        
+        /* SCROLL ANIMATIONS - SIMPLIFIED */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+        
+        .scroll-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* CONTACT FORM STYLING */
+        #contactForm input,
+        #contactForm select,
+        #contactForm textarea {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        #contactForm input:focus,
+        #contactForm select:focus,
+        #contactForm textarea:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        #contactForm input::placeholder,
+        #contactForm textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        #contactForm select option {
+            background: #1a1a1a;
+            color: #e5e5e5;
+        }
+        
+        .form-success {
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* MODAL */
+        #imageModal {
+            transition: all 0.3s ease;
+        }
+        
+        /* SIMPLE PARALLAX SECTIONS - NO FIXED BACKGROUNDS */
+        .parallax-section {
+            min-height: 70vh;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            overflow: hidden; /* Prevent horizontal overflow */
+        }
+        
+        @media (max-width: 768px) {
+            .parallax-section {
+                min-height: 60vh; /* Reduce height on mobile */
+                padding: 20px 10px;
+            }
+        }
+        
+        /* GALLERY GRID - RESPONSIVE LAYOUT */
+        .gallery-grid {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 0;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        
+        /* MOBILE: One photo per row with horizontal scrolling - PREVENT VERTICAL SCROLL */
+        @media (max-width: 768px) {
+            .gallery-grid {
+                justify-content: flex-start;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                overflow-y: hidden; /* Prevent vertical scroll */
+                padding: 0 20px;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                gap: 20px;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                height: auto;
+                min-height: 280px;
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+                /* CRITICAL: Prevent vertical scroll on touch */
+                touch-action: pan-x pinch-zoom;
+                -ms-touch-action: pan-x pinch-zoom;
+            }
+            
+            .gallery-grid::-webkit-scrollbar {
+                height: 8px;
+                margin-top: 15px;
+            }
+            
+            .gallery-grid::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 4px;
+            }
+            
+            .gallery-grid::-webkit-scrollbar-thumb {
+                background: rgba(245, 158, 11, 0.6);
+                border-radius: 4px;
+            }
+            
+            .hanging-photo {
+                scroll-snap-align: center;
+                margin: 0;
+                flex-shrink: 0;
+                display: inline-block;
+                vertical-align: top;
+                /* Make all photos same size on mobile for consistency */
+                width: 220px !important;
+                height: 280px !important;
+                /* CRITICAL: Prevent vertical scroll when touching photos */
+                touch-action: pan-x pinch-zoom;
+                -ms-touch-action: pan-x pinch-zoom;
+                /* ENSURE PROPER CONNECTION TO ROPE */
+                position: relative;
+                top: 40px; /* Fixed offset from rope */
+            }
+            
+            /* Override all photo size classes on mobile to be consistent */
+            .photo-small,
+            .photo-medium,
+            .photo-large,
+            .photo-square,
+            .photo-landscape {
+                width: 220px !important;
+                height: 280px !important;
+            }
+        }
+        
+        /* RESPONSIVE DESIGN - VERY SMALL SCREENS */
+        @media (max-width: 480px) {
+            body {
+                overflow-x: hidden;
+            }
+            
+            /* Keep consistent photo sizing on very small screens */
+            .photo-small,
+            .photo-medium,
+            .photo-large,
+            .photo-square,
+            .photo-landscape {
+                width: 200px !important;
+                height: 260px !important;
+            }
+            
+            .clothesline-row {
+                margin-bottom: 200px; /* Reduced spacing for small screens */
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .pricing-btn {
+                padding: 0.75rem;
+            }
+            
+            .gallery-grid {
+                gap: 15px;
+                padding: 0 15px;
+            }
+            
+            .filter-buttons-container {
+                max-width: 280px;
+                gap: 10px;
+            }
+            
+            .filter-buttons-container .gallery-btn {
+                min-width: 110px;
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+        }
+        
+        /* DESKTOP RESPONSIVE */
+        @media (min-width: 769px) {
+            .gallery-grid {
+                flex-wrap: wrap;
+                width: 100vw;
+                margin-left: calc(-50vw + 50%);
+            }
+        }
+    </style>
+</head>
+<body class="antialiased" style="overflow-x: hidden; width: 100%; max-width: 100vw;">
+
+    <!-- Ambient Background -->
+    <div class="ambient-bg"></div>
+
+    <!-- Header & Navigation -->
+    <header class="glass-header fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-display font-bold tracking-wider">Lensl<span class="text-amber-500">0</span>re.ca</a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="nav-link text-sm uppercase tracking-widest">About</a>
+                <a href="#portfolio" class="nav-link text-sm uppercase tracking-widest">Portfolio</a>
+                <a href="#pricing" class="nav-link text-sm uppercase tracking-widest">Pricing</a>
+                <a href="#contact" class="nav-link text-sm uppercase tracking-widest">Contact</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#about" class="block py-2 nav-link text-sm uppercase tracking-widest">About</a>
+            <a href="#portfolio" class="block py-2 nav-link text-sm uppercase tracking-widest">Portfolio</a>
+            <a href="#pricing" class="block py-2 nav-link text-sm uppercase tracking-widest">Pricing</a>
+            <a href="#contact" class="block py-2 nav-link text-sm uppercase tracking-widest">Contact</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+        <section id="hero" class="h-screen flex items-center justify-center text-center bg-cover bg-center" style="background-image: url('p15.png');">
+            <div class="bg-black/40 absolute inset-0"></div>
+            <div class="relative z-10 px-4">
+                <h1 class="text-5xl md:text-8xl font-display font-black hero-title leading-tight scroll-animate">Tell Your Story</h1>
+                <p class="text-lg md:text-xl text-neutral-200 mt-4 max-w-2xl mx-auto scroll-animate" style="transition-delay: 100ms;">Through intentional, cinematic, and authentic photography.</p>
+                
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 md:py-32 relative">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-5 gap-16 items-center">
+                    <div class="md:col-span-2 space-y-6 scroll-animate">
+                        <p class="text-neutral-300 text-lg leading-relaxed">
+                            LensL0re is a platform dedicated to storytelling through the lens. We believe every person, moment, and scene holds a story waiting to be told.
+                        </p>
+                        <h3 class="text-2xl font-bold font-display">The Experience</h3>
+                        <p class="text-neutral-300">
+                            Our tagline, "Tell Your Story," is an invitation. We don't just take pictures; we listen, observe, and collaborate to bring your unique narrative to life.
+                        </p>
+                        <p class="text-neutral-300">
+                           LensL0re offers photography that feels intentional, cinematic, and rooted in connection. Every session is custom-tailored to reflect who you are or what your brand represents.
+                        </p>
+                        <h4 class="font-bold text-lg pt-4">Why It Matters</h4>
+                        <p class="text-neutral-300">
+                            In a world overflowing with content, we cut through the noise by focusing on meaning. We create space for images that stick with you, not because they're polished, but because they're <span class="text-amber-500 font-semibold">real</span>.
+                        </p>
+                    </div>
+                    <div class="md:col-span-3 scroll-animate" style="transition-delay: 150ms;">
+                        <div class="glass-display-case" style="max-width: 600px; margin: 0 auto;">
+                            <div class="hanging-chain"></div>
+                            <img src="me.png" alt="Photographer Kiitan Kujembola" class="glass-case-photo" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/1a1a1a/444?text=me.png+not+found';">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section Header on Background Image -->
+        <section class="parallax-section" style="background-image: url('p11.png');">
+             <div class="bg-black/50 absolute inset-0"></div>
+             <div class="relative z-10 text-center px-6">
+                <h2 class="text-4xl md:text-6xl font-display font-bold text-white mb-6 scroll-animate">Portfolio</h2>
+                <p class="text-neutral-200 text-lg md:text-xl max-w-2xl mx-auto mb-8 scroll-animate" style="transition-delay: 100ms;">Fresh from the darkroom - stories captured and hanging to dry. <span class="hidden md:inline">Drag them around!</span><span class="md:hidden">Swipe to explore!</span></p>
+                
+                <div class="flex justify-center space-x-2 md:space-x-4 scroll-animate filter-buttons-container" style="transition-delay: 200ms;">
+                    <button class="gallery-btn active py-3 px-6 md:px-8 rounded-xl font-semibold text-sm" data-filter="all">All</button>
+                    <button class="gallery-btn py-3 px-6 md:px-8 rounded-xl font-semibold text-sm" data-filter="portraits">Portraits</button>
+                    <button class="gallery-btn py-3 px-6 md:px-8 rounded-xl font-semibold text-sm" data-filter="community">Community</button>
+                    <button class="gallery-btn py-3 px-6 md:px-8 rounded-xl font-semibold text-sm" data-filter="fashion">Fashion</button>
+                </div>
+             </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-20 md:py-32" style="overflow-x: hidden; width: 100%;">
+            <!-- Darkroom Clotheslines Gallery -->
+            <div class="darkroom-lines">
+                <div id="gallery-container">
+                    <!-- Multiple clothesline rows will be dynamically inserted here -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Pricing Section Header on Background Image -->
+        <section class="parallax-section" style="background-image: url('p14.png');">
+             <div class="bg-black/50 absolute inset-0"></div>
+             <div class="relative z-10 text-center px-4 md:px-6">
+                <h2 class="text-3xl md:text-6xl font-display font-bold text-white mb-4 md:mb-6 scroll-animate">Packages & Pricing</h2>
+                <p class="text-neutral-200 text-base md:text-xl max-w-2xl mx-auto mb-8 md:mb-12 scroll-animate" style="transition-delay: 100ms;">Choose a package that best tells your story, or let's create a custom one.</p>
+                
+                <!-- Pricing Buttons Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto scroll-animate" style="transition-delay: 200ms;">
+                    <!-- Starter Package -->
+                    <button class="pricing-btn bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-xl p-4 md:p-6 text-white hover:bg-opacity-20 transition-all duration-300 transform hover:scale-105" data-package="starter">
+                        <h3 class="text-lg md:text-xl font-bold font-display text-amber-400 mb-2">Starter Package</h3>
+                        <p class="text-sm text-neutral-300 mb-3">"Mini Shoot"</p>
+                        <p class="text-2xl md:text-3xl font-bold mb-4">$50–$75</p>
+                        <ul class="text-sm space-y-2 text-left">
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>30-min session</li>
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>10 edited images</li>
+                        </ul>
+                    </button>
+                    
+                    <!-- Standard Package -->
+                    <button class="pricing-btn bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-xl p-4 md:p-6 text-white hover:bg-opacity-20 transition-all duration-300 transform hover:scale-105" data-package="standard">
+                        <h3 class="text-lg md:text-xl font-bold font-display text-amber-400 mb-2">Standard Package</h3>
+                        <p class="text-sm text-neutral-300 mb-3">"Full Session"</p>
+                        <p class="text-2xl md:text-3xl font-bold mb-4">$100–$150</p>
+                        <ul class="text-sm space-y-2 text-left">
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>1-hour session</li>
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>20–25 edited images</li>
+                        </ul>
+                    </button>
+                    
+                    <!-- Premium Package -->
+                    <button class="pricing-btn bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-xl p-4 md:p-6 text-white hover:bg-opacity-20 transition-all duration-300 transform hover:scale-105" data-package="premium">
+                        <h3 class="text-lg md:text-xl font-bold font-display text-amber-400 mb-2">Premium Package</h3>
+                        <p class="text-sm text-neutral-300 mb-3">"Creative"</p>
+                        <p class="text-2xl md:text-3xl font-bold mb-4">$175–$250</p>
+                        <ul class="text-sm space-y-2 text-left">
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>1.5–2 hour session</li>
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>35–50 edited images</li>
+                        </ul>
+                    </button>
+                    
+                    <!-- Studio Session -->
+                    <button class="pricing-btn bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-xl p-4 md:p-6 text-white hover:bg-opacity-20 transition-all duration-300 transform hover:scale-105" data-package="studio">
+                        <h3 class="text-lg md:text-xl font-bold font-display text-amber-400 mb-2">Studio Session</h3>
+                        <p class="text-sm text-neutral-300 mb-3">"Professional"</p>
+                        <p class="text-2xl md:text-3xl font-bold mb-4">TBD</p>
+                        <ul class="text-sm space-y-2 text-left">
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>1–1.5 hour session</li>
+                            <li class="flex items-center"><span class="text-amber-400 mr-2">✔</span>Professional studio</li>
+                        </ul>
+                    </button>
+                </div>
+             </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="glass-header border-t border-neutral-700 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-2xl md:text-3xl font-display font-bold scroll-animate">Let's Create Together</h2>
+            <p class="text-neutral-300 mt-4 mb-8 max-w-xl mx-auto scroll-animate">Ready to tell your story? Get in touch to book a session.</p>
+            
+            <div class="flex justify-center space-x-6 mt-8 scroll-animate">
+                <a href="https://www.instagram.com/lens_l0re/" target="_blank" rel="noopener noreferrer" class="text-neutral-400 hover:text-amber-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.90-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg>
+                </a>
+            </div>
+            <p class="text-neutral-500 text-sm mt-10">&copy; <span id="year"></span> Lenslore.ca by Kiitan Kujembola. All Rights Reserved.</p>
+            <p class="text-neutral-600 text-xs mt-2">
+                Site created by 
+                <a href="https://www.instagram.com/mrwopara/?hl=en" target="_blank" rel="noopener noreferrer" class="text-amber-500 hover:text-amber-400 transition-colors font-semibold">
+                    Chim
+                </a>
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none">
+        <img id="modalImage" src="" alt="Full size view" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        <button id="closeModal" class="absolute top-6 right-6 text-white text-4xl hover:text-amber-500 transition-colors">&times;</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DETECT MOBILE DEVICE
+            const isMobile = window.innerWidth <= 768;
+            
+            // DRAG SYSTEM VARIABLES (DESKTOP ONLY)
+            let isDragging = false;
+            let currentDragElement = null;
+            let startX = 0;
+            let startY = 0;
+            let currentRope = null;
+            
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // --- Dynamic Year for Footer ---
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // --- Portfolio Gallery Logic ---
+            const galleryContainer = document.getElementById('gallery-container');
+            const filterButtons = document.querySelectorAll('.gallery-btn');
+            const imageModal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const closeModal = document.getElementById('closeModal');
+
+            // ENSURE NO DUPLICATE IMAGES - CREATE UNIQUE ARRAYS (EXCLUDING f1)
+            const allImages = [
+                ...Array.from({ length: 16 }, (_, i) => ({ src: `p${i + 1}.png`, category: 'portraits', alt: `Portrait ${i + 1}`, id: `p${i + 1}` })),
+                ...Array.from({ length: 9 }, (_, i) => ({ src: `c${i + 1}.png`, category: 'community', alt: `Community & Calling ${i + 1}`, id: `c${i + 1}` })),
+                ...Array.from({ length: 11 }, (_, i) => ({ src: `f${i + 2}.png`, category: 'fashion', alt: `Fashion & Brand Work ${i + 2}`, id: `f${i + 2}` })), // Skip f1
+            ];
+            
+            // Shuffle images for variety but maintain uniqueness
+            const shuffledImages = [...allImages].sort(() => 0.5 - Math.random());
+
+            // Photo sizes for darkroom variety
+            const photoSizes = ['photo-small', 'photo-medium', 'photo-large', 'photo-square', 'photo-landscape'];
+
+            function getRandomPhotoSize() {
+                return photoSizes[Math.floor(Math.random() * photoSizes.length)];
+            }
+
+            // ENHANCED DRAG SYSTEM WITH ROPE PHYSICS (DESKTOP ONLY)
+            function initializeDragSystem(hangingPhoto) {
+                if (isMobile) return; // Skip drag system on mobile
+                
+                let originalTransform = '';
+                
+                function handleDragStart(e) {
+                    if (e.target.closest('.watermark') || e.target.closest('.camera-watermark')) return;
+                    
+                    isDragging = true;
+                    currentDragElement = hangingPhoto;
+                    currentRope = hangingPhoto.closest('.clothesline-row').querySelector('.clothesline');
+                    
+                    const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+                    
+                    startX = clientX;
+                    startY = clientY;
+                    
+                    // Store original transform for snap-back
+                    originalTransform = hangingPhoto.style.transform || '';
+                    
+                    hangingPhoto.classList.add('dragging');
+                    hangingPhoto.style.zIndex = '25';
+                    
+                    e.preventDefault();
+                }
+                
+                function handleDragMove(e) {
+                    if (!isDragging || currentDragElement !== hangingPhoto) return;
+                    
+                    const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+                    
+                    const deltaX = clientX - startX;
+                    const deltaY = clientY - startY;
+                    
+                    // Apply rubber band effect - resistance increases with distance
+                    const resistance = 0.7;
+                    const rubberX = deltaX * resistance;
+                    const rubberY = deltaY * resistance;
+                    
+                    // Add slight rotation based on horizontal movement
+                    const rotation = rubberX * 0.05;
+                    
+                    hangingPhoto.style.transform = `translate(${rubberX}px, ${rubberY}px) rotate(${rotation}deg)`;
+                    
+                    // ENHANCED ROPE PHYSICS: Stretch the rope at connection point
+                    if (currentRope) {
+                        const photoRect = hangingPhoto.getBoundingClientRect();
+                        const ropeRect = currentRope.getBoundingClientRect();
+                        
+                        // Calculate the connection point relative to the rope
+                        const connectionPoint = (photoRect.left + photoRect.width / 2 - ropeRect.left) / ropeRect.width;
+                        
+                        // Create rope stretching effect using CSS transforms
+                        const stretchY = Math.min(Math.abs(rubberY * 0.8), 25); // More pronounced stretch
+                        const stretchX = rubberX * 0.3;
+                        
+                        // Apply localized stretch at the connection point
+                        currentRope.style.transformOrigin = `${connectionPoint * 100}% center`;
+                        currentRope.style.transform = `translate(${stretchX}px, ${stretchY}px) scaleY(${1 + Math.abs(rubberY) * 0.01}) rotate(${rubberX * 0.03}deg)`;
+                        
+                        // Add visual rope tension effect
+                        currentRope.style.filter = `brightness(${1 + Math.abs(rubberY) * 0.005})`;
+                    }
+                    
+                    e.preventDefault();
+                }
+                
+                function handleDragEnd(e) {
+                    if (!isDragging || currentDragElement !== hangingPhoto) return;
+                    
+                    isDragging = false;
+                    currentDragElement = null;
+                    
+                    hangingPhoto.classList.remove('dragging');
+                    hangingPhoto.classList.add('snapping-back');
+                    
+                    // Snap back to original position with bounce
+                    hangingPhoto.style.transform = originalTransform;
+                    
+                    // Reset rope to normal position with smooth transition
+                    if (currentRope) {
+                        currentRope.style.transition = 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                        currentRope.style.transform = '';
+                        currentRope.style.transformOrigin = '';
+                        currentRope.style.filter = '';
+                        
+                        setTimeout(() => {
+                            currentRope.style.transition = '';
+                        }, 800);
+                        
+                        currentRope = null;
+                    }
+                    
+                    setTimeout(() => {
+                        hangingPhoto.classList.remove('snapping-back');
+                        hangingPhoto.style.zIndex = '';
+                    }, 800);
+                    
+                    e.preventDefault();
+                }
+                
+                // Only add drag events for desktop
+                if (!isMobile) {
+                    // Mouse events
+                    hangingPhoto.addEventListener('mousedown', handleDragStart);
+                    document.addEventListener('mousemove', handleDragMove);
+                    document.addEventListener('mouseup', handleDragEnd);
+                }
+            }
+
+            // Function to create darkroom-style hanging photo with FIXED DIMENSIONS
+            function createHangingPhoto(image, index) {
+                const hangingPhoto = document.createElement('div');
+                const photoSize = getRandomPhotoSize();
+                
+                hangingPhoto.className = `hanging-photo ${photoSize} scroll-animate`;
+                hangingPhoto.style.transitionDelay = `${(index % 12) * 100}ms`;
+                hangingPhoto.setAttribute('data-image-id', image.id); // Track unique ID
+
+                // Create clothespin
+                const clothespin = document.createElement('div');
+                clothespin.className = 'clothespin';
+
+                // Create image directly - NO WHITE BORDER with FIXED SIZING
+                const imgElement = document.createElement('img');
+                imgElement.src = image.src;
+                imgElement.alt = image.alt;
+                imgElement.loading = 'lazy';
+                
+                // FORCE PROPER DIMENSIONS - no need to wait for load
+                imgElement.style.width = '100%';
+                imgElement.style.height = '100%';
+                imgElement.style.objectFit = 'cover'; // Use cover to prevent distortion
+                imgElement.style.objectPosition = 'center';
+                
+                imgElement.onerror = function() { 
+                    this.onerror=null; 
+                    this.src=`https://placehold.co/400x500/111/fff?text=${image.src.replace('.png','').toUpperCase()}+Not+Found`; 
+                };
+                
+                const watermark = document.createElement('div');
+                watermark.className = 'watermark';
+                watermark.textContent = '@lens_l0re';
+                
+                const cameraWatermark = document.createElement('div');
+                cameraWatermark.className = 'camera-watermark';
+                cameraWatermark.textContent = 'Nikon D5100';
+                
+                hangingPhoto.appendChild(clothespin);
+                hangingPhoto.appendChild(imgElement);
+                hangingPhoto.appendChild(watermark);
+                hangingPhoto.appendChild(cameraWatermark);
+                
+                // Initialize drag system for this photo (desktop only)
+                initializeDragSystem(hangingPhoto);
+                
+                // Click handler for modal (only if not dragging) + PREVENT VERTICAL SCROLL
+                hangingPhoto.addEventListener('click', (e) => {
+                    if (hangingPhoto.classList.contains('dragging')) return;
+                    
+                    watermark.classList.add('visible');
+                    cameraWatermark.classList.add('visible');
+                    setTimeout(() => {
+                        modalImage.src = image.src;
+                        imageModal.classList.remove('opacity-0', 'pointer-events-none');
+                    }, 300);
+                });
+                
+                // MOBILE: Prevent vertical scrolling when touching photos
+                if (isMobile) {
+                    hangingPhoto.addEventListener('touchstart', (e) => {
+                        e.stopPropagation();
+                    }, { passive: true });
+                    
+                    hangingPhoto.addEventListener('touchmove', (e) => {
+                        e.stopPropagation();
+                    }, { passive: true });
+                    
+                    hangingPhoto.addEventListener('touchend', (e) => {
+                        e.stopPropagation();
+                    }, { passive: true });
+                }
+                
+                return hangingPhoto;
+            }
+
+            // Function to check and prevent photo overlaps
+            function preventOverlaps(container) {
+                const photos = container.querySelectorAll('.hanging-photo');
+                const photosArray = Array.from(photos);
+                
+                for (let i = 0; i < photosArray.length; i++) {
+                    const currentPhoto = photosArray[i];
+                    const currentRect = currentPhoto.getBoundingClientRect();
+                    
+                    for (let j = i + 1; j < photosArray.length; j++) {
+                        const nextPhoto = photosArray[j];
+                        const nextRect = nextPhoto.getBoundingClientRect();
+                        
+                        // Check if photos overlap horizontally
+                        const horizontalOverlap = !(currentRect.right <= nextRect.left || nextRect.right <= currentRect.left);
+                        const verticalOverlap = !(currentRect.bottom <= nextRect.top || nextRect.bottom <= currentRect.top);
+                        
+                        if (horizontalOverlap && verticalOverlap) {
+                            // Hide the later photo to prevent overlap
+                            nextPhoto.style.display = 'none';
+                            console.log(`Hidden photo ${nextPhoto.getAttribute('data-image-id')} to prevent overlap`);
+                        }
+                    }
+                }
+            }
+
+            // Function to organize photos into rows for multiple clotheslines
+            function renderGallery(filter = 'all') {
+                galleryContainer.innerHTML = '';
+                
+                // Filter images and ensure no duplicates
+                let filteredImages = (filter === 'all') ? shuffledImages : shuffledImages.filter(img => img.category === filter);
+                
+                // Remove duplicates by ID (extra safety)
+                const seenIds = new Set();
+                filteredImages = filteredImages.filter(img => {
+                    if (seenIds.has(img.id)) {
+                        return false;
+                    }
+                    seenIds.add(img.id);
+                    return true;
+                });
+                
+                // Group photos into rows - Mobile: 1 photo per row for horizontal scroll, Desktop: 3-4 per row
+                const photosPerRow = isMobile ? [1, 1, 1, 1, 1, 1, 1, 1, 1, 1] : [4, 3, 4, 4, 3, 4, 4, 3];
+                let imageIndex = 0;
+                let rowIndex = 0;
+                
+                while (imageIndex < filteredImages.length) {
+                    const currentRowCount = photosPerRow[rowIndex % photosPerRow.length];
+                    const rowImages = filteredImages.slice(imageIndex, imageIndex + currentRowCount);
+                    
+                    if (rowImages.length === 0) break;
+                    
+                    // Create clothesline row
+                    const clotheslineRow = document.createElement('div');
+                    clotheslineRow.className = 'clothesline-row';
+                    
+                    // Create rope
+                    const clothesline = document.createElement('div');
+                    clothesline.className = 'clothesline';
+                    clothesline.style.animationDelay = `${rowIndex * 0.5}s`;
+                    
+                    // Create row gallery
+                    const rowGallery = document.createElement('div');
+                    rowGallery.className = 'gallery-grid';
+                    
+                    // Add photos to this row
+                    rowImages.forEach((image, photoIndex) => {
+                        const hangingPhoto = createHangingPhoto(image, imageIndex + photoIndex);
+                        rowGallery.appendChild(hangingPhoto);
+                    });
+                    
+                    // MOBILE: Prevent vertical scroll on gallery containers
+                    if (isMobile) {
+                        rowGallery.addEventListener('touchstart', (e) => {
+                            // Allow horizontal scroll but prevent vertical
+                            const touch = e.touches[0];
+                            rowGallery._startY = touch.clientY;
+                            rowGallery._startX = touch.clientX;
+                        }, { passive: true });
+                        
+                        rowGallery.addEventListener('touchmove', (e) => {
+                            if (!rowGallery._startY || !rowGallery._startX) return;
+                            
+                            const touch = e.touches[0];
+                            const deltaY = Math.abs(touch.clientY - rowGallery._startY);
+                            const deltaX = Math.abs(touch.clientX - rowGallery._startX);
+                            
+                            // If more vertical movement than horizontal, prevent it
+                            if (deltaY > deltaX) {
+                                e.preventDefault();
+                            }
+                        }, { passive: false });
+                        
+                        rowGallery.addEventListener('touchend', (e) => {
+                            rowGallery._startY = null;
+                            rowGallery._startX = null;
+                        }, { passive: true });
+                    }
+                    
+                    clotheslineRow.appendChild(clothesline);
+                    clotheslineRow.appendChild(rowGallery);
+                    galleryContainer.appendChild(clotheslineRow);
+                    
+                    // Only prevent overlaps on desktop (not needed on mobile with 1 photo per row)
+                    if (!isMobile) {
+                        setTimeout(() => {
+                            preventOverlaps(rowGallery);
+                        }, 100);
+                    }
+                    
+                    imageIndex += currentRowCount;
+                    rowIndex++;
+                }
+                
+                // Re-trigger scroll animations
+                observeAnimatedElements();
+            }
+
+            // Filter button functionality
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const filter = button.getAttribute('data-filter');
+                    renderGallery(filter);
+                });
+            });
+            
+            // Modal close handlers
+            closeModal.addEventListener('click', closeModalHandler);
+            imageModal.addEventListener('click', (e) => {
+                if (e.target === imageModal) {
+                    closeModalHandler();
+                }
+            });
+            
+            function closeModalHandler() {
+                imageModal.classList.add('opacity-0', 'pointer-events-none');
+                document.querySelectorAll('.watermark, .camera-watermark').forEach(wm => wm.classList.remove('visible'));
+            }
+
+            // --- OPTIMIZED Scroll Animation Observer ---
+            let observer;
+            function observeAnimatedElements() {
+                if (observer) {
+                    observer.disconnect();
+                }
+                
+                const animatedElements = document.querySelectorAll('.scroll-animate:not(.is-visible)');
+                
+                observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { 
+                    threshold: 0.1,
+                    rootMargin: '50px'
+                });
+
+                animatedElements.forEach(el => observer.observe(el));
+            }
+            
+            // Initial setup
+            renderGallery('all');
+            
+            // --- PRICING BUTTON HANDLERS ---
+            const pricingButtons = document.querySelectorAll('.pricing-btn');
+            
+            pricingButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const packageType = this.getAttribute('data-package');
+                    let packageInfo = {};
+                    
+                    switch(packageType) {
+                        case 'starter':
+                            packageInfo = {
+                                name: 'Starter Package',
+                                subtitle: 'Mini Shoot',
+                                price: '$50-$75',
+                                details: '30-min session, 10 edited images'
+                            };
+                            break;
+                        case 'standard':
+                            packageInfo = {
+                                name: 'Standard Package',
+                                subtitle: 'Full Session',
+                                price: '$100-$150',
+                                details: '1-hour session, 20-25 edited images'
+                            };
+                            break;
+                        case 'premium':
+                            packageInfo = {
+                                name: 'Premium Package',
+                                subtitle: 'Creative',
+                                price: '$175-$250',
+                                details: '1.5-2 hour session, 35-50 edited images'
+                            };
+                            break;
+                        case 'studio':
+                            packageInfo = {
+                                name: 'Studio Session',
+                                subtitle: 'Professional',
+                                price: 'TBD',
+                                details: '1-1.5 hour session, Professional studio'
+                            };
+                            break;
+                    }
+                    
+                    // Create email content with empty fields for user to fill
+                    const emailSubject = encodeURIComponent('Photography Inquiry - ' + packageInfo.name);
+                    const emailBodyText = 'Hi there!' + 
+                        '%0D%0A%0D%0A' + 'I am interested in booking the ' + packageInfo.name + ' (' + packageInfo.subtitle + ') - ' + packageInfo.price + '.' +
+                        '%0D%0A%0D%0A' + 'Package includes: ' + packageInfo.details +
+                        '%0D%0A%0D%0A' + 'PLEASE FILL OUT THE FOLLOWING:' +
+                        '%0D%0A%0D%0A' + 'Your Name: [PLEASE ADD YOUR NAME]' +
+                        '%0D%0A' + 'Phone Number: [PLEASE ADD YOUR PHONE]' +
+                        '%0D%0A' + 'Email: [PLEASE ADD YOUR EMAIL]' +
+                        '%0D%0A' + 'City: [PLEASE ADD YOUR CITY]' +
+                        '%0D%0A' + 'Preferred Date(s): [PLEASE ADD PREFERRED DATES]' +
+                        '%0D%0A' + 'Event/Session Type: [PLEASE DESCRIBE]' +
+                        '%0D%0A' + 'Location Preference: [INDOOR/OUTDOOR/STUDIO/OTHER]' +
+                        '%0D%0A' + 'How did you hear about us: [PLEASE TELL US]' +
+                        '%0D%0A%0D%0A' + 'Additional Details/Vision:' +
+                        '%0D%0A' + '[PLEASE DESCRIBE YOUR VISION, ANY SPECIFIC SHOTS YOU WANT, STYLE PREFERENCES, ETC.]' +
+                        '%0D%0A%0D%0A' + 'Looking forward to creating something amazing together!' +
+                        '%0D%0A%0D%0A' + 'Best regards,';
+                    
+                    // Create mailto link
+                    const mailtoLink = 'mailto:hello@lenslore.ca?subject=' + emailSubject + '&body=' + emailBodyText;
+                    
+                    // Open email client
+                    window.location.href = mailtoLink;
+                });
+            });
+            
+            // --- RESIZE HANDLER ---
+            window.addEventListener('resize', () => {
+                // Re-render gallery on significant size changes
+                const newIsMobile = window.innerWidth <= 768;
+                if (newIsMobile !== isMobile) {
+                    location.reload(); // Simple solution for major layout changes
+                }
+            });
+            
+            // --- MOBILE SCROLL FIX ---
+            if (isMobile) {
+                // Prevent horizontal scroll on mobile
+                document.body.style.overflowX = 'hidden';
+                document.documentElement.style.overflowX = 'hidden';
+                
+                // Ensure all sections fit within viewport
+                const sections = document.querySelectorAll('section, main, .container');
+                sections.forEach(section => {
+                    section.style.maxWidth = '100vw';
+                    section.style.overflowX = 'hidden';
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
