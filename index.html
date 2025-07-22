@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lenslore.ca | Kiitan Kujembola Photography</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" onerror="console.error('jsPDF failed to load')"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -542,7 +542,23 @@
     </div>
 
     <script>
+        // Global error handler for debugging
+        window.addEventListener('error', function(e) {
+            console.error('Global error caught:', e.error || e.message);
+            console.error('Error occurred in:', e.filename, 'at line:', e.lineno);
+        });
+
+        // Check if required libraries are available
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, checking dependencies...');
+            
+            // Check jsPDF availability
+            if (!window.jspdf) {
+                console.warn('jsPDF library not loaded - PDF generation will be disabled');
+            } else {
+                console.log('jsPDF loaded successfully');
+            }
+            
             try {
                 // --- Mobile Menu Toggle ---
                 const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -834,8 +850,15 @@
 
                 // Generate professional invoice PDF
                 function generateInvoice(clientData, packageData) {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF();
+                    // Check if jsPDF is available
+                    if (!window.jspdf || !window.jspdf.jsPDF) {
+                        console.warn('jsPDF not available, skipping invoice generation');
+                        return false;
+                    }
+                    
+                    try {
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF();
                     
                     // Invoice number and date
                     const invoiceNumber = 'INV-' + Date.now().toString().slice(-6);
@@ -939,7 +962,13 @@
                     doc.text('LensL0re.ca | hello@lenslore.ca | Professional Photography Services', 20, 270);
                     
                     // Save the PDF
-                    doc.save('Invoice.pdf');
+                    doc.save(`LensLore_Invoice_${invoiceNumber}.pdf`);
+                    return true;
+                    
+                    } catch (error) {
+                        console.error('Error generating PDF:', error);
+                        return false;
+                    }
                 }
 
                 // --- Inquiry Form Event Handlers ---
@@ -963,10 +992,11 @@
                     });
                 });
 
+                // ✅ FIXED FORM SUBMISSION - Email first, then invoice when user returns
                 inquiryForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     
-                    // Add loading state to button
+                    // Show loading state immediately
                     const submitBtn = this.querySelector('button[type="submit"]');
                     const originalText = submitBtn.innerHTML;
                     
@@ -980,35 +1010,36 @@
                         </span>
                     `;
                     submitBtn.disabled = true;
-                    
-                    const formData = new FormData(this);
-                    const data = Object.fromEntries(formData);
-                    
-                    // Package information for invoice
-                    const packageInfo = {
-                        'starter': { name: 'Starter Package', rate: '$50/hr', duration: '30 min', amount: '$25.00' },
-                        'standard': { name: 'Standard Package', rate: '$100/hr', duration: '1 hour', amount: '$100.00' },
-                        'premium': { name: 'Premium Package', rate: '$175/hr', duration: '1.5-2 hours', amount: '$175.00' },
-                        'studio': { name: 'Studio Package', rate: 'TBD', duration: '1-1.5 hours', amount: 'TBD' },
-                        'custom': { name: 'Custom Package', rate: 'Custom', duration: 'Variable', amount: 'Quote' }
-                    };
-                    
-                    const selectedPackage = packageInfo[data.clientPackage] || packageInfo.custom;
-                    
-                    // Format the email content (shorter to avoid URL limits)
-                    const subject = `Photography Inquiry - ${selectedPackage.name}`;
-                    
-                    const sessionDateTime = new Date(data.clientDateTime).toLocaleString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: '2-digit',
-                        hour12: true
-                    });
-                    
-                    const body = `New Photography Inquiry
+
+                    try {
+                        // Get form data immediately (while in user gesture context)
+                        const formData = new FormData(this);
+                        const data = Object.fromEntries(formData);
+                        
+                        // Package information for invoice
+                        const packageInfo = {
+                            'starter': { name: 'Starter Package', rate: '$50/hr', duration: '30 min', amount: '$25.00' },
+                            'standard': { name: 'Standard Package', rate: '$100/hr', duration: '1 hour', amount: '$100.00' },
+                            'premium': { name: 'Premium Package', rate: '$175/hr', duration: '1.5-2 hours', amount: '$175.00' },
+                            'studio': { name: 'Studio Package', rate: 'TBD', duration: '1-1.5 hours', amount: 'TBD' },
+                            'custom': { name: 'Custom Package', rate: 'Custom', duration: 'Variable', amount: 'Quote' }
+                        };
+                        
+                        const selectedPackage = packageInfo[data.clientPackage] || packageInfo.custom;
+                        
+                        // Email content
+                        const subject = `Photography Inquiry - ${selectedPackage.name}`;
+                        const sessionDateTime = new Date(data.clientDateTime).toLocaleString('en-US', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true
+                        });
+                        
+                        const body = `New Photography Inquiry
 
 Package: ${selectedPackage.name}
 Client: ${data.clientName}
@@ -1018,52 +1049,135 @@ Date/Time: ${sessionDateTime}
 
 ${data.clientMessage ? `Notes: ${data.clientMessage}` : ''}
 
-Invoice has been generated and sent to client.
-
 Best regards,
 LensL0re Booking System`;
 
-                    // Simulate processing time for better UX
-                    setTimeout(() => {
-                        // Generate and download invoice first
-                        generateInvoice(data, selectedPackage);
-                        
-                        // Show generating invoice state
+                        // Update button to show email opening
                         submitBtn.innerHTML = `
                             <span class="relative z-10 flex items-center justify-center">
                                 <svg class="mr-2 h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
-                                Invoice Generated!
+                                Opening Email...
                             </span>
                         `;
                         
-                        // Wait a moment then open email
-                        setTimeout(() => {
-                            // Automatically open email client without permission prompts
-                            const emailUrl = `mailto:hello@lenslore.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                        // ✅ STEP 1: Open email client first (this opens in new window/tab)
+                        const emailUrl = `mailto:hello@lenslore.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                        window.location.href = emailUrl; // User goes to email client
+                        
+                        // ✅ STEP 2: Set up detection for when user returns to the site
+                        let invoiceGenerated = false;
+                        let returnDetected = false;
+                        
+                        function generateInvoiceOnReturn() {
+                            if (invoiceGenerated || returnDetected) return;
+                            returnDetected = true;
                             
-                            // Use window.open for automatic email opening
-                            window.open(emailUrl, '_self');
+                            console.log('User returned to site, generating invoice...');
                             
-                            // Show success state
+                            // Update button to show invoice generation
                             submitBtn.innerHTML = `
                                 <span class="relative z-10 flex items-center justify-center">
-                                    <svg class="mr-2 h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    <svg class="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    Complete!
+                                    Generating Invoice...
                                 </span>
                             `;
                             
-                            // Close modal after success
+                            // Generate and download invoice
                             setTimeout(() => {
-                                submitBtn.innerHTML = originalText;
-                                submitBtn.disabled = false;
-                                closeInquiryModal();
-                            }, 2000);
-                        }, 1000);
-                    }, 1000);
+                                const invoiceSuccess = generateInvoice(data, selectedPackage);
+                                invoiceGenerated = true;
+                                
+                                // Show success
+                                submitBtn.innerHTML = `
+                                    <span class="relative z-10 flex items-center justify-center">
+                                        <svg class="mr-2 h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        ${invoiceSuccess ? 'Invoice Downloaded!' : 'Complete!'}
+                                    </span>
+                                `;
+                                
+                                // Close modal after brief delay
+                                setTimeout(() => {
+                                    submitBtn.innerHTML = originalText;
+                                    submitBtn.disabled = false;
+                                    closeInquiryModal();
+                                    
+                                    // Clean up event listeners
+                                    window.removeEventListener('focus', generateInvoiceOnReturn);
+                                    document.removeEventListener('visibilitychange', visibilityHandler);
+                                    document.removeEventListener('mousemove', generateInvoiceOnReturn);
+                                    document.removeEventListener('touchstart', generateInvoiceOnReturn);
+                                    document.removeEventListener('click', generateInvoiceOnReturn);
+                                }, 2000);
+                            }, 500);
+                        }
+                        
+                        // ✅ STEP 3: Listen for multiple ways user can return to site
+                        
+                        // When browser window regains focus
+                        window.addEventListener('focus', generateInvoiceOnReturn, { once: true });
+                        
+                        // When tab becomes visible again
+                        function visibilityHandler() {
+                            if (!document.hidden) {
+                                generateInvoiceOnReturn();
+                            }
+                        }
+                        document.addEventListener('visibilitychange', visibilityHandler);
+                        
+                        // When user moves mouse (they're back and active)
+                        document.addEventListener('mousemove', generateInvoiceOnReturn, { once: true });
+                        
+                        // When user touches screen (mobile)
+                        document.addEventListener('touchstart', generateInvoiceOnReturn, { once: true });
+                        
+                        // When user clicks anywhere
+                        document.addEventListener('click', generateInvoiceOnReturn, { once: true });
+                        
+                        // ✅ STEP 4: Fallback - if user doesn't return in 30 seconds, still show completion
+                        setTimeout(() => {
+                            if (!returnDetected) {
+                                console.log('Fallback timeout - completing without invoice generation');
+                                submitBtn.innerHTML = `
+                                    <span class="relative z-10 flex items-center justify-center">
+                                        <svg class="mr-2 h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Email Sent!
+                                    </span>
+                                `;
+                                
+                                setTimeout(() => {
+                                    submitBtn.innerHTML = originalText;
+                                    submitBtn.disabled = false;
+                                    closeInquiryModal();
+                                }, 2000);
+                            }
+                        }, 30000); // 30 second fallback
+                        
+                    } catch (error) {
+                        console.error('Form submission error:', error);
+                        
+                        // Reset button and show error
+                        submitBtn.innerHTML = `
+                            <span class="relative z-10">Try Again</span>
+                        `;
+                        submitBtn.disabled = false;
+                        
+                        // Simple fallback - just try to open email without invoice
+                        try {
+                            const simpleEmailUrl = 'mailto:hello@lenslore.ca?subject=Photography Inquiry';
+                            window.location.href = simpleEmailUrl;
+                        } catch (fallbackError) {
+                            alert('Please email us directly at hello@lenslore.ca');
+                        }
+                    }
                 });
 
                 // --- Initial Load ---
@@ -1071,6 +1185,18 @@ LensL0re Booking System`;
 
             } catch (e) {
                 console.error("An error occurred during script execution:", e);
+                
+                // Fallback: Simple email functionality without advanced features
+                console.log("Setting up fallback email functionality...");
+                
+                const fallbackPricingButtons = document.querySelectorAll('.pricing-btn-action');
+                fallbackPricingButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const packageType = this.getAttribute('data-package');
+                        const emailUrl = `mailto:hello@lenslore.ca?subject=Photography Inquiry - ${packageType} Package&body=Hi, I'm interested in the ${packageType} package. Please get in touch!`;
+                        window.location.href = emailUrl;
+                    });
+                });
             }
         });
     </script>
