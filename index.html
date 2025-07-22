@@ -220,7 +220,7 @@
                 </div>
         
                 <!-- Gallery Grid -->
-                <div id="gallery-container" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div id="gallery-container" class="columns-2 md:columns-4 gap-4 space-y-4">
                     <!-- Images are dynamically inserted here by JavaScript -->
                 </div>
             </div>
@@ -345,20 +345,10 @@
                     imgElement.src = image.src;
                     imgElement.alt = image.alt;
                     imgElement.loading = 'lazy';
-                    imgElement.className = 'w-full h-full object-cover group-hover:scale-105 transition-transform duration-300';
+                    imgElement.className = 'w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105';
                     
-                    container.className = 'w-full h-full rounded-lg shadow-md overflow-hidden cursor-pointer group scroll-animate';
+                    container.className = 'break-inside-avoid mb-4 scroll-animate';
                     container.style.transitionDelay = `${(index % 15) * 50}ms`;
-
-                    // Logic to create a more dynamic grid
-                    // Make certain images taller or wider on desktop
-                    if (window.innerWidth >= 768) {
-                        if (index % 7 === 1) {
-                            container.classList.add('md:col-span-2', 'md:row-span-2');
-                        } else if (index % 7 === 5) {
-                             container.classList.add('md:row-span-2');
-                        }
-                    }
 
                     imgElement.onerror = function() { 
                         this.onerror=null; 
@@ -381,12 +371,6 @@
                     const filteredImages = (filter === 'all') 
                         ? shuffledImages 
                         : shuffledImages.filter(img => img.category === filter);
-                    
-                    // Set grid to auto-rows to allow for spanning
-                    galleryContainer.style.gridAutoRows = '250px';
-                    if (window.innerWidth < 768) {
-                       galleryContainer.style.gridAutoRows = 'auto'; // Let mobile stack naturally
-                    }
 
                     filteredImages.forEach((image, index) => {
                         const photoItem = createPhotoItem(image, index);
@@ -448,14 +432,6 @@
 
                 // --- Initial Load ---
                 renderGallery('all');
-                
-                // --- Resize handler for responsive grid logic ---
-                window.addEventListener('resize', () => {
-                    // A simple way to re-render on resize to adjust spans.
-                    // For production, a more sophisticated debounce function would be better.
-                    const activeFilter = document.querySelector('.gallery-btn.active').dataset.filter;
-                    renderGallery(activeFilter);
-                });
 
             } catch (e) {
                 console.error("An error occurred during script execution:", e);
