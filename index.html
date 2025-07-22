@@ -123,6 +123,21 @@
         /* Image Modal */
         #imageModal {
             transition: opacity 0.3s ease;
+            touch-action: pan-y pinch-zoom; /* Allow vertical scroll and zoom, but capture horizontal swipes */
+        }
+
+        #modalImage {
+            transition: transform 0.2s ease-out;
+            touch-action: none; /* Prevent default touch behaviors on the image */
+        }
+
+        /* Swipe visual feedback */
+        #modalImage.swiping-left {
+            transform: translateX(-20px);
+        }
+
+        #modalImage.swiping-right {
+            transform: translateX(20px);
         }
 
         /* Inquiry Modal Styles */
@@ -426,7 +441,8 @@
         
         <!-- Navigation hints -->
         <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white text-sm bg-black/50 px-4 py-2 rounded-full">
-            Use arrow keys to navigate • ESC to close
+            <span class="hidden md:inline">Use arrow keys to navigate • ESC to close</span>
+            <span class="md:hidden">Swipe left or right to navigate • Tap to close</span>
         </div>
     </div>
 
@@ -738,8 +754,85 @@
                 // Modal event handlers
                 closeModal.addEventListener('click', closeModalHandler);
                 imageModal.addEventListener('click', (e) => {
-                    if (e.target === imageModal) closeModalHandler();
+                    // Only close if clicking on the modal background (not during a swipe)
+                    if (e.target === imageModal && !e.target.closest('img')) {
+                        closeModalHandler();
+                    }
                 });
+
+                // ✅ MOBILE SWIPE NAVIGATION WITH VISUAL FEEDBACK
+                let touchStartX = 0;
+                let touchStartY = 0;
+                let touchEndX = 0;
+                let touchEndY = 0;
+                let isSwipingHorizontally = false;
+                const minSwipeDistance = 50; // Minimum distance for a swipe
+                const swipeThreshold = 20; // Threshold to start showing visual feedback
+
+                imageModal.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                    touchStartY = e.changedTouches[0].screenY;
+                    isSwipingHorizontally = false;
+                }, { passive: true });
+
+                imageModal.addEventListener('touchmove', (e) => {
+                    if (!imageModal.classList.contains('opacity-0')) {
+                        const currentX = e.changedTouches[0].screenX;
+                        const currentY = e.changedTouches[0].screenY;
+                        const deltaX = currentX - touchStartX;
+                        const deltaY = currentY - touchStartY;
+                        const absDeltaX = Math.abs(deltaX);
+                        const absDeltaY = Math.abs(deltaY);
+
+                        // Determine if this is a horizontal swipe
+                        if (absDeltaX > swipeThreshold && absDeltaX > absDeltaY) {
+                            isSwipingHorizontally = true;
+                            e.preventDefault(); // Prevent scrolling during horizontal swipe
+                            
+                            // Add visual feedback
+                            const img = modalImage;
+                            img.classList.remove('swiping-left', 'swiping-right');
+                            
+                            if (deltaX > swipeThreshold) {
+                                img.classList.add('swiping-right');
+                            } else if (deltaX < -swipeThreshold) {
+                                img.classList.add('swiping-left');
+                            }
+                        }
+                    }
+                }, { passive: false });
+
+                imageModal.addEventListener('touchend', (e) => {
+                    if (!imageModal.classList.contains('opacity-0')) {
+                        touchEndX = e.changedTouches[0].screenX;
+                        touchEndY = e.changedTouches[0].screenY;
+                        
+                        // Remove visual feedback
+                        modalImage.classList.remove('swiping-left', 'swiping-right');
+                        
+                        if (isSwipingHorizontally) {
+                            handleSwipe();
+                        }
+                    }
+                }, { passive: true });
+
+                function handleSwipe() {
+                    const deltaX = touchEndX - touchStartX;
+                    const deltaY = touchEndY - touchStartY;
+                    const absDeltaX = Math.abs(deltaX);
+                    const absDeltaY = Math.abs(deltaY);
+
+                    // Check if it's a horizontal swipe (more horizontal than vertical)
+                    if (absDeltaX > absDeltaY && absDeltaX > minSwipeDistance) {
+                        if (deltaX > 0) {
+                            // Swipe right - go to previous image
+                            navigateModal('prev');
+                        } else {
+                            // Swipe left - go to next image
+                            navigateModal('next');
+                        }
+                    }
+                }
 
                 // Keyboard navigation for modal
                 document.addEventListener('keydown', (e) => {
