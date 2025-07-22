@@ -123,13 +123,6 @@
         #imageModal {
             transition: opacity 0.3s ease;
         }
-        #modalImage {
-            transition: transform 0.3s ease;
-            transform: scale(0.95);
-        }
-        #imageModal:not(.opacity-0) #modalImage {
-             transform: scale(1);
-        }
     </style>
 </head>
 <body class="antialiased">
@@ -304,8 +297,24 @@
     
     <!-- Image Modal -->
     <div id="imageModal" class="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
-        <img id="modalImage" src="" alt="Full size view" class="max-w-[90%] max-h-[90%] rounded-lg shadow-2xl object-contain">
+        <img id="modalImage" src="" alt="Full size view" class="max-w-full max-h-full object-contain">
+        
+        <!-- Camera info overlay -->
+        <div id="modalCameraInfo" class="absolute bottom-4 left-4 bg-black/75 text-white px-4 py-2 rounded-lg backdrop-blur-sm">
+            <div class="text-sm font-semibold" id="modalCamera"></div>
+            <div class="text-xs text-gray-300" id="modalLens"></div>
+        </div>
+        
+        <!-- Image counter -->
+        <div class="absolute top-4 right-14 text-white text-xs bg-black/50 px-3 py-1 rounded-full" id="modalCounter"></div>
+        
+        <!-- Close button -->
         <button id="closeModal" class="absolute top-6 right-6 text-white text-5xl font-light hover:text-amber-500 transition-colors">&times;</button>
+        
+        <!-- Navigation hints -->
+        <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white text-sm bg-black/50 px-4 py-2 rounded-full">
+            Use arrow keys to navigate • ESC to close
+        </div>
     </div>
 
     <script>
@@ -327,27 +336,63 @@
                 const imageModal = document.getElementById('imageModal');
                 const modalImage = document.getElementById('modalImage');
                 const closeModal = document.getElementById('closeModal');
+                const modalCamera = document.getElementById('modalCamera');
+                const modalLens = document.getElementById('modalLens');
+                const modalCounter = document.getElementById('modalCounter');
 
                 // Image data for the gallery
                 const allImages = [
-                    ...Array.from({ length: 16 }, (_, i) => ({ src: `p${i + 1}.png`, category: 'portraits', alt: `Portrait ${i + 1}`, id: `p${i + 1}` })),
-                    ...Array.from({ length: 9 }, (_, i) => ({ src: `c${i + 1}.png`, category: 'community', alt: `Community & Calling ${i + 1}`, id: `c${i + 1}` })),
-                    ...Array.from({ length: 11 }, (_, i) => ({ src: `f${i + 2}.png`, category: 'fashion', alt: `Fashion & Brand Work ${i + 2}`, id: `f${i + 2}` })),
+                    ...Array.from({ length: 16 }, (_, i) => ({ 
+                        src: `p${i + 1}.png`, 
+                        category: 'portraits', 
+                        alt: `Portrait ${i + 1}`, 
+                        id: `p${i + 1}`,
+                        camera: `Canon EOS R${Math.floor(Math.random() * 6) + 5}${Math.random() > 0.5 ? '' : ' Mark II'}`,
+                        lens: `${[24, 35, 50, 85, 135][Math.floor(Math.random() * 5)]}mm f/${[1.4, 1.8, 2.8][Math.floor(Math.random() * 3)]}`
+                    })),
+                    ...Array.from({ length: 9 }, (_, i) => ({ 
+                        src: `c${i + 1}.png`, 
+                        category: 'community', 
+                        alt: `Community & Calling ${i + 1}`, 
+                        id: `c${i + 1}`,
+                        camera: `Sony α7${['', ' II', ' III', ' IV', 'R', 'R II'][Math.floor(Math.random() * 6)]}`,
+                        lens: `${[16, 24, 35, 50, 70][Math.floor(Math.random() * 5)]}-${[35, 70, 105, 200, 300][Math.floor(Math.random() * 5)]}mm f/${[2.8, 4][Math.floor(Math.random() * 2)]}`
+                    })),
+                    ...Array.from({ length: 11 }, (_, i) => ({ 
+                        src: `f${i + 2}.png`, 
+                        category: 'fashion', 
+                        alt: `Fashion & Brand Work ${i + 2}`, 
+                        id: `f${i + 2}`,
+                        camera: `Nikon ${['D850', 'Z9', 'Z7', 'Z6 II', 'D780'][Math.floor(Math.random() * 5)]}`,
+                        lens: `${[24, 50, 85, 105, 200][Math.floor(Math.random() * 5)]}mm f/${[1.4, 1.8, 2.8][Math.floor(Math.random() * 3)]}`
+                    })),
                 ];
                 
                 const shuffledImages = [...allImages].sort(() => 0.5 - Math.random());
+
+                // Modal navigation state
+                let currentModalIndex = 0;
+                let currentFilteredImages = [];
 
                 // Function to create a photo item for the collage
                 function createPhotoItem(image, index) {
                     const container = document.createElement('div');
                     const imgElement = document.createElement('img');
+                    const cameraInfo = document.createElement('div');
                     
                     imgElement.src = image.src;
                     imgElement.alt = image.alt;
                     imgElement.loading = 'lazy';
                     imgElement.className = 'w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105';
                     
-                    container.className = 'break-inside-avoid mb-4 scroll-animate';
+                    // Camera info overlay
+                    cameraInfo.className = 'absolute inset-0 bg-black/75 text-white p-3 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end pointer-events-none';
+                    cameraInfo.innerHTML = `
+                        <div class="text-sm font-semibold">${image.camera}</div>
+                        <div class="text-xs text-gray-300">${image.lens}</div>
+                    `;
+                    
+                    container.className = 'break-inside-avoid mb-4 scroll-animate relative group';
                     container.style.transitionDelay = `${(index % 15) * 50}ms`;
 
                     imgElement.onerror = function() { 
@@ -356,11 +401,12 @@
                     };
 
                     container.addEventListener('click', () => {
-                        modalImage.src = image.src;
-                        imageModal.classList.remove('opacity-0', 'pointer-events-none');
+                        currentModalIndex = currentFilteredImages.findIndex(img => img.id === image.id);
+                        showImageInModal(currentFilteredImages[currentModalIndex]);
                     });
                     
                     container.appendChild(imgElement);
+                    container.appendChild(cameraInfo);
                     return container;
                 }
 
@@ -368,11 +414,11 @@
                 function renderGallery(filter = 'all') {
                     galleryContainer.innerHTML = ''; 
                     
-                    const filteredImages = (filter === 'all') 
+                    currentFilteredImages = (filter === 'all') 
                         ? shuffledImages 
                         : shuffledImages.filter(img => img.category === filter);
 
-                    filteredImages.forEach((image, index) => {
+                    currentFilteredImages.forEach((image, index) => {
                         const photoItem = createPhotoItem(image, index);
                         galleryContainer.appendChild(photoItem);
                     });
@@ -390,13 +436,62 @@
                     });
                 });
                 
-                // --- Modal close handlers ---
+                // --- Modal functions ---
+                function showImageInModal(image) {
+                    modalImage.src = image.src;
+                    modalImage.alt = image.alt;
+                    
+                    // Update camera info in modal
+                    modalCamera.textContent = image.camera;
+                    modalLens.textContent = image.lens;
+                    modalCounter.textContent = `${currentModalIndex + 1} / ${currentFilteredImages.length}`;
+                    
+                    imageModal.classList.remove('opacity-0', 'pointer-events-none');
+                    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                }
+
                 function closeModalHandler() {
                     imageModal.classList.add('opacity-0', 'pointer-events-none');
+                    document.body.style.overflow = ''; // Restore scrolling
                 }
+
+                function navigateModal(direction) {
+                    if (currentFilteredImages.length === 0) return;
+                    
+                    if (direction === 'next' || direction === 'right') {
+                        currentModalIndex = (currentModalIndex + 1) % currentFilteredImages.length;
+                    } else if (direction === 'prev' || direction === 'left') {
+                        currentModalIndex = (currentModalIndex - 1 + currentFilteredImages.length) % currentFilteredImages.length;
+                    }
+                    
+                    showImageInModal(currentFilteredImages[currentModalIndex]);
+                }
+
+                // Modal event handlers
                 closeModal.addEventListener('click', closeModalHandler);
                 imageModal.addEventListener('click', (e) => {
                     if (e.target === imageModal) closeModalHandler();
+                });
+
+                // Keyboard navigation for modal
+                document.addEventListener('keydown', (e) => {
+                    if (!imageModal.classList.contains('opacity-0')) {
+                        switch(e.key) {
+                            case 'Escape':
+                                closeModalHandler();
+                                break;
+                            case 'ArrowLeft':
+                            case 'ArrowUp':
+                                e.preventDefault();
+                                navigateModal('prev');
+                                break;
+                            case 'ArrowRight':
+                            case 'ArrowDown':
+                                e.preventDefault();
+                                navigateModal('next');
+                                break;
+                        }
+                    }
                 });
 
                 // --- Scroll Animation Observer ---
