@@ -151,6 +151,17 @@
             padding: 0 8px;
         }
 
+        /* Mobile-specific floating label adjustments */
+        @media (max-width: 640px) {
+            .form-group input:focus + label,
+            .form-group input:not(:placeholder-shown) + label,
+            .form-group textarea:focus + label,
+            .form-group textarea:not(:placeholder-shown) + label {
+                transform: translateY(-100%) scale(0.9);
+                font-size: 0.75rem;
+            }
+        }
+
         /* Date Input Styling */
         .date-input::-webkit-calendar-picker-indicator {
             background: transparent;
@@ -167,6 +178,14 @@
             background-repeat: no-repeat;
             background-position: right 1.5rem center;
             background-size: 1.25rem;
+        }
+
+        /* Mobile date picker */
+        @media (max-width: 640px) {
+            .date-input::-webkit-calendar-picker-indicator {
+                background-position: right 1rem center;
+                background-size: 1rem;
+            }
         }
 
         .date-input:focus::-webkit-calendar-picker-indicator {
@@ -186,6 +205,23 @@
         input[type="datetime-local"]::-webkit-datetime-edit {
             color: inherit;
             padding: 0;
+        }
+
+        /* Mobile touch improvements */
+        @media (max-width: 640px) {
+            input[type="datetime-local"] {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            select {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            input[type="tel"],
+            input[type="text"],
+            textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
         }
 
         /* Button Hover Effects */
@@ -210,6 +246,16 @@
 
         .inquiry-modal-content::-webkit-scrollbar-thumb:hover {
             background: rgba(245, 158, 11, 0.5);
+        }
+
+        /* Improved focus states for mobile */
+        @media (max-width: 640px) {
+            .form-group input:focus,
+            .form-group textarea:focus,
+            .form-group select:focus {
+                border-width: 3px;
+                border-color: #f59e0b;
+            }
         }
     </style>
 </head>
@@ -1014,43 +1060,21 @@ LensL0re Booking System`;
                         
                         // Wait a moment then open email
                         setTimeout(() => {
-                            // Try to open email client (may be blocked by some browsers)
-                            try {
-                                const emailUrl = `mailto:hello@lenslore.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                                
-                                // Create a temporary link to trigger email
-                                const tempLink = document.createElement('a');
-                                tempLink.href = emailUrl;
-                                tempLink.style.display = 'none';
-                                document.body.appendChild(tempLink);
-                                tempLink.click();
-                                document.body.removeChild(tempLink);
-                                
-                                // Show success state
-                                submitBtn.innerHTML = `
-                                    <span class="relative z-10 flex items-center justify-center">
-                                        <svg class="mr-2 h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Complete!
-                                    </span>
-                                `;
-                            } catch (error) {
-                                console.log('Email client could not be opened automatically');
-                                
-                                // Show alternative success message
-                                submitBtn.innerHTML = `
-                                    <span class="relative z-10 flex items-center justify-center">
-                                        <svg class="mr-2 h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Invoice Downloaded!
-                                    </span>
-                                `;
-                                
-                                // Show instruction to manually email
-                                alert('Invoice downloaded! Please email hello@lenslore.ca with your inquiry details.');
-                            }
+                            // Automatically open email client without permission prompts
+                            const emailUrl = `mailto:hello@lenslore.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                            
+                            // Use window.open for automatic email opening
+                            window.open(emailUrl, '_self');
+                            
+                            // Show success state
+                            submitBtn.innerHTML = `
+                                <span class="relative z-10 flex items-center justify-center">
+                                    <svg class="mr-2 h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Complete!
+                                </span>
+                            `;
                             
                             // Close modal after success
                             setTimeout(() => {
