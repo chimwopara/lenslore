@@ -168,17 +168,18 @@
             <div class="container mx-auto px-6">
                 <div class="grid md:grid-cols-5 gap-12 md:gap-16 items-center">
                     <div class="md:col-span-3 space-y-6 scroll-animate">
+                        <h2 class="text-4xl md:text-5xl font-display font-bold text-gray-800 mb-8">About Us</h2>
                         <p class="text-lg leading-relaxed text-gray-600">
                             LensL0re is a platform dedicated to storytelling through the lens. We believe every person, moment, and scene holds a story waiting to be told.
                         </p>
-                        <h3 class="text-3xl font-bold font-display text-gray-800 pt-4">The Experience</h3>
+                        <h3 class="text-2xl font-bold font-display text-gray-800 pt-4">The Experience</h3>
                         <p class="text-gray-600">
                             Our tagline, "Tell Your Story," is an invitation. We don't just take pictures; we listen, observe, and collaborate to bring your unique narrative to life.
                         </p>
                         <p class="text-gray-600">
                            LensL0re offers photography that feels intentional, cinematic, and rooted in connection. Every session is custom-tailored to reflect who you are or what your brand represents.
                         </p>
-                        <h4 class="font-bold text-xl font-display pt-4 text-gray-800">Why It Matters</h4>
+                        <h4 class="text-2xl font-bold font-display text-gray-800 pt-4">Why It Matters</h4>
                         <p class="text-gray-600">
                             In a world overflowing with content, we cut through the noise by focusing on meaning. We create space for images that stick with you, not because they're polished, but because they're <span class="text-amber-500 font-semibold">real</span>.
                         </p>
@@ -206,7 +207,7 @@
             <div class="container mx-auto px-6">
                 <!-- Filter Buttons -->
                 <div class="flex justify-center flex-wrap gap-3 md:gap-4 mb-12 scroll-animate">
-                    <button class="gallery-btn active" data-filter="all">All</button>
+                    <button class="gallery-btn active" data-filter="overview">Overview</button>
                     <button class="gallery-btn" data-filter="portraits">Portraits</button>
                     <button class="gallery-btn" data-filter="community">Community</button>
                     <button class="gallery-btn" data-filter="fashion">Fashion</button>
@@ -317,6 +318,73 @@
         </div>
     </div>
 
+    <!-- Inquiry Form Modal -->
+    <div id="inquiryModal" class="fixed inset-0 bg-black/90 z-[110] flex items-center justify-center p-4 opacity-0 pointer-events-none">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <h3 class="text-2xl font-display font-bold text-gray-800 mb-6 text-center">Photography Inquiry</h3>
+            <p class="text-gray-600 text-center mb-6">Tell us about your photography needs</p>
+            
+            <form id="inquiryForm" class="space-y-4">
+                <div>
+                    <label for="clientName" class="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
+                    <input type="text" id="clientName" name="clientName" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors"
+                           placeholder="Your full name">
+                </div>
+                
+                <div>
+                    <label for="clientPhone" class="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
+                    <input type="tel" id="clientPhone" name="clientPhone" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors"
+                           placeholder="(555) 123-4567">
+                </div>
+                
+                <div>
+                    <label for="clientLocation" class="block text-sm font-semibold text-gray-700 mb-2">Preferred Location *</label>
+                    <input type="text" id="clientLocation" name="clientLocation" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors"
+                           placeholder="Edmonton, Calgary, or specific venue">
+                </div>
+                
+                <div>
+                    <label for="clientDate" class="block text-sm font-semibold text-gray-700 mb-2">Preferred Date *</label>
+                    <input type="date" id="clientDate" name="clientDate" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors">
+                </div>
+                
+                <div>
+                    <label for="clientPackage" class="block text-sm font-semibold text-gray-700 mb-2">Package Interest</label>
+                    <select id="clientPackage" name="clientPackage" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors">
+                        <option value="starter">Starter Package - $50/hr</option>
+                        <option value="standard">Standard Package - $100/hr</option>
+                        <option value="premium">Premium Package - $175/hr</option>
+                        <option value="studio">Studio Package - TBD</option>
+                        <option value="custom">Custom Package</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="clientMessage" class="block text-sm font-semibold text-gray-700 mb-2">Additional Details</label>
+                    <textarea id="clientMessage" name="clientMessage" rows="3" 
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors resize-none"
+                              placeholder="Tell us more about your vision..."></textarea>
+                </div>
+                
+                <div class="flex gap-3 pt-4">
+                    <button type="button" id="cancelInquiry" 
+                            class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="flex-1 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg hover:from-amber-600 hover:to-orange-600 transition-all font-semibold">
+                        Send Inquiry
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             try {
@@ -340,6 +408,12 @@
                 const modalLens = document.getElementById('modalLens');
                 const modalCounter = document.getElementById('modalCounter');
 
+                // --- Inquiry Modal Elements ---
+                const inquiryModal = document.getElementById('inquiryModal');
+                const inquiryForm = document.getElementById('inquiryForm');
+                const cancelInquiry = document.getElementById('cancelInquiry');
+                const clientPackageSelect = document.getElementById('clientPackage');
+
                 // Image data for the gallery
                 const allImages = [
                     ...Array.from({ length: 16 }, (_, i) => ({ 
@@ -347,6 +421,14 @@
                         category: 'portraits', 
                         alt: `Portrait ${i + 1}`, 
                         id: `p${i + 1}`,
+                        camera: `Canon EOS R${Math.floor(Math.random() * 6) + 5}${Math.random() > 0.5 ? '' : ' Mark II'}`,
+                        lens: `${[24, 35, 50, 85, 135][Math.floor(Math.random() * 5)]}mm f/${[1.4, 1.8, 2.8][Math.floor(Math.random() * 3)]}`
+                    })),
+                    ...Array.from({ length: 11 }, (_, i) => ({ 
+                        src: `n${i + 1}.png`, 
+                        category: 'portraits', 
+                        alt: `Portrait ${i + 17}`, 
+                        id: `n${i + 1}`,
                         camera: `Canon EOS R${Math.floor(Math.random() * 6) + 5}${Math.random() > 0.5 ? '' : ' Mark II'}`,
                         lens: `${[24, 35, 50, 85, 135][Math.floor(Math.random() * 5)]}mm f/${[1.4, 1.8, 2.8][Math.floor(Math.random() * 3)]}`
                     })),
@@ -369,6 +451,9 @@
                 ];
                 
                 const shuffledImages = [...allImages].sort(() => 0.5 - Math.random());
+
+                // Overview curated selection for faster loading
+                const overviewSelection = ['f2', 'f5', 'f8', 'f12', 'n3', 'n4', 'n6', 'n7', 'n8', 'n10', 'n11', 'p2', 'p8', 'p9', 'p16'];
 
                 // Modal navigation state
                 let currentModalIndex = 0;
@@ -411,12 +496,23 @@
                 }
 
                 // Function to render the gallery
-                function renderGallery(filter = 'all') {
+                function renderGallery(filter = 'overview') {
                     galleryContainer.innerHTML = ''; 
                     
-                    currentFilteredImages = (filter === 'all') 
-                        ? shuffledImages 
-                        : shuffledImages.filter(img => img.category === filter);
+                    // Set different column layouts based on filter and screen size
+                    if (filter === 'overview') {
+                        // Instagram-style feed on mobile for overview
+                        galleryContainer.className = 'columns-1 md:columns-4 gap-4 space-y-4';
+                    } else {
+                        // Standard 2-column layout for other categories
+                        galleryContainer.className = 'columns-2 md:columns-4 gap-4 space-y-4';
+                    }
+                    
+                    if (filter === 'overview') {
+                        currentFilteredImages = allImages.filter(img => overviewSelection.includes(img.id));
+                    } else {
+                        currentFilteredImages = shuffledImages.filter(img => img.category === filter);
+                    }
 
                     currentFilteredImages.forEach((image, index) => {
                         const photoItem = createPhotoItem(image, index);
@@ -475,6 +571,15 @@
 
                 // Keyboard navigation for modal
                 document.addEventListener('keydown', (e) => {
+                    // Handle inquiry modal
+                    if (!inquiryModal.classList.contains('opacity-0')) {
+                        if (e.key === 'Escape') {
+                            closeInquiryModal();
+                        }
+                        return; // Don't handle other keys when inquiry modal is open
+                    }
+                    
+                    // Handle image modal
                     if (!imageModal.classList.contains('opacity-0')) {
                         switch(e.key) {
                             case 'Escape':
@@ -521,12 +626,94 @@
                 pricingButtons.forEach(button => {
                     button.addEventListener('click', function() {
                         const packageType = this.getAttribute('data-package');
-                        window.location.href = `mailto:hello@lenslore.ca?subject=Inquiry for ${packageType} package`;
+                        openInquiryModal(packageType);
                     });
                 });
 
+                // --- Inquiry Modal Functions ---
+                function openInquiryModal(packageType) {
+                    // Set the package in the dropdown
+                    clientPackageSelect.value = packageType;
+                    
+                    // Set minimum date to today
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('clientDate').min = today;
+                    
+                    // Show modal
+                    inquiryModal.classList.remove('opacity-0', 'pointer-events-none');
+                    document.body.style.overflow = 'hidden';
+                }
+
+                function closeInquiryModal() {
+                    inquiryModal.classList.add('opacity-0', 'pointer-events-none');
+                    document.body.style.overflow = '';
+                    inquiryForm.reset();
+                }
+
+                // --- Inquiry Form Event Handlers ---
+                cancelInquiry.addEventListener('click', closeInquiryModal);
+                
+                inquiryModal.addEventListener('click', (e) => {
+                    if (e.target === inquiryModal) closeInquiryModal();
+                });
+
+                inquiryForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    const data = Object.fromEntries(formData);
+                    
+                    // Format the email content
+                    const packageNames = {
+                        'starter': 'Starter Package - $50/hr',
+                        'standard': 'Standard Package - $100/hr', 
+                        'premium': 'Premium Package - $175/hr',
+                        'studio': 'Studio Package - TBD',
+                        'custom': 'Custom Package'
+                    };
+                    
+                    const subject = `Photography Inquiry - ${packageNames[data.clientPackage] || data.clientPackage}`;
+                    
+                    const body = `Hi LensL0re Team,
+
+I'm interested in booking a photography session. Here are my details:
+
+📸 PACKAGE INTEREST:
+${packageNames[data.clientPackage] || data.clientPackage}
+
+👤 CONTACT INFORMATION:
+Name: ${data.clientName}
+Phone: ${data.clientPhone}
+
+📍 LOCATION:
+${data.clientLocation}
+
+📅 PREFERRED DATE:
+${new Date(data.clientDate).toLocaleDateString('en-US', { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+})}
+
+💬 ADDITIONAL DETAILS:
+${data.clientMessage || 'No additional details provided.'}
+
+Looking forward to telling my story through your lens!
+
+Best regards,
+${data.clientName}`;
+
+                    // Open email client with pre-filled content
+                    const emailUrl = `mailto:hello@lenslore.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                    window.location.href = emailUrl;
+                    
+                    // Close modal after a short delay
+                    setTimeout(closeInquiryModal, 500);
+                });
+
                 // --- Initial Load ---
-                renderGallery('all');
+                renderGallery('overview');
 
             } catch (e) {
                 console.error("An error occurred during script execution:", e);
