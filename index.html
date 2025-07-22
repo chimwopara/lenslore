@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lenslore.ca | Kiitan Kujembola Photography</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -122,6 +123,93 @@
         /* Image Modal */
         #imageModal {
             transition: opacity 0.3s ease;
+        }
+
+        /* Inquiry Modal Styles */
+        #inquiryModal {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .inquiry-modal-content {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 
+                        0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        #inquiryModal:not(.opacity-0) .inquiry-modal-content {
+            transform: scale(1);
+        }
+
+        /* Floating Label Animation */
+        .form-group input:focus + label,
+        .form-group input:not(:placeholder-shown) + label,
+        .form-group textarea:focus + label,
+        .form-group textarea:not(:placeholder-shown) + label {
+            transform: translateY(-100%) scale(0.85);
+            color: #f59e0b;
+            background: white;
+            padding: 0 8px;
+        }
+
+        /* Date Input Styling */
+        .date-input::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23d1d5db'%3e%3cpath fill-rule='evenodd' d='M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z' clip-rule='evenodd'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1.5rem center;
+            background-size: 1.25rem;
+        }
+
+        .date-input:focus::-webkit-calendar-picker-indicator {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23f59e0b'%3e%3cpath fill-rule='evenodd' d='M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z' clip-rule='evenodd'/%3e%3c/svg%3e");
+        }
+
+        /* DateTime input specific styling */
+        input[type="datetime-local"]::-webkit-inner-spin-button,
+        input[type="datetime-local"]::-webkit-clear-button {
+            display: none;
+        }
+
+        input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
+            padding: 0;
+        }
+
+        input[type="datetime-local"]::-webkit-datetime-edit {
+            color: inherit;
+            padding: 0;
+        }
+
+        /* Button Hover Effects */
+        button:hover {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Custom Scrollbar for Modal */
+        .inquiry-modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .inquiry-modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .inquiry-modal-content::-webkit-scrollbar-thumb {
+            background: rgba(245, 158, 11, 0.3);
+            border-radius: 3px;
+        }
+
+        .inquiry-modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(245, 158, 11, 0.5);
         }
     </style>
 </head>
@@ -319,66 +407,110 @@
     </div>
 
     <!-- Inquiry Form Modal -->
-    <div id="inquiryModal" class="fixed inset-0 bg-black/90 z-[110] flex items-center justify-center p-4 opacity-0 pointer-events-none">
-        <div class="bg-white rounded-xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <h3 class="text-2xl font-display font-bold text-gray-800 mb-6 text-center">Photography Inquiry</h3>
-            <p class="text-gray-600 text-center mb-6">Tell us about your photography needs</p>
+    <div id="inquiryModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-500">
+        <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-white/20 transform scale-95 transition-all duration-500 inquiry-modal-content">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-3xl font-display font-bold text-gray-900 mb-2">Photography Inquiry</h3>
+                <p class="text-gray-600 font-medium">Tell us about your vision</p>
+            </div>
             
-            <form id="inquiryForm" class="space-y-4">
-                <div>
-                    <label for="clientName" class="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
-                    <input type="text" id="clientName" name="clientName" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors"
-                           placeholder="Your full name">
+            <form id="inquiryForm" class="space-y-6">
+                <!-- Name Field -->
+                <div class="form-group">
+                    <div class="relative">
+                        <input type="text" id="clientName" name="clientName" required 
+                               class="peer w-full px-6 py-4 bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-amber-400 focus:bg-white outline-none transition-all duration-300 placeholder-transparent text-gray-900 font-medium"
+                               placeholder="Your full name">
+                        <label for="clientName" class="absolute left-6 -top-3 bg-white px-2 text-sm font-semibold text-gray-700 transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-placeholder-shown:bg-transparent peer-focus:-top-3 peer-focus:text-sm peer-focus:text-amber-600 peer-focus:bg-white">
+                            Full Name
+                        </label>
+                    </div>
                 </div>
                 
-                <div>
-                    <label for="clientPhone" class="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
-                    <input type="tel" id="clientPhone" name="clientPhone" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors"
-                           placeholder="(555) 123-4567">
+                <!-- Phone Field -->
+                <div class="form-group">
+                    <div class="relative">
+                        <input type="tel" id="clientPhone" name="clientPhone" required 
+                               class="peer w-full px-6 py-4 bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-amber-400 focus:bg-white outline-none transition-all duration-300 placeholder-transparent text-gray-900 font-medium"
+                               placeholder="(555) 123-4567">
+                        <label for="clientPhone" class="absolute left-6 -top-3 bg-white px-2 text-sm font-semibold text-gray-700 transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-placeholder-shown:bg-transparent peer-focus:-top-3 peer-focus:text-sm peer-focus:text-amber-600 peer-focus:bg-white">
+                            Phone Number
+                        </label>
+                    </div>
                 </div>
                 
-                <div>
-                    <label for="clientLocation" class="block text-sm font-semibold text-gray-700 mb-2">Preferred Location *</label>
-                    <input type="text" id="clientLocation" name="clientLocation" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors"
-                           placeholder="Edmonton, Calgary, or specific venue">
+                <!-- Location Field -->
+                <div class="form-group">
+                    <div class="relative">
+                        <input type="text" id="clientLocation" name="clientLocation" required 
+                               class="peer w-full px-6 py-4 bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-amber-400 focus:bg-white outline-none transition-all duration-300 placeholder-transparent text-gray-900 font-medium"
+                               placeholder="Edmonton, Calgary, or specific venue">
+                        <label for="clientLocation" class="absolute left-6 -top-3 bg-white px-2 text-sm font-semibold text-gray-700 transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-placeholder-shown:bg-transparent peer-focus:-top-3 peer-focus:text-sm peer-focus:text-amber-600 peer-focus:bg-white">
+                            Preferred Location
+                        </label>
+                    </div>
                 </div>
                 
-                <div>
-                    <label for="clientDate" class="block text-sm font-semibold text-gray-700 mb-2">Preferred Date *</label>
-                    <input type="date" id="clientDate" name="clientDate" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors">
+                <!-- Date & Time Field -->
+                <div class="form-group">
+                    <div class="relative">
+                        <input type="datetime-local" id="clientDateTime" name="clientDateTime" required 
+                               class="peer w-full px-6 py-4 bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-amber-400 focus:bg-white outline-none transition-all duration-300 text-gray-900 font-medium date-input">
+                        <label for="clientDateTime" class="absolute left-6 -top-3 bg-white px-2 text-sm font-semibold text-amber-600">
+                            Preferred Date & Time
+                        </label>
+                    </div>
                 </div>
                 
-                <div>
-                    <label for="clientPackage" class="block text-sm font-semibold text-gray-700 mb-2">Package Interest</label>
-                    <select id="clientPackage" name="clientPackage" 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors">
-                        <option value="starter">Starter Package - $50/hr</option>
-                        <option value="standard">Standard Package - $100/hr</option>
-                        <option value="premium">Premium Package - $175/hr</option>
-                        <option value="studio">Studio Package - TBD</option>
-                        <option value="custom">Custom Package</option>
-                    </select>
+                <!-- Package Selection -->
+                <div class="form-group">
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Package Interest</label>
+                    <div class="relative">
+                        <select id="clientPackage" name="clientPackage" 
+                                class="w-full px-6 py-4 bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-amber-400 focus:bg-white outline-none transition-all duration-300 text-gray-900 font-medium appearance-none cursor-pointer">
+                            <option value="starter">Starter Package - $50/hr</option>
+                            <option value="standard">Standard Package - $100/hr</option>
+                            <option value="premium">Premium Package - $175/hr</option>
+                            <option value="studio">Studio Package - TBD</option>
+                            <option value="custom">Custom Package</option>
+                        </select>
+                        <div class="absolute right-6 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
                 
-                <div>
-                    <label for="clientMessage" class="block text-sm font-semibold text-gray-700 mb-2">Additional Details</label>
-                    <textarea id="clientMessage" name="clientMessage" rows="3" 
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors resize-none"
-                              placeholder="Tell us more about your vision..."></textarea>
+                <!-- Message Field -->
+                <div class="form-group">
+                    <div class="relative">
+                        <textarea id="clientMessage" name="clientMessage" rows="4" 
+                                  class="peer w-full px-6 py-4 bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-amber-400 focus:bg-white outline-none transition-all duration-300 placeholder-transparent resize-none text-gray-900 font-medium"
+                                  placeholder="Tell us more about your vision..."></textarea>
+                        <label for="clientMessage" class="absolute left-6 -top-3 bg-white px-2 text-sm font-semibold text-gray-700 transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-placeholder-shown:bg-transparent peer-focus:-top-3 peer-focus:text-sm peer-focus:text-amber-600 peer-focus:bg-white">
+                            Additional Details
+                        </label>
+                    </div>
                 </div>
                 
-                <div class="flex gap-3 pt-4">
+                <!-- Action Buttons -->
+                <div class="flex gap-4 pt-6">
                     <button type="button" id="cancelInquiry" 
-                            class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold">
+                            class="flex-1 px-8 py-4 bg-gray-100/80 text-gray-700 rounded-2xl hover:bg-gray-200/80 transition-all duration-300 font-semibold backdrop-blur-sm border border-gray-200/60 hover:scale-[1.02] active:scale-[0.98]">
                         Cancel
                     </button>
                     <button type="submit" 
-                            class="flex-1 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg hover:from-amber-600 hover:to-orange-600 transition-all font-semibold">
-                        Send Inquiry
+                            class="flex-1 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl hover:from-amber-600 hover:to-orange-600 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden">
+                        <span class="relative z-10">Confirm & Generate Invoice</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
                     </button>
                 </div>
             </form>
@@ -635,19 +767,155 @@
                     // Set the package in the dropdown
                     clientPackageSelect.value = packageType;
                     
-                    // Set minimum date to today
-                    const today = new Date().toISOString().split('T')[0];
-                    document.getElementById('clientDate').min = today;
+                    // Set minimum datetime to now
+                    const now = new Date();
+                    const minDateTime = new Date(now.getTime() + (24 * 60 * 60 * 1000)); // Tomorrow
+                    const minDateTimeString = minDateTime.toISOString().slice(0, 16);
+                    document.getElementById('clientDateTime').min = minDateTimeString;
                     
-                    // Show modal
+                    // Show modal with animation
                     inquiryModal.classList.remove('opacity-0', 'pointer-events-none');
                     document.body.style.overflow = 'hidden';
+                    
+                    // Trigger enter animation
+                    setTimeout(() => {
+                        const modalContent = document.querySelector('.inquiry-modal-content');
+                        modalContent.style.transform = 'scale(1)';
+                        modalContent.style.opacity = '1';
+                    }, 50);
+                    
+                    // Focus first input after animation
+                    setTimeout(() => {
+                        document.getElementById('clientName').focus();
+                    }, 300);
                 }
 
                 function closeInquiryModal() {
-                    inquiryModal.classList.add('opacity-0', 'pointer-events-none');
-                    document.body.style.overflow = '';
-                    inquiryForm.reset();
+                    const modalContent = document.querySelector('.inquiry-modal-content');
+                    modalContent.style.transform = 'scale(0.95)';
+                    modalContent.style.opacity = '0.8';
+                    
+                    setTimeout(() => {
+                        inquiryModal.classList.add('opacity-0', 'pointer-events-none');
+                        document.body.style.overflow = '';
+                        inquiryForm.reset();
+                        
+                        // Reset transform for next time
+                        setTimeout(() => {
+                            modalContent.style.transform = 'scale(0.95)';
+                            modalContent.style.opacity = '1';
+                        }, 500);
+                    }, 200);
+                }
+
+                // Generate professional invoice PDF
+                function generateInvoice(clientData, packageData) {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    
+                    // Invoice number and date
+                    const invoiceNumber = 'INV-' + Date.now().toString().slice(-6);
+                    const currentDate = new Date().toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    
+                    // Header with logo placeholder
+                    doc.setFillColor(245, 158, 11);
+                    doc.rect(0, 0, 210, 40, 'F');
+                    
+                    // Company name (since we can't load external images in this environment)
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(24);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('LensL0re.ca', 20, 25);
+                    
+                    // Invoice title
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFontSize(28);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('INVOICE', 150, 25);
+                    
+                    // Invoice details
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'normal');
+                    doc.text(`Invoice #: ${invoiceNumber}`, 150, 35);
+                    doc.text(`Date: ${currentDate}`, 150, 42);
+                    
+                    // Bill To section
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Bill To:', 20, 60);
+                    
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'normal');
+                    doc.text(clientData.clientName, 20, 70);
+                    doc.text(`Phone: ${clientData.clientPhone}`, 20, 77);
+                    doc.text(`Location: ${clientData.clientLocation}`, 20, 84);
+                    
+                    const sessionDateTime = new Date(clientData.clientDateTime).toLocaleString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+                    doc.text(`Session: ${sessionDateTime}`, 20, 91);
+                    
+                    // Services table header
+                    doc.setFillColor(240, 240, 240);
+                    doc.rect(20, 110, 170, 10, 'F');
+                    
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Description', 25, 117);
+                    doc.text('Rate', 120, 117);
+                    doc.text('Duration', 140, 117);
+                    doc.text('Amount', 165, 117);
+                    
+                    // Service details
+                    doc.setFont(undefined, 'normal');
+                    doc.text(packageData.name, 25, 130);
+                    doc.text(packageData.rate, 120, 130);
+                    doc.text(packageData.duration, 140, 130);
+                    doc.text(packageData.amount, 165, 130);
+                    
+                    // Additional services if custom message provided
+                    if (clientData.clientMessage) {
+                        doc.setFontSize(10);
+                        doc.text('Special Requirements:', 25, 145);
+                        const splitMessage = doc.splitTextToSize(clientData.clientMessage, 165);
+                        doc.text(splitMessage, 25, 152);
+                    }
+                    
+                    // Total section
+                    doc.setDrawColor(200, 200, 200);
+                    doc.line(120, 170, 190, 170);
+                    
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Total:', 140, 180);
+                    doc.text(packageData.amount, 165, 180);
+                    
+                    // Terms
+                    doc.setFontSize(10);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('Terms & Conditions:', 20, 210);
+                    doc.text('• 50% deposit required to secure booking', 20, 217);
+                    doc.text('• Final payment due on session day', 20, 224);
+                    doc.text('• Edited photos delivered within 7-14 business days', 20, 231);
+                    doc.text('• Cancellation policy: 48 hours notice required', 20, 238);
+                    
+                    // Footer
+                    doc.setFontSize(9);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text('LensL0re.ca | hello@lenslore.ca | Professional Photography Services', 20, 270);
+                    
+                    // Save the PDF
+                    doc.save('Invoice.pdf');
                 }
 
                 // --- Inquiry Form Event Handlers ---
@@ -657,59 +925,141 @@
                     if (e.target === inquiryModal) closeInquiryModal();
                 });
 
+                // Add subtle interaction feedback to form fields
+                document.querySelectorAll('#inquiryForm input, #inquiryForm textarea, #inquiryForm select').forEach(field => {
+                    field.addEventListener('focus', function() {
+                        this.parentElement.style.transform = 'translateY(-2px)';
+                        this.parentElement.style.transition = 'transform 0.2s ease';
+                    });
+                    
+                    field.addEventListener('blur', function() {
+                        this.parentElement.style.transform = 'translateY(0)';
+                    });
+                });
+
                 inquiryForm.addEventListener('submit', function(e) {
                     e.preventDefault();
+                    
+                    // Add loading state to button
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    
+                    submitBtn.innerHTML = `
+                        <span class="relative z-10 flex items-center justify-center">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Processing...
+                        </span>
+                    `;
+                    submitBtn.disabled = true;
                     
                     const formData = new FormData(this);
                     const data = Object.fromEntries(formData);
                     
-                    // Format the email content
-                    const packageNames = {
-                        'starter': 'Starter Package - $50/hr',
-                        'standard': 'Standard Package - $100/hr', 
-                        'premium': 'Premium Package - $175/hr',
-                        'studio': 'Studio Package - TBD',
-                        'custom': 'Custom Package'
+                    // Package information for invoice
+                    const packageInfo = {
+                        'starter': { name: 'Starter Package', rate: '$50/hr', duration: '30 min', amount: '$25.00' },
+                        'standard': { name: 'Standard Package', rate: '$100/hr', duration: '1 hour', amount: '$100.00' },
+                        'premium': { name: 'Premium Package', rate: '$175/hr', duration: '1.5-2 hours', amount: '$175.00' },
+                        'studio': { name: 'Studio Package', rate: 'TBD', duration: '1-1.5 hours', amount: 'TBD' },
+                        'custom': { name: 'Custom Package', rate: 'Custom', duration: 'Variable', amount: 'Quote' }
                     };
                     
-                    const subject = `Photography Inquiry - ${packageNames[data.clientPackage] || data.clientPackage}`;
+                    const selectedPackage = packageInfo[data.clientPackage] || packageInfo.custom;
                     
-                    const body = `Hi LensL0re Team,
+                    // Format the email content (shorter to avoid URL limits)
+                    const subject = `Photography Inquiry - ${selectedPackage.name}`;
+                    
+                    const sessionDateTime = new Date(data.clientDateTime).toLocaleString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+                    
+                    const body = `New Photography Inquiry
 
-I'm interested in booking a photography session. Here are my details:
-
-📸 PACKAGE INTEREST:
-${packageNames[data.clientPackage] || data.clientPackage}
-
-👤 CONTACT INFORMATION:
-Name: ${data.clientName}
+Package: ${selectedPackage.name}
+Client: ${data.clientName}
 Phone: ${data.clientPhone}
+Location: ${data.clientLocation}
+Date/Time: ${sessionDateTime}
 
-📍 LOCATION:
-${data.clientLocation}
+${data.clientMessage ? `Notes: ${data.clientMessage}` : ''}
 
-📅 PREFERRED DATE:
-${new Date(data.clientDate).toLocaleDateString('en-US', { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
-})}
-
-💬 ADDITIONAL DETAILS:
-${data.clientMessage || 'No additional details provided.'}
-
-Looking forward to telling my story through your lens!
+Invoice has been generated and sent to client.
 
 Best regards,
-${data.clientName}`;
+LensL0re Booking System`;
 
-                    // Open email client with pre-filled content
-                    const emailUrl = `mailto:hello@lenslore.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                    window.location.href = emailUrl;
-                    
-                    // Close modal after a short delay
-                    setTimeout(closeInquiryModal, 500);
+                    // Simulate processing time for better UX
+                    setTimeout(() => {
+                        // Generate and download invoice first
+                        generateInvoice(data, selectedPackage);
+                        
+                        // Show generating invoice state
+                        submitBtn.innerHTML = `
+                            <span class="relative z-10 flex items-center justify-center">
+                                <svg class="mr-2 h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Invoice Generated!
+                            </span>
+                        `;
+                        
+                        // Wait a moment then open email
+                        setTimeout(() => {
+                            // Try to open email client (may be blocked by some browsers)
+                            try {
+                                const emailUrl = `mailto:hello@lenslore.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                                
+                                // Create a temporary link to trigger email
+                                const tempLink = document.createElement('a');
+                                tempLink.href = emailUrl;
+                                tempLink.style.display = 'none';
+                                document.body.appendChild(tempLink);
+                                tempLink.click();
+                                document.body.removeChild(tempLink);
+                                
+                                // Show success state
+                                submitBtn.innerHTML = `
+                                    <span class="relative z-10 flex items-center justify-center">
+                                        <svg class="mr-2 h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Complete!
+                                    </span>
+                                `;
+                            } catch (error) {
+                                console.log('Email client could not be opened automatically');
+                                
+                                // Show alternative success message
+                                submitBtn.innerHTML = `
+                                    <span class="relative z-10 flex items-center justify-center">
+                                        <svg class="mr-2 h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Invoice Downloaded!
+                                    </span>
+                                `;
+                                
+                                // Show instruction to manually email
+                                alert('Invoice downloaded! Please email hello@lenslore.ca with your inquiry details.');
+                            }
+                            
+                            // Close modal after success
+                            setTimeout(() => {
+                                submitBtn.innerHTML = originalText;
+                                submitBtn.disabled = false;
+                                closeInquiryModal();
+                            }, 2000);
+                        }, 1000);
+                    }, 1000);
                 });
 
                 // --- Initial Load ---
