@@ -270,6 +270,13 @@
             transition: opacity 0.3s ease;
         }
 
+        /* Hide close button on mobile - use swipe instead */
+        @media (max-width: 768px) {
+            #closeModal {
+                display: none;
+            }
+        }
+
         /* Inquiry Modal Styles */
         #inquiryModal {
             backdrop-filter: blur(12px);
@@ -618,8 +625,6 @@
         
         <!-- Close button -->
         <button id="closeModal" class="absolute top-6 right-6 text-white text-5xl font-light hover:text-blue-500 transition-colors">&times;</button>
-        
-        
     </div>
 
     <!-- Inquiry Form Modal -->
@@ -772,8 +777,22 @@
                 // --- Mobile Menu Toggle ---
                 const mobileMenuButton = document.getElementById('mobile-menu-button');
                 const mobileMenu = document.getElementById('mobile-menu');
+                let lastScrollTop = 0;
+
                 mobileMenuButton.addEventListener('click', () => {
                     mobileMenu.classList.toggle('hidden');
+                });
+
+                // Auto-hide mobile menu on scroll
+                window.addEventListener('scroll', () => {
+                    const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    // Hide mobile menu when scrolling (if it's open)
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                    
+                    lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
                 });
 
                 // --- Dynamic Year for Footer ---
@@ -948,6 +967,53 @@
                     if (e.target === imageModal) closeModalHandler();
                 });
 
+                // Touch gesture handling for mobile
+                let touchStartX = 0;
+                let touchStartY = 0;
+                let touchEndX = 0;
+                let touchEndY = 0;
+                const minSwipeDistance = 50;
+
+                function handleTouchStart(e) {
+                    touchStartX = e.changedTouches[0].screenX;
+                    touchStartY = e.changedTouches[0].screenY;
+                }
+
+                function handleTouchEnd(e) {
+                    touchEndX = e.changedTouches[0].screenX;
+                    touchEndY = e.changedTouches[0].screenY;
+                    handleSwipe();
+                }
+
+                function handleSwipe() {
+                    const deltaX = touchEndX - touchStartX;
+                    const deltaY = touchEndY - touchStartY;
+                    const absDeltaX = Math.abs(deltaX);
+                    const absDeltaY = Math.abs(deltaY);
+
+                    // Only handle swipes if they meet minimum distance
+                    if (Math.max(absDeltaX, absDeltaY) < minSwipeDistance) return;
+
+                    // Determine if horizontal or vertical swipe
+                    if (absDeltaX > absDeltaY) {
+                        // Horizontal swipe - navigate images
+                        if (deltaX > 0) {
+                            // Swipe right - go to previous image
+                            navigateModal('prev');
+                        } else {
+                            // Swipe left - go to next image
+                            navigateModal('next');
+                        }
+                    } else {
+                        // Vertical swipe - close modal
+                        closeModalHandler();
+                    }
+                }
+
+                // Add touch listeners to modal image
+                modalImage.addEventListener('touchstart', handleTouchStart, { passive: true });
+                modalImage.addEventListener('touchend', handleTouchEnd, { passive: true });
+
                 // Keyboard navigation for modal
                 document.addEventListener('keydown', (e) => {
                     // Handle inquiry modal
@@ -985,6 +1051,18 @@
                     
                     const animatedElements = document.querySelectorAll('.scroll-animate:not(.is-visible)');
                     
+                    // Check if mobile device - skip animations on mobile for better performance
+                    const isMobile = window.innerWidth <= 768;
+                    
+                    if (isMobile) {
+                        // On mobile, immediately show all elements without animation
+                        animatedElements.forEach(el => {
+                            el.classList.add('is-visible');
+                        });
+                        return;
+                    }
+                    
+                    // On desktop, use intersection observer for animations
                     observer = new IntersectionObserver((entries, observerInstance) => {
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
@@ -1341,6 +1419,11 @@ LensL0re Booking System`;
 
                 // --- Initial Load ---
                 renderGallery('overview');
+
+                // Handle window resize for animation detection
+                window.addEventListener('resize', () => {
+                    observeAnimatedElements();
+                });
 
             } catch (e) {
                 console.error("An error occurred during script execution:", e);
