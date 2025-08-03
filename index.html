@@ -614,12 +614,6 @@
     <div id="imageModal" class="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none">
         <img id="modalImage" src="" alt="Full size view" class="max-w-full max-h-full object-contain">
         
-        <!-- Camera info overlay -->
-        <div id="modalCameraInfo" class="absolute bottom-4 left-4 bg-black/75 text-white px-4 py-2 rounded-lg backdrop-blur-sm">
-            <div class="text-sm font-semibold" id="modalCamera"></div>
-            <div class="text-xs text-gray-300" id="modalLens"></div>
-        </div>
-        
         <!-- Image counter -->
         <div class="absolute top-4 right-14 text-white text-xs bg-black/50 px-3 py-1 rounded-full" id="modalCounter"></div>
         
@@ -804,8 +798,6 @@
                 const imageModal = document.getElementById('imageModal');
                 const modalImage = document.getElementById('modalImage');
                 const closeModalBtn = document.getElementById('closeModal');
-                const modalCamera = document.getElementById('modalCamera');
-                const modalLens = document.getElementById('modalLens');
                 const modalCounter = document.getElementById('modalCounter');
 
                 // --- Inquiry Modal Elements ---
@@ -820,33 +812,25 @@
                         src: `p${n}.png`, 
                         category: 'portraits', 
                         alt: `Portrait ${n}`, 
-                        id: `p${n}`,
-                        camera: `Canon EOS R${Math.floor(Math.random() * 6) + 5}${Math.random() > 0.5 ? '' : ' Mark II'}`,
-                        lens: `${[24, 35, 50, 85, 135][Math.floor(Math.random() * 5)]}mm f/${[1.4, 1.8, 2.8][Math.floor(Math.random() * 3)]}`
+                        id: `p${n}`
                     })),
                     ...Array.from({ length: 11 }, (_, i) => ({ 
                         src: `n${i + 1}.png`, 
                         category: 'professional-portraits', // UPDATED: New category
                         alt: `Professional Portrait ${i + 1}`, 
-                        id: `n${i + 1}`,
-                        camera: `Canon EOS R${Math.floor(Math.random() * 6) + 5}${Math.random() > 0.5 ? '' : ' Mark II'}`,
-                        lens: `${[24, 35, 50, 85, 135][Math.floor(Math.random() * 5)]}mm f/${[1.4, 1.8, 2.8][Math.floor(Math.random() * 3)]}`
+                        id: `n${i + 1}`
                     })),
                     ...Array.from({ length: 9 }, (_, i) => ({ 
                         src: `c${i + 1}.png`, 
                         category: 'community', 
                         alt: `Community & Calling ${i + 1}`, 
-                        id: `c${i + 1}`,
-                        camera: `Sony α7${['', ' II', ' III', ' IV', 'R', 'R II'][Math.floor(Math.random() * 6)]}`,
-                        lens: `${[16, 24, 35, 50, 70][Math.floor(Math.random() * 5)]}-${[35, 70, 105, 200, 300][Math.floor(Math.random() * 5)]}mm f/${[2.8, 4][Math.floor(Math.random() * 2)]}`
+                        id: `c${i + 1}`
                     })),
                     ...Array.from({ length: 13 }, (_, i) => ({ // UPDATED: Length is now 13 to include f13, f14
                         src: `f${i + 2}.png`, 
                         category: 'fashion', 
                         alt: `Fashion & Brand Work ${i + 2}`, 
-                        id: `f${i + 2}`,
-                        camera: `Nikon ${['D850', 'Z9', 'Z7', 'Z6 II', 'D780'][Math.floor(Math.random() * 5)]}`,
-                        lens: `${[24, 50, 85, 105, 200][Math.floor(Math.random() * 5)]}mm f/${[1.4, 1.8, 2.8][Math.floor(Math.random() * 3)]}`
+                        id: `f${i + 2}`
                     })),
                 ];
                 
@@ -863,19 +847,11 @@
                 function createPhotoItem(image, index) {
                     const container = document.createElement('div');
                     const imgElement = document.createElement('img');
-                    const cameraInfo = document.createElement('div');
                     
                     imgElement.src = image.src;
                     imgElement.alt = image.alt;
                     imgElement.loading = 'lazy';
                     imgElement.className = 'w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105';
-                    
-                    // Camera info overlay
-                    cameraInfo.className = 'absolute inset-0 bg-black/75 text-white p-3 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end pointer-events-none';
-                    cameraInfo.innerHTML = `
-                        <div class="text-sm font-semibold">${image.camera}</div>
-                        <div class="text-xs text-gray-300">${image.lens}</div>
-                    `;
                     
                     container.className = 'break-inside-avoid mb-4 scroll-animate relative group';
                     container.style.transitionDelay = `${(index % 15) * 50}ms`;
@@ -891,7 +867,6 @@
                     });
                     
                     container.appendChild(imgElement);
-                    container.appendChild(cameraInfo);
                     return container;
                 }
 
@@ -935,9 +910,7 @@
                     modalImage.src = image.src;
                     modalImage.alt = image.alt;
                     
-                    // Update camera info in modal
-                    modalCamera.textContent = image.camera;
-                    modalLens.textContent = image.lens;
+                    // Update counter
                     modalCounter.textContent = `${currentModalIndex + 1} / ${currentFilteredImages.length}`;
                     
                     imageModal.classList.remove('opacity-0', 'pointer-events-none');
