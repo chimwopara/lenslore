@@ -610,7 +610,7 @@
             <p class="text-gray-500 text-sm mt-10">&copy; <span id="year"></span> Lenslore.ca by Kiitan Kujembola. All Rights Reserved.</p>
             <p class="text-gray-400 text-xs mt-2">
                 Website by 
-                <a href="https://wopara.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-500 transition-colors font-semibold">
+                <a href="https://www.wopara.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-500 transition-colors font-semibold">
                     Chim
                 </a>
             </p>
@@ -1232,24 +1232,13 @@
                 const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 640;
                 
                 document.querySelectorAll('#inquiryForm input, #inquiryForm textarea, #inquiryForm select').forEach(field => {
-                    field.addEventListener('focus', function() {
+                    field.addEventListener('focus', function(e) {
                         // Only add transform on desktop to avoid mobile jumping
                         if (!isMobileDevice) {
                             this.style.transform = 'translateY(-2px)';
                             this.style.transition = 'transform 0.2s ease';
                         }
                         this.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.15)'; // UPDATED: Blue shadow
-                        
-                        // On mobile, smoothly scroll the field into view
-                        if (isMobileDevice) {
-                            setTimeout(() => {
-                                this.scrollIntoView({ 
-                                    behavior: 'smooth', 
-                                    block: 'nearest',
-                                    inline: 'nearest'
-                                });
-                            }, 100);
-                        }
                     });
                     
                     field.addEventListener('blur', function() {
@@ -1258,6 +1247,16 @@
                         }
                         this.style.boxShadow = '';
                     });
+                    
+                    // iOS specific fix: prevent multiple cursors
+                    if (isMobileDevice) {
+                        field.addEventListener('touchstart', function(e) {
+                            // Blur all other fields first
+                            document.querySelectorAll('#inquiryForm input, #inquiryForm textarea, #inquiryForm select').forEach(f => {
+                                if (f !== this) f.blur();
+                            });
+                        }, { passive: true });
+                    }
                 });
 
                 inquiryForm.addEventListener('submit', function(e) {
