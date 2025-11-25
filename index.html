@@ -376,11 +376,11 @@
         }
 
         /* Improved focus states for mobile - UPDATED: Blue theme */
-       @media (max-width: 640px) {
+@media (max-width: 640px) {
     .form-group input:focus,
     .form-group textarea:focus,
     .form-group select:focus {
-        border-width: 2px; /* Changed from 3px to 2px to prevent jumping */
+        border-width: 2px;
         border-color: #3b82f6;
     }
             
@@ -392,22 +392,7 @@
             }
         }
 
-         /* Improved focus states for mobile - UPDATED: Blue theme */
-       @media (max-width: 720px) {
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-        border-width: 2px; /* Changed from 3px to 2px to prevent jumping */
-        border-color: #3b82f6;
-    }
-            
-            /* FIXED: Prevent transforms on mobile to avoid cursor jumping */
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                transform: none !important;
-            }
-        }
+        
     </style>
 </head>
 <body class="antialiased">
@@ -665,7 +650,7 @@
                 <div class="form-group">
                     <div class="relative">
                         <input type="text" id="clientName" name="clientName" required 
-                               class="peer w-full px-4 md:px-6 py-4 text-left bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all duration-300 placeholder-transparent text-gray-900 font-medium"
+                               class="peer w-full px-4 md:px-6 py-4 text-left appearance-none bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all duration-300 placeholder-transparent text-gray-900 font-medium"
                                placeholder="Your full name">
                         <label for="clientName" class="absolute left-4 md:left-6 -top-3 bg-white px-2 text-sm font-semibold text-gray-700 transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-placeholder-shown:bg-transparent peer-focus:-top-3 peer-focus:text-sm peer-focus:text-blue-600 peer-focus:bg-white">
                             Full Name
@@ -677,7 +662,7 @@
                 <div class="form-group">
                     <div class="relative">
                         <input type="tel" id="clientPhone" name="clientPhone" required 
-                               class="peer w-full px-4 md:px-6 py-4 text-left bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all duration-300 placeholder-transparent text-gray-900 font-medium"
+                               class="peer w-full px-4 md:px-6 py-4 text-left appearance-none bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all duration-300 placeholder-transparent text-gray-900 font-medium"
                                placeholder="(555) 123-4567">
                         <label for="clientPhone" class="absolute left-4 md:left-6 -top-3 bg-white px-2 text-sm font-semibold text-gray-700 transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-placeholder-shown:bg-transparent peer-focus:-top-3 peer-focus:text-sm peer-focus:text-blue-600 peer-focus:bg-white">
                             Phone Number
@@ -689,7 +674,7 @@
                 <div class="form-group">
                     <div class="relative">
                         <input type="text" id="clientLocation" name="clientLocation" required 
-                               class="peer w-full px-4 md:px-6 py-4 text-left bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all duration-300 placeholder-transparent text-gray-900 font-medium"
+                               class="peer w-full px-4 md:px-6 py-4 text-left appearance-none bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all duration-300 placeholder-transparent text-gray-900 font-medium"
                                placeholder="Edmonton, Calgary, or specific venue">
                         <label for="clientLocation" class="absolute left-4 md:left-6 -top-3 bg-white px-2 text-sm font-semibold text-gray-700 transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-placeholder-shown:bg-transparent peer-focus:-top-3 peer-focus:text-sm peer-focus:text-blue-600 peer-focus:bg-white">
                             Preferred Location
@@ -732,7 +717,7 @@
                 <div class="form-group">
                     <div class="relative">
                         <textarea id="clientMessage" name="clientMessage" rows="4" 
-                                  class="peer w-full px-6 py-4 bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all duration-300 placeholder-transparent resize-none text-gray-900 font-medium"
+                                  class="peer w-full px-4 md:px-6 py-4 text-left appearance-none bg-gray-50/80 border-2 border-gray-200/60 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all duration-300 placeholder-transparent text-gray-900 font-medium"
                                   placeholder="Tell us more about your vision..."></textarea>
                         <label for="clientMessage" class="absolute left-4 md:left-6 -top-3 bg-white px-2 text-sm font-semibold text-gray-700 transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-placeholder-shown:bg-transparent peer-focus:-top-3 peer-focus:text-sm peer-focus:text-blue-600 peer-focus:bg-white">
                             Additional Details
