@@ -383,6 +383,13 @@
                 border-width: 3px;
                 border-color: #3b82f6;
             }
+            
+            /* FIXED: Prevent transforms on mobile to avoid cursor jumping */
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                transform: none !important;
+            }
         }
     </style>
 </head>
@@ -603,7 +610,7 @@
             <p class="text-gray-500 text-sm mt-10">&copy; <span id="year"></span> Lenslore.ca by Kiitan Kujembola. All Rights Reserved.</p>
             <p class="text-gray-400 text-xs mt-2">
                 Website by 
-                <a href="https://www.instagram.com/mrwopara/?hl=en" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-500 transition-colors font-semibold">
+                <a href="https://wopara.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-500 transition-colors font-semibold">
                     Chim
                 </a>
             </p>
@@ -1222,15 +1229,33 @@
                 });
 
                 // Add subtle interaction feedback to form fields
+                const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 640;
+                
                 document.querySelectorAll('#inquiryForm input, #inquiryForm textarea, #inquiryForm select').forEach(field => {
                     field.addEventListener('focus', function() {
-                        this.style.transform = 'translateY(-2px)';
-                        this.style.transition = 'transform 0.2s ease';
+                        // Only add transform on desktop to avoid mobile jumping
+                        if (!isMobileDevice) {
+                            this.style.transform = 'translateY(-2px)';
+                            this.style.transition = 'transform 0.2s ease';
+                        }
                         this.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.15)'; // UPDATED: Blue shadow
+                        
+                        // On mobile, smoothly scroll the field into view
+                        if (isMobileDevice) {
+                            setTimeout(() => {
+                                this.scrollIntoView({ 
+                                    behavior: 'smooth', 
+                                    block: 'nearest',
+                                    inline: 'nearest'
+                                });
+                            }, 100);
+                        }
                     });
                     
                     field.addEventListener('blur', function() {
-                        this.style.transform = 'translateY(0)';
+                        if (!isMobileDevice) {
+                            this.style.transform = 'translateY(0)';
+                        }
                         this.style.boxShadow = '';
                     });
                 });
