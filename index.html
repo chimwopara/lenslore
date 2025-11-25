@@ -391,6 +391,23 @@
                 transform: none !important;
             }
         }
+
+         /* Improved focus states for mobile - UPDATED: Blue theme */
+       @media (max-width: 720px) {
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        border-width: 2px; /* Changed from 3px to 2px to prevent jumping */
+        border-color: #3b82f6;
+    }
+            
+            /* FIXED: Prevent transforms on mobile to avoid cursor jumping */
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                transform: none !important;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
