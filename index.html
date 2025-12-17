@@ -1284,11 +1284,11 @@
                     
                     // Package information for invoice - UPDATED: New pricing
                     const packageInfo = {
-                        'starter': { name: 'Starter Package - "Mini Shoot"', duration: '30-minute session, 1 outfit, 1 location', amount: '$50–$75' },
-                        'standard': { name: 'Standard Package - "Full Session"', duration: '1-hour session, up to 2 outfits, 1–2 locations', amount: '$100–$150' },
-                        'premium': { name: 'Premium Package - "Creative or Lifestyle"', duration: '1.5–2 hour session, up to 3 outfits, multiple locations', amount: '$175–$250' },
-                        'studio': { name: 'Studio Session - "Professional Setup"', duration: '1–1.5 hour session, professional studio', amount: 'TBD' },
-                        'custom': { name: 'Custom Package', duration: 'Variable', amount: 'Quote' }
+                        'starter': { name: 'The Headshot Session (Starter Package)', duration: '20–30 min session, 10–15 edited photos, 1 outfit, 48-hour delivery', amount: '$149–$179' },
+                        'standard': { name: 'The Branding Mini (Mid Package)', duration: '60–75 min session, 25-50 edited photos, 2 outfits, 1 location, 5 day delivery', amount: '$239–$269' },
+                        'premium': { name: 'The Full Brand Story (Flagship Package)', duration: '2-hour session, 40–75 edited photos, 3 video reels, 1–2 locations, Priority delivery', amount: '$399' },
+                        'studio': { name: 'Premium Full-Day Brand Experience (Top Tier)', duration: 'Half-day (3–4 hours), 100+ edited photos, 6–8 reels, Team headshots (up to 4 ppl)', amount: '$620' },
+                        'custom': { name: 'Fashion & Creative Campaigns', duration: 'Custom scoped based on concept, usage, and deliverables', amount: 'Custom Quote' }
                     };
                     
                     const selectedPackage = packageInfo[data.clientPackage] || packageInfo.custom;
