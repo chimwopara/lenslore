@@ -51,15 +51,14 @@ function renderFolders(folders) {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             ${folders.map(folder => {
                 const coverImage = folder.images ? folder.images[0].src : (folder.coverImage || '');
+                const countText = folder.images ? `${folder.images.length} Photos` : `${folder.folders ? folder.folders.length : 0} Collections`;
                 
                 return `
                 <div class="folder-card" onclick="navigateToFolder('${folder.name}')">
-                    ${coverImage ? `<img src="${coverImage}" alt="${folder.name} cover">` : ''}
-                    <div class="p-6">
-                        ${!coverImage ? `<div class="folder-icon">📁</div>` : ''}
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">${folder.name}</h3>
-                        <p class="text-gray-600 text-sm mb-2">${folder.description || ''}</p>
-                        ${folder.images ? `<p class="text-sm text-blue-600 font-semibold">${folder.images.length} photos</p>` : `<p class="text-sm text-blue-600 font-semibold">${folder.folders ? folder.folders.length : 0} collections</p>`}
+                    ${coverImage ? `<img src="${coverImage}" alt="${folder.name} cover">` : '<div style="width:100%;height:100%;background:#333;"></div>'}
+                    <div class="folder-overlay">
+                        <h3>${folder.name}</h3>
+                        <p>${countText}</p>
                     </div>
                 </div>
             `}).join('')}
