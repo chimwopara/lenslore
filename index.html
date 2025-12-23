@@ -9,20 +9,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="src/css/styles.css?v=1.1">
+    <link rel="stylesheet" href="src/css/styles.css?v=1.2">
 </head>
 <body>
     <!-- Header -->
     <header class="light-header fixed top-0 left-0 right-0 z-50">
-        <nav class="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+        <nav class="max-w-7xl mx-auto px-6 lg:px-8 py-3">
             <div class="flex items-center justify-between">
                 <a href="#" class="text-2xl font-display font-bold text-gray-900">LensL<span class="text-blue-600">0</span>re</a>
                 
-                <!-- Desktop Menu -->
+                <!-- Desktop Menu - Reordered -->
                 <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="nav-link">About</a>
                     <a href="#portfolio" class="nav-link">Portfolio</a>
                     <a href="#pricing" class="nav-link">Pricing</a>
-                    <a href="#about" class="nav-link">About</a>
                     <button id="darkModeToggle" class="dark-mode-toggle">
                         <svg id="sunIcon" class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
@@ -51,33 +51,66 @@
                 </div>
             </div>
             
-            <!-- Mobile Menu -->
+            <!-- Mobile Menu - Reordered -->
             <div id="mobile-menu" class="md:hidden">
                 <div class="flex flex-col space-y-4 py-4">
+                    <a href="#about" class="nav-link">About</a>
                     <a href="#portfolio" class="nav-link">Portfolio</a>
                     <a href="#pricing" class="nav-link">Pricing</a>
-                    <a href="#about" class="nav-link">About</a>
                 </div>
             </div>
         </nav>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero-section relative min-h-screen flex items-center justify-center px-6 pt-20 md:items-start md:pt-48">
+    <section class="hero-section relative min-h-screen flex items-center justify-center px-6 pt-16 md:items-start md:pt-40">
         <div class="max-w-6xl mx-auto text-center">
             <h1 class="hero-title font-display font-bold text-white mb-6 fade-in-up">
-                Capturing Moments,<br>Creating <span class="text-blue-400">Memories</span>
+                Capturing Identity,<br>Creating <span class="text-blue-400">Impact</span>
             </h1>
-            <p class="text-xl text-gray-200 mb-12 max-w-2xl mx-auto fade-in-up" style="animation-delay: 0.2s;">
+            <p class="text-xl text-gray-200 mb-10 max-w-2xl mx-auto fade-in-up" style="animation-delay: 0.2s;">
                 Professional photography services for brands, events, and personal projects. Let's tell your story through the lens.
             </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center fade-in-up" style="animation-delay: 0.4s;">
+                <a href="#portfolio" class="hero-cta">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    View Gallery
+                </a>
+                <button id="openInquiryBtn2" class="hero-cta">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    Book a Session
+                </button>
+            </div>
         </div>
     </section>
 
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="py-24 px-6">
+    <!-- About Section - Now second -->
+    <section id="about" class="py-16 px-6">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16 animate-on-scroll">
+            <div class="animate-on-scroll">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6 text-xl text-gray-600">
+                        <h2 class="text-5xl font-display font-bold text-gray-900 mb-6">About Me</h2>
+                        <p>Hi, I'm Kiitan Kujembola, a professional photographer based in Edmonton, specializing in brand photography, lifestyle campaigns, and creative visual storytelling.</p>
+                        <p>With years of experience capturing authentic moments for brands and individuals, I bring a unique perspective to every project. My work has been featured in various campaigns for fashion brands, lifestyle companies, and organizations.</p>
+                        <p>I believe that every photograph should tell a story and evoke emotion. Whether it's a corporate headshot, a lifestyle campaign, or a personal brand shoot, I work closely with my clients to understand their vision and bring it to life.</p>
+                    </div>
+                    <div>
+                        <img src="src/images/Background/aboutme.jpg" alt="About Kiitan Kujembola" class="about-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section - Now third -->
+    <section id="portfolio" class="py-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12 animate-on-scroll">
                 <h2 id="portfolio-title" class="text-5xl font-display font-bold text-gray-900 mb-4">Portfolio</h2>
                 <p id="portfolio-subtitle" class="text-xl text-gray-600 max-w-2xl mx-auto">
                     Explore my work across different categories
@@ -97,35 +130,35 @@
         </div>
     </section>
 
-    <!-- Pricing Section -->
-    <section id="pricing" class="py-24 px-6">
+    <!-- Pricing Section - Now fourth -->
+    <section id="pricing" class="py-16 px-6">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16 animate-on-scroll">
-                <h2 class="text-5xl font-display font-bold text-gray-900 mb-4">Pricing</h2>
+            <div class="text-center mb-10 animate-on-scroll">
+                <h2 class="text-5xl font-display font-bold text-gray-900 mb-3">Pricing</h2>
                 <p class="text-xl text-gray-600 max-w-2xl mx-auto">Choose the package that fits your needs</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-on-scroll">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-on-scroll">
                 <!-- Starter Package -->
                 <div class="pricing-card">
-                    <h3 class="text-2xl font-display font-bold text-gray-900 mb-2">The Headshot Session</h3>
-                    <p class="text-gray-600 mb-4">Starter Package</p>
-                    <div class="text-4xl font-bold text-blue-600 mb-6">$149-$179</div>
-                    <ul class="space-y-3 mb-8">
+                    <h3 class="text-2xl font-display font-bold text-gray-900 mb-1">The Headshot Session</h3>
+                    <p class="text-gray-600 mb-3">Starter Package</p>
+                    <div class="text-4xl font-bold text-blue-600 mb-4">$149-$179</div>
+                    <ul class="space-y-2 mb-6">
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>20–30 min session</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>10–15 edited photos</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>1 outfit</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>48-hour delivery</span>
                         </li>
                     </ul>
@@ -134,28 +167,28 @@
 
                 <!-- Mid Package -->
                 <div class="pricing-card">
-                    <h3 class="text-2xl font-display font-bold text-gray-900 mb-2">The Branding Mini</h3>
-                    <p class="text-gray-600 mb-4">Mid Package</p>
-                    <div class="text-4xl font-bold text-blue-600 mb-6">$239-$269</div>
-                    <ul class="space-y-3 mb-8">
+                    <h3 class="text-2xl font-display font-bold text-gray-900 mb-1">The Branding Mini</h3>
+                    <p class="text-gray-600 mb-3">Mid Package</p>
+                    <div class="text-4xl font-bold text-blue-600 mb-4">$239-$269</div>
+                    <ul class="space-y-2 mb-6">
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>60–75 min session</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>25-50 edited photos</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>2 outfits</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>1 location</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>5 day delivery</span>
                         </li>
                     </ul>
@@ -164,29 +197,29 @@
 
                 <!-- Flagship Package -->
                 <div class="pricing-card featured">
-                    <div class="inline-block px-3 py-1 bg-blue-600 text-white text-sm font-semibold rounded-full mb-4">MOST POPULAR</div>
-                    <h3 class="text-2xl font-display font-bold text-gray-900 mb-2">The Full Brand Story</h3>
-                    <p class="text-gray-600 mb-4">Flagship Package</p>
-                    <div class="text-4xl font-bold text-blue-600 mb-6">$399</div>
-                    <ul class="space-y-3 mb-8">
+                    <div class="inline-block px-3 py-1 bg-blue-600 text-white text-sm font-semibold rounded-full mb-3">MOST POPULAR</div>
+                    <h3 class="text-2xl font-display font-bold text-gray-900 mb-1">The Full Brand Story</h3>
+                    <p class="text-gray-600 mb-3">Flagship Package</p>
+                    <div class="text-4xl font-bold text-blue-600 mb-4">$399</div>
+                    <ul class="space-y-2 mb-6">
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>2-hour session</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>40–75 edited photos</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>3 video reels</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>1–2 locations</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>Priority delivery</span>
                         </li>
                     </ul>
@@ -195,24 +228,24 @@
 
                 <!-- Top Tier Package -->
                 <div class="pricing-card">
-                    <h3 class="text-2xl font-display font-bold text-gray-900 mb-2">Premium Full-Day Brand Experience</h3>
-                    <p class="text-gray-600 mb-4">Top Tier</p>
-                    <div class="text-4xl font-bold text-blue-600 mb-6">$620</div>
-                    <ul class="space-y-3 mb-8">
+                    <h3 class="text-2xl font-display font-bold text-gray-900 mb-1">Premium Full-Day Brand Experience</h3>
+                    <p class="text-gray-600 mb-3">Top Tier</p>
+                    <div class="text-4xl font-bold text-blue-600 mb-4">$620</div>
+                    <ul class="space-y-2 mb-6">
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>Half-day (3–4 hours)</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>100+ edited photos</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>6–8 reels</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>Team headshots (up to 4 people)</span>
                         </li>
                     </ul>
@@ -221,43 +254,24 @@
 
                 <!-- Custom Package -->
                 <div class="pricing-card md:col-span-2 lg:col-span-1">
-                    <h3 class="text-2xl font-display font-bold text-gray-900 mb-2">Fashion & Creative Campaigns</h3>
-                    <p class="text-gray-600 mb-4">Custom Quote</p>
-                    <div class="text-4xl font-bold text-blue-600 mb-6">Custom</div>
-                    <ul class="space-y-3 mb-8">
+                    <h3 class="text-2xl font-display font-bold text-gray-900 mb-1">Fashion & Creative Campaigns</h3>
+                    <p class="text-gray-600 mb-3">Custom Quote</p>
+                    <div class="text-4xl font-bold text-blue-600 mb-4">Custom</div>
+                    <ul class="space-y-2 mb-6">
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>Custom scoped based on concept</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>Usage rights included</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>Flexible deliverables</span>
                         </li>
                     </ul>
                     <button onclick="openInquiryModal()" class="w-full px-6 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all duration-300 font-semibold">Get a Quote</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-12 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="animate-on-scroll">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div class="space-y-8 text-xl text-gray-600">
-                        <h2 class="text-5xl font-display font-bold text-gray-900 mb-6">About Me</h2>
-                        <p>Hi, I'm Kiitan Kujembola, a professional photographer based in Edmonton, specializing in brand photography, lifestyle campaigns, and creative visual storytelling.</p>
-                        <p>With years of experience capturing authentic moments for brands and individuals, I bring a unique perspective to every project. My work has been featured in various campaigns for fashion brands, lifestyle companies, and organizations.</p>
-                        <p>I believe that every photograph should tell a story and evoke emotion. Whether it's a corporate headshot, a lifestyle campaign, or a personal brand shoot, I work closely with my clients to understand their vision and bring it to life.</p>
-                    </div>
-                    <div>
-                        <img src="src/images/Background/aboutme.jpg" alt="About Kiitan Kujembola" class="about-image">
-                    </div>
                 </div>
             </div>
         </div>
@@ -284,9 +298,9 @@
 
     <!-- Lightbox -->
     <div id="lightbox" class="lightbox">
-        <button id="closeLightbox" class="absolute top-8 right-8 text-white text-4xl hover:text-gray-300 transition-colors z-50">&times;</button>
-        <button id="prevImage" class="absolute left-8 text-white text-4xl hover:text-gray-300 transition-colors z-50">&#8249;</button>
-        <button id="nextImage" class="absolute right-8 text-white text-4xl hover:text-gray-300 transition-colors z-50">&#8250;</button>
+        <button id="closeLightbox" class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300 transition-colors z-50">&times;</button>
+        <button id="prevImage" class="absolute left-2 text-white text-4xl hover:text-gray-300 transition-colors z-50">&#8249;</button>
+        <button id="nextImage" class="absolute right-2 text-white text-4xl hover:text-gray-300 transition-colors z-50">&#8250;</button>
         <img id="lightbox-img" class="lightbox-content" src="" alt="">
     </div>
 
@@ -339,7 +353,7 @@
 
     <!-- Scripts -->
     <script src="src/data/portfolio.js"></script>
-    <script src="src/js/gallery.js?v=1.1"></script>
+    <script src="src/js/gallery.js?v=1.2"></script>
     <script src="src/js/modal.js"></script>
     <script src="src/js/theme.js"></script>
 </body>
