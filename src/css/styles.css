@@ -1,10 +1,10 @@
 /* Base & Dark Mode */
 body { font-family: 'Inter', sans-serif; background: #fff; color: #374151; line-height: 1.6; overflow-x: hidden; transition: all 0.3s ease; }
 body.dark-mode { background: #0f172a; color: #e2e8f0; }
-body.dark-mode .light-header { background: rgba(15, 23, 42, 0.95); border-bottom: none; }
+body.dark-mode .light-header { background: rgba(15, 23, 42, 0.95) !important; border-bottom: none !important; box-shadow: none !important; }
 body.dark-mode .nav-link { color: #e2e8f0; }
 body.dark-mode .nav-link:hover { color: #60a5fa; }
-body.dark-mode #mobile-menu { background: #0f172a; border-top: 1px solid #334155; }
+body.dark-mode #mobile-menu { background: #0f172a; border-top: none; }
 body.dark-mode #about, body.dark-mode #portfolio { background: #0f172a; }
 body.dark-mode #about h2, body.dark-mode #about p, body.dark-mode #portfolio h2, body.dark-mode #portfolio p { color: #f1f5f9; }
 body.dark-mode #pricing { background-image: url('../../../src/images/Background/pricing.jpg'); background-size: cover; background-position: center; background-attachment: fixed; }
@@ -199,7 +199,7 @@ body.dark-mode .dark-mode-toggle:hover { background: rgba(59, 130, 246, 0.2); }
     #nextImage { right: 0.25rem; }
     
     /* Nearly fullscreen gallery images on mobile */
-    #portfolio { padding-left: 0.25rem; padding-right: 0.25rem; }
+    #portfolio { padding-left: 0.25rem; padding-right: 0.25rem; padding-bottom: 0.5rem; }
     #gallery-container .grid { gap: 0.25rem; padding: 0; }
     .gallery-item { border-radius: 0.25rem; }
     .folder-card { border-radius: 0.25rem; }

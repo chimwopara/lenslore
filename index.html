@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="src/css/styles.css?v=1.4">
+    <link rel="stylesheet" href="src/css/styles.css?v=1.5">
 </head>
 <body>
     <!-- Header -->
@@ -135,7 +135,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-10 animate-on-scroll">
                 <h2 class="text-5xl font-display font-bold text-gray-900 mb-3">Pricing</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Choose the package that fits your needs</p>
+                <p class="text-xl text-gray-800 max-w-2xl mx-auto">Choose The Package That Fits Your Needs</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-on-scroll">
@@ -290,7 +290,8 @@
                 </div>
             </div>
             <div class="border-t border-gray-800 pt-8">
-                <p class="text-gray-500">&copy; 2024 LensLore. All rights reserved.</p>
+                <p class="text-gray-500">&copy; <span id="currentYear"></span> LensLore. All rights reserved.</p>
+                <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
                 <p class="text-gray-500 mt-2">Website by <a href="https://chimwopara.com/about" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 transition-colors">Chim</a></p>
             </div>
         </div>
@@ -353,7 +354,7 @@
 
     <!-- Scripts -->
     <script src="src/data/portfolio.js"></script>
-    <script src="src/js/gallery.js?v=1.3"></script>
+    <script src="src/js/gallery.js?v=1.4"></script>
     <script src="src/js/modal.js"></script>
     <script src="src/js/theme.js"></script>
 </body>
