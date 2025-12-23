@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    
+    <!-- Homepage -->
+    <url>
+        <loc>https://lenslore.ca/</loc>
+        <lastmod>2025-12-23</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <xhtml:link rel="alternate" hreflang="en-CA" href="https://lenslore.ca/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://lenslore.ca/"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://lenslore.ca/"/>
+        <image:image>
+            <image:loc>https://lenslore.ca/src/images/Background/hero.jpg</image:loc>
+            <image:title>LensLore Photography - Edmonton Branding Photographer</image:title>
+            <image:caption>Professional branding and portrait photography services in Edmonton, Alberta</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://lenslore.ca/src/images/Background/aboutme.jpg</image:loc>
+            <image:title>Kiitan Kujembola - Edmonton Photographer</image:title>
+            <image:caption>Kiitan Kujembola, professional branding photographer based in Edmonton</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://lenslore.ca/src/images/Background/pricing.jpg</image:loc>
+            <image:title>Photography Pricing - LensLore Edmonton</image:title>
+            <image:caption>Professional photography packages starting at $149</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- About Section -->
+    <url>
+        <loc>https://lenslore.ca/#about</loc>
+        <lastmod>2025-12-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Portfolio Section -->
+    <url>
+        <loc>https://lenslore.ca/#portfolio</loc>
+        <lastmod>2025-12-23</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Pricing Section -->
+    <url>
+        <loc>https://lenslore.ca/#pricing</loc>
+        <lastmod>2025-12-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+</urlset>

@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
                 document.getElementById('copyEmailBtn').addEventListener('click', function() {
-                    navigator.clipboard.writeText(`To: kiitanki@gmail.com\nSubject: ${subject}\n\n${body}`);
+                    navigator.clipboard.writeText(`To: kiitan@lenslore.ca\nSubject: ${subject}\n\n${body}`);
                     this.textContent = 'Copied!';
                     setTimeout(() => this.textContent = 'Copy All', 2000);
                 });

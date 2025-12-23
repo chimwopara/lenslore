@@ -1,0 +1,56 @@
+# robots.txt for LensLore Photography
+# https://lenslore.ca
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://lenslore.ca/sitemap.xml
+
+# Crawl-delay for polite crawling (optional, honored by some bots)
+Crawl-delay: 1
+
+# Google-specific
+User-agent: Googlebot
+Allow: /
+Disallow: /src/js/
+Disallow: /src/css/
+
+# Google Image Bot - allow image indexing
+User-agent: Googlebot-Image
+Allow: /src/images/
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Block AI training bots (optional - remove if you want AI to train on your content)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+# Block bad bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Disallow: /
+
+# Host directive (some crawlers use this)
+Host: https://lenslore.ca
