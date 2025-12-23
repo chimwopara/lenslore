@@ -1,13 +1,14 @@
 /* Base & Dark Mode */
 body { font-family: 'Inter', sans-serif; background: #fff; color: #374151; line-height: 1.6; overflow-x: hidden; transition: all 0.3s ease; }
 body.dark-mode { background: #0f172a; color: #e2e8f0; }
-body.dark-mode .light-header { background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid #334155; }
+body.dark-mode .light-header { background: rgba(15, 23, 42, 0.95); border-bottom: none; }
 body.dark-mode .nav-link { color: #e2e8f0; }
 body.dark-mode .nav-link:hover { color: #60a5fa; }
 body.dark-mode #mobile-menu { background: #0f172a; border-top: 1px solid #334155; }
 body.dark-mode #about, body.dark-mode #portfolio { background: #0f172a; }
 body.dark-mode #about h2, body.dark-mode #about p, body.dark-mode #portfolio h2, body.dark-mode #portfolio p { color: #f1f5f9; }
-body.dark-mode #pricing { background: rgba(15, 23, 42, 0.85); }
+body.dark-mode #pricing { background-image: url('../../../src/images/Background/pricing.jpg'); background-size: cover; background-position: center; background-attachment: fixed; }
+body.dark-mode #pricing::before { background: rgba(15, 23, 42, 0.7); }
 body.dark-mode #pricing h2, body.dark-mode #pricing h3, body.dark-mode #pricing p { color: #f1f5f9; }
 body.dark-mode .pricing-card { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(51, 65, 85, 0.5); backdrop-filter: blur(12px); }
 body.dark-mode .pricing-card:hover { border-color: rgba(96, 165, 250, 0.5); }
@@ -49,7 +50,7 @@ body.dark-mode #cancelInquiry:hover { background: rgba(71, 85, 105, 0.8); }
 
 /* Pricing Section - with background image and glassmorphism */
 #pricing { 
-    background-image: url('../../../src/images/Background/hero.jpg'); 
+    background-image: url('../../../src/images/Background/pricing.jpg'); 
     background-size: cover; 
     background-position: center; 
     background-attachment: fixed; 
@@ -196,6 +197,12 @@ body.dark-mode .dark-mode-toggle:hover { background: rgba(59, 130, 246, 0.2); }
     #closeLightbox { top: 0.5rem; right: 0.5rem; }
     #prevImage { left: 0.25rem; }
     #nextImage { right: 0.25rem; }
+    
+    /* Nearly fullscreen gallery images on mobile */
+    #portfolio { padding-left: 0.25rem; padding-right: 0.25rem; }
+    #gallery-container .grid { gap: 0.25rem; padding: 0; }
+    .gallery-item { border-radius: 0.25rem; }
+    .folder-card { border-radius: 0.25rem; }
 }
 @media (max-width: 1024px) {
     .hero-section, #pricing, #contact { background-attachment: scroll; }

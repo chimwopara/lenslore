@@ -37,7 +37,7 @@ function updateSectionTitle(folder) {
     if (currentPath.length === 0) {
         // Main portfolio view
         titleElement.textContent = 'Portfolio';
-        subtitleElement.textContent = 'Explore my work across different categories';
+        subtitleElement.textContent = 'Explore My Work Across Different Categories';
     } else {
         // Inside a folder
         titleElement.textContent = folder.name;
@@ -48,7 +48,7 @@ function updateSectionTitle(folder) {
 function renderFolders(folders) {
     const container = document.getElementById('gallery-container');
     container.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-6">
             ${folders.map(folder => {
                 const coverImage = folder.images ? folder.images[0].src : (folder.coverImage || '');
                 const countText = folder.images ? `${folder.images.length} Photos` : `${folder.folders ? folder.folders.length : 0} Collections`;
@@ -70,7 +70,7 @@ function renderImages(images) {
     const container = document.getElementById('gallery-container');
     currentImages = images;
     container.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-6">
             ${images.map((image, index) => `
                 <div class="gallery-item card-shadow" onclick="openLightbox(${index})">
                     <img src="${image.src}" alt="${image.alt}">
