@@ -97,19 +97,19 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <button id="copyEmailBtn" class="text-blue-600 hover:text-blue-700 text-sm font-semibold flex items-center">Copy All</button>
                             </div>
                             <div class="space-y-3">
-                                <div><span class="font-semibold text-gray-700">To:</span> <span class="text-blue-600">kiitanki@gmail.com</span></div>
+                                <div><span class="font-semibold text-gray-700">To:</span> <span class="text-blue-600">Lenslorephotograph@gmail.com</span></div>
                                 <div><span class="font-semibold text-gray-700">Subject:</span> <span class="text-gray-900">${subject}</span></div>
                                 <div><span class="font-semibold text-gray-700">Message:</span><pre class="text-sm text-gray-700 mt-2 whitespace-pre-wrap font-sans">${body}</pre></div>
                             </div>
                         </div>
                         <div class="flex gap-4">
-                            <a href="mailto:hello@lenslore.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}" class="flex-1 px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] text-center">📧 Open Email App</a>
+                            <a href="mailto:Lenslorephotograph@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}" class="flex-1 px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] text-center">📧 Open Email App</a>
                             <button id="closeSuccessModal" class="flex-1 px-8 py-4 bg-gray-100 text-gray-700 rounded-2xl hover:bg-gray-200 transition-all duration-300 font-semibold">Done</button>
                         </div>
                     </div>
                 `;
                 document.getElementById('copyEmailBtn').addEventListener('click', function() {
-                    navigator.clipboard.writeText(`To: kiitan@lenslore.ca\nSubject: ${subject}\n\n${body}`);
+                    navigator.clipboard.writeText(`To: Lenslorephotograph@gmail.com\nSubject: ${subject}\n\n${body}`);
                     this.textContent = 'Copied!';
                     setTimeout(() => this.textContent = 'Copy All', 2000);
                 });
